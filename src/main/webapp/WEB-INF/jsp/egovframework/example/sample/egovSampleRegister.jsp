@@ -25,8 +25,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
       <!-- 게시판 코드가 있으면 registerFlag변수에 modify, 없으면 create 저장 -->
     <c:set var="registerFlag" value="${empty sampleVO.boardCd ? 'create' : 'modify'}"/>
-    <title>게시글 <c:if test="${registerFlag == 'create'}"><spring:message code="button.create" /></c:if>
-                  <c:if test="${registerFlag == 'modify'}"><spring:message code="button.modify" /></c:if>
+    <title>게시글
+    	 <!-- 등록 -->
+    	 <c:if test="${registerFlag == 'create'}"><spring:message code="button.create" /></c:if>
+    	 <!-- 수정 -->
+         <c:if test="${registerFlag == 'modify'}"><spring:message code="button.modify" /></c:if>
     </title>
     <link type="text/css" rel="stylesheet" href="<c:url value='/css/write.css?after'/>"/>
     
@@ -61,9 +64,6 @@
 	        
         	frm = document.detailForm;
         	if(!validateSampleVO(frm)){
-//         		 for(var ele of errors){
-//      	        	ele.style.display = "inline-block";
-//      	        } 
                 return;
             }else if(con == true){
             	frm.action = "<c:url value="${registerFlag == 'create' ? '/addSample.do' : '/updateSample.do'}"/>";
