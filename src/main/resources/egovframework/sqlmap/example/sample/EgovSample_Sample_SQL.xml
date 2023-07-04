@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Sample">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="searchVO" type="egovframework.example.sample.service.SampleDefaultVO"/>
+
+	<resultMap id="sample" class="egovframework.example.sample.service.SampleVO" >
+		<result property="boardSq" column="board_sq"/>
+		<result property="boardCd" column="board_cd"/>
+		<result property="title" column="title"/>
+		<result property="content" column="content"/>
+		<result property="viewCnt" column="view_cnt"/>
+		<result property="userNm" column="user_nm"/>
+		<result property="fileNm" column="file_nm"/>
+		<result property="createDt" column="create_dt"/>
+		<result property="updateDt" column="update_dt"/>
+<!-- 		<collection property = "sampleVO" ofType="SampleVO"> -->
+<!-- 			<id property="fileNm" column="file_nm"/> -->
+<!-- 		</collection> -->
+	</resultMap>
+	
+	<resultMap id="code" class="egovframework.example.sample.service.CodeVO">
+		<result property="code" column="code"/>
+		<result property="decode" column="decode"/>
+		<result property="codePid" column="code_pid"/>
+	</resultMap>
+	
+	<resultMap id="uploadfile" class="egovframework.example.sample.service.UploadFileVO">
+		<result property="fileSq" column="file_sq"/>
+		<result property="fileCd" column="file_cd"/>
+		<result property="boardNo" column="board_no"/>
+		<result property="storeNm" column="store_nm"/>
+		<result property="uploadNm" column="upload_nm"/>
+		<result property="fileSize" column="file_size"/>
+		<result property="fileType" column="file_type"/>
+	</resultMap>
+	
+	<insert id="uploadFileDAO.insertFile">
+		<![CDATA[
+			INSERT INTO test_uploadfile_tb 
+				( file_sq
+				  , file_cd
+				  , board_no
+				  , store_nm
+				  , upload_nm
+				  , file_size
+				  , file_type
+				   )
+			VALUES ( test_uploadfile_seq.nextval
+				  , #fileCd#
+				  , #boardNo#
+				  , #storeNm#
+				  , #uploadNm#
+				  , #fileSize#
+				  , #fileType#
+				  )
+		]]>
+	</insert>
+	
+	<select id="uploadFileDAO.selectFileList" resultMap="uploadfile" remapResults="true">
+	<![CDATA[
+   		   SELECT *
+        	FROM TEST_UPLOADFILE_TB 
+        	WHERE FILE_CD = #fileCd# 
+        		AND BOARD_NO = #boardNo#
+   	]]>
+    </select>
+	
+	<select id="uploadFileDAO.selectFile"  resultMap="uploadfile" remapResults="true">
+       	<![CDATA[
+            SELECT *
+            FROM test_uploadfile_tb 
+            WHERE file_sq =#fileSq#
+        ]]>
+    </select>
+    
+    <delete id="uploadFileDAO.deleteFile">
+		<![CDATA[
+			DELETE FROM test_uploadfile_tb 
+			WHERE store_nm =#storeNm#
+		]]>
+	</delete>
+	
+	
+	<select id="codeDAO.selectCodeList" parameterClass="egovframework.example.sample.service.CodeVO" resultClass="egovframework.example.sample.service.CodeVO">
+	<![CDATA[
+        SELECT *
+        	FROM TEST_CODE_TB 
+        	WHERE CODE_PID = #codePid#
+   	]]>
+    </select>
+    
+    <select id="codeDAO.selectAllCodeList" resultMap="code" remapResults="true">
+	<![CDATA[
+        SELECT *
+        	FROM TEST_CODE_TB 
+        	WHERE CODE_PID is not null
+   	]]>
+    </select>
+
+	<insert id="sampleDAO.insertSample">
+		<![CDATA[
+			INSERT INTO test_board_tb 
+				( board_sq
+				  , board_cd
+				  , title
+				  , content
+				  , user_nm
+				  , file_nm )
+			VALUES ( test_board_seq.nextval
+				  , #boardCd#
+				  , #title#
+				  , #content#
+				  , #userNm#
+				  , #fileNm# )
+		]]>
+	</insert>
+	
+	<update id="sampleDAO.updateSample">
+		<![CDATA[
+			UPDATE test_board_tb
+			SET title=#title#
+				, content=#content#
+				, update_dt=systimestamp
+				, user_nm = #userNm#
+				, board_cd = #boardCd#
+				, file_nm = #fileNm#
+			WHERE board_sq=#boardSq#
+		]]>
+	</update>
+	
+	<update id="sampleDAO.updateViewCnt">
+		<![CDATA[
+			UPDATE test_board_tb
+			SET view_cnt = view_cnt + 1
+			WHERE board_sq=#boardSq#
+		]]>
+	</update>
+	
+	
+	<delete id="sampleDAO.deleteSample">
+		<![CDATA[
+			DELETE FROM test_board_tb 
+			WHERE board_sq=#boardSq#
+		]]>
+	</delete>
+    
+    <select id="sampleDAO.selectSample" resultMap="sample" remapResults="true">
+<!--     <select id="sampleDAO.selectSample" parameterClass="egovframework.example.sample.service.SampleVO" resultClass="egovframework.example.sample.service.SampleVO"> -->
+       	<![CDATA[
+            SELECT
+             *
+            FROM test_board_tb 
+            WHERE board_sq=#boardSq#
+        ]]>
+    </select>
+	
+	<select id="sampleDAO.selectSampleList" parameterClass="searchVO" resultClass="egovMap">
+
+			SELECT
+				board_sq, board_cd, title, view_cnt, user_nm, update_dt
+			FROM test_board_tb
+			WHERE 1=1
+			<isEqual prepend="AND" property="searchCondition" compareValue="0">
+				title LIKE '%' || #searchKeyword# || '%'
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				content LIKE '%' || #searchKeyword# || '%'
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="2">
+				user_nm LIKE '%' || #searchKeyword# || '%'
+			</isEqual>
+			
+			ORDER BY board_sq DESC
+			OFFSET #firstIndex# ROWS 
+			FETCH NEXT #recordCountPerPage# ROWS ONLY	
+	</select>
+	
+	<select id="sampleDAO.selectSampleListTotCnt" parameterClass="searchVO" resultClass="int">
+
+			SELECT COUNT(*) totcnt
+			FROM test_board_tb
+			WHERE 1=1
+			<isEqual prepend="AND" property="searchCondition" compareValue="0">
+				title LIKE '%' || #searchKeyword# || '%'
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				content LIKE '%' || #searchKeyword# || '%'
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="2">
+				user_nm LIKE '%' || #searchKeyword# || '%'
+			</isEqual>
+	</select>
+
+</sqlMap>

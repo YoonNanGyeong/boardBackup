@@ -1,0 +1,217 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+
+* {
+    /* outline: 1px solid green; */
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 초기화 */
+ul, li {
+    list-style-type: none;
+}
+a {
+    text-decoration: none;
+}
+a:hover{
+	color: #89B0D2;
+}
+
+/* 레이아웃 */
+#listForm {
+    display: grid;
+    grid-template-columns: 1fr minmax(320px, 1920px) 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+        'nv nv nv'
+        'l hd r'
+        'l mn r'
+        'l ft r';
+}
+
+.nv-l, .nv-r, .nv {
+    grid-area: nv;
+}
+
+.hd {
+    grid-area: hd;
+}
+
+.mn {
+    grid-area: mn;
+}
+
+.ft {
+    grid-area: ft;
+}
+
+ .hd-l, .mn-l, .ft-l {
+    grid-area: l;
+}
+ .hd-r, .mn-r, .ft-r {
+    grid-area: r;
+}
+
+/* / 레이아웃 */
+
+
+/* 상단바 */
+nav {
+    width: 100%;
+    height: 31px;
+    background-color: #7CA3C6;
+    padding: 10px 10px 0 10px;
+}
+
+nav h4 {
+    box-sizing: border-box;
+    color: white;
+}
+/* /상단바 */
+
+/* 타이틀 */
+header {
+    margin: 30px 0;
+}
+
+#title{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+#title a{
+    color: #0070D2;
+}
+
+#ect {
+    display: flex;
+    color: #9B9B9B;
+}
+
+#ect p {
+	font-size: 0.8rem;
+}
+
+#title h4{
+	color: #0070D2;
+}
+
+/* /타이틀 */
+
+.border {
+    margin: 30px;
+    padding: 0 30px;
+    padding-bottom: 30px;
+    border: 1px solid #D5D9DE;
+}
+
+.mn{
+    margin-top: 30px;
+}
+
+.mn label {
+   margin-right: 20px;
+   font-weight: bold;
+   font-size: 0.9rem;
+}
+
+.contents label {
+    margin-right: 45px;
+}
+
+
+.download-title {
+    display: flex;
+    margin-top: 30px;
+}
+
+.download-title i {
+    color: #0070D2;
+    margin-left: 10px;
+}
+
+.download-area {
+    margin-top: 10px;
+    padding: 20px;
+    border: 1px solid #D5D9DE;
+    border-radius: 10px;
+}
+
+.download-area .prev-img a {
+    color: #0070D2;
+}
+
+.download-area .prev-img img{
+    width: 10px; height: 10px;
+    margin-left: 10px;
+}
+
+
+
+/* /글 작성 영역 */
+
+/* 첨부파일 영역 */
+#fileNm {
+	width: 100%;
+    border: none;
+    color: #0070D2;
+    cursor: pointer;
+}
+
+.file-area img {
+	width: 50%;
+}
+
+.ft {
+    margin-top: 10px;
+}
+
+.ft .btns{
+	display: flex;
+	justify-content: flex-end;
+    margin-right: 30px;
+    margin-bottom: 30px;
+}
+
+/*  수정 버튼 */
+#editBtn {
+    cursor: pointer;
+    margin: 0 10px;
+    width: 108px;
+    height: 42px;
+    border-radius: 12px;
+    border: 1px solid #0070D2;
+    background-color: #0070D2;
+    color: white;
+    font-weight: bold;
+}
+
+/*  삭제 버튼 */
+#deleteBtn {
+    cursor: pointer;
+    margin: 0 10px;
+    width: 108px;
+    height: 42px;
+    border-radius: 12px;
+    border: 1px solid #0070D2;
+    background-color: white;
+    color: #0070D2;
+    font-weight: bold;
+}
+
+/* 목록 버튼 */
+#listBtn {
+    cursor: pointer;
+    margin: 0 10px;
+    width: 108px;
+    height: 42px;
+    border-radius: 12px;
+    border: 1px solid #EBEBEB;
+    background-color: EBEBEB;
+    color: #2E2E2E;
+    font-weight: bold;
+}

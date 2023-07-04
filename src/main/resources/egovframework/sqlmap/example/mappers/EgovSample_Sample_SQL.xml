@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.example.sample.service.impl.SampleMapper">
+
+	<resultMap id="sample" type="egovframework.example.sample.service.SampleVO">
+		<result property="boardSq" column="board_sq"/>
+		<result property="boardCd" column="board_cd"/>
+		<result property="title" column="title"/>
+		<result property="content" column="content"/>
+		<result property="userNm" column="user_nm"/>
+		<result property="viewCnt" column="view_cnt"/>
+<!-- 		<result property="updateDt" column="update_dt"/> -->
+	</resultMap>
+	
+	<resultMap id="code" type="egovframework.example.sample.service.CodeVO">
+		<result property="code" column="code"/>
+		<result property="decode" column="decode"/>
+		<result property="codePid" column="code_pid"/>
+	</resultMap>
+	
+	<resultMap id="uploadfile" type="egovframework.example.sample.service.UploadFileVO">
+		<result property="fileSq" column="file_sq"/>
+		<result property="fileCd" column="file_cd"/>
+		<result property="boardNo" column="board_no"/>
+		<result property="storeNm" column="store_nm"/>
+		<result property="uploadNm" column="upload_nm"/>
+		<result property="fileSize" column="file_size"/>
+		<result property="fileType" column="file_type"/>
+	</resultMap>
+	
+	<insert id="insertFile">
+
+			INSERT INTO test_uploadfile_tb 
+				( file_sq
+				  , file_cd
+				  , board_no
+				  , store_nm
+				  , upload_nm
+				  , file_size
+				  , file_type
+				   )
+			VALUES ( test_uploadfile_seq.nextval
+				  , #{fileCd}
+				  , #{boardNo}
+				  , #{storeNm}
+				  , #{uploadNm}
+				  , #{fileSize}
+				  , #{fileType}
+				  )
+
+	</insert>
+	
+	<select id="selectFileList" resultMap="uploadfile">
+
+        SELECT file_sq, file_cd, board_no, store_nm, upload_nm,
+        		file_size, file_type
+        	FROM TEST_UPLOADFILE_TB 
+        	WHERE FILE_CD = #{fileCd}
+        		AND BOARD_NO = #{boardNo}
+
+    </select>
+	
+	<select id="selectFile" resultMap="uploadfile" >
+       
+            SELECT * 
+            FROM test_uploadfile_tb 
+            WHERE file_sq =#{fileSq}
+     
+    </select>
+    
+    <delete id="deleteFile">
+	
+			DELETE FROM test_uploadfile_tb 
+			WHERE file_sq =#{fileSq}
+	
+	</delete>
+	
+	
+	
+	<select id="selectCodeList" resultMap="code">
+        SELECT CODE, DECODE, CODE_PID
+        	FROM TEST_CODE_TB 
+        	WHERE CODE_PID = #{codePid}
+    </select>
+    
+    <select id="selectAllCodeList" resultMap="code">
+        SELECT CODE, DECODE, CODE_PID
+        	FROM TEST_CODE_TB 
+        	WHERE CODE_PID is not null
+    </select>
+
+	<insert id="insertSample" parameterType="SampleVO">
+
+			INSERT INTO test_board_tb 
+				( board_sq
+				  , board_cd
+				  , title
+				  , content
+				  , user_nm )
+			VALUES ( test_board_seq.nextval
+				  , #{boardCd}
+				  , #{title}
+				  , #{content}
+				  , #{userNm} )
+
+	</insert>
+
+	<update id="updateSample">
+
+			UPDATE test_board_tb
+			SET title=#{title}
+				, content=#{content}
+				, DESCRIPTION=#{description}
+				, update_dt= systimestamp
+				  WHERE board_sq=#{boardSq}
+
+	</update>
+
+	<delete id="deleteSample">
+
+			DELETE FROM test_board_tb
+			WHERE board_sq=#{boardSq}
+
+	</delete>
+
+	<select id="selectSample" resultMap="sample">
+
+			SELECT
+				*
+			FROM test_board_tb
+			WHERE board_sq=#{boardSq}
+
+	</select>
+
+	<select id="selectSampleList" parameterType="searchVO" resultType="egovMap">
+
+			SELECT
+				board_sq, board_cd, title, view_cnt, user_nm, update_dt
+			FROM test_board_tb
+			WHERE 1=1
+			<if test="searchKeyword != null and searchKeyword != ''">
+		        <choose>
+		            <when test="searchCondition == 0">
+						AND	board_sq LIKE '%' || #{searchKeyword} || '%'
+					</when>
+		            <when test="searchCondition == 1">
+						AND	user_nm LIKE '%' || #{searchKeyword} || '%'
+					</when>
+				</choose>
+			</if>
+			ORDER BY board_sq ASC
+			OFFSET #{firstIndex} ROWS 
+			FETCH NEXT #{recordCountPerPage} ROWS ONLY	
+	</select>
+
+	<select id="selectSampleListTotCnt" parameterType="searchVO" resultType="int">
+
+			SELECT COUNT(*) totcnt
+			FROM test_board_tb
+			WHERE 1=1
+			<if test="searchKeyword != null and searchKeyword != ''">
+		        <choose>
+		            <when test="searchCondition == 0">
+						AND board_sq LIKE '%' || #{searchKeyword} || '%'
+					</when>
+		            <when test="searchCondition == 1">
+						AND	user_nm LIKE '%' || #{searchKeyword} || '%'
+					</when>
+				</choose>
+			</if>
+	</select>
+
+</mapper>
