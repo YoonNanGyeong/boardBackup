@@ -16,9 +16,6 @@
 		<result property="fileNm" column="file_nm"/>
 		<result property="createDt" column="create_dt"/>
 		<result property="updateDt" column="update_dt"/>
-<!-- 		<collection property = "sampleVO" ofType="SampleVO"> -->
-<!-- 			<id property="fileNm" column="file_nm"/> -->
-<!-- 		</collection> -->
 	</resultMap>
 	
 	<resultMap id="code" class="egovframework.example.sample.service.CodeVO">
@@ -148,7 +145,6 @@
 	</delete>
     
     <select id="sampleDAO.selectSample" resultMap="sample" remapResults="true">
-<!--     <select id="sampleDAO.selectSample" parameterClass="egovframework.example.sample.service.SampleVO" resultClass="egovframework.example.sample.service.SampleVO"> -->
        	<![CDATA[
             SELECT
              *
