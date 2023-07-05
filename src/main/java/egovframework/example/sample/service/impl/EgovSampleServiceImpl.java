@@ -83,12 +83,12 @@ public class EgovSampleServiceImpl extends EgovAbstractServiceImpl implements Eg
 	@Override
 	public Long insertSample(SampleVO vo) throws Exception {
 		LOGGER.debug(vo.toString());
-		Long id = vo.getBoardSq();
 
 		LOGGER.debug(vo.toString());
 
-		sampleDAO.insertSample(vo);
-		
+		Long id = sampleDAO.insertSample(vo);
+		System.out.println("id: " + id);
+	
 		return id;
 	}
 

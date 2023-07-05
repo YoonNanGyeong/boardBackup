@@ -34,7 +34,7 @@
 		<result property="fileType" column="file_type"/>
 	</resultMap>
 	
-	<insert id="uploadFileDAO.insertFile">
+	<insert id="uploadFileDAO.insertFile" >
 		<![CDATA[
 			INSERT INTO test_uploadfile_tb 
 				( file_sq
@@ -97,7 +97,8 @@
    	]]>
     </select>
 
-	<insert id="sampleDAO.insertSample">
+	<insert id="sampleDAO.insertSample" useGeneratedKeys="true" keyColumn="board_sq" keyProperty="boardSq">
+		
 		<![CDATA[
 			INSERT INTO test_board_tb 
 				( board_sq
@@ -108,11 +109,15 @@
 				  , file_nm )
 			VALUES ( test_board_seq.nextval
 				  , #boardCd#
-				  , #title#
+				  , #title#  
 				  , #content#
 				  , #userNm#
 				  , #fileNm# )
 		]]>
+<!-- 		<selectKey keyProperty="board_sq" resultClass="java.lang.Long"> -->
+<!-- 			select last_insert_id() -->
+<!-- <!-- 			SELECT nvl(max(t1.BOARD_SQ),1) FROM TEST_BOARD_TB t1 --> -->
+<!-- 		</selectKey> -->
 	</insert>
 	
 	<update id="sampleDAO.updateSample">

@@ -75,7 +75,7 @@ public class EgovSampleController {
 
 	/** Validator */
 	@Resource(name = "beanValidator")
-	protected DefaultBeanValidator beanValidator;
+	protected DefaultBeanValidator beanValidator; 
 
 	
 	// 게시판 코드 디코드 
@@ -190,8 +190,9 @@ public class EgovSampleController {
 		
 		// 게시글 저장
 		 Long boardNo = sampleService.insertSample(sampleVO);
+//		 model.addAttribute("boardSq",boardNo);
 		 System.out.println("boardNo: " + boardNo);
-		
+		 
 		// 업로드 파일 객체
 		UploadFileVO uploadFileVO = new UploadFileVO();
 		
@@ -216,6 +217,7 @@ public class EgovSampleController {
 		}
 		
 		status.setComplete();
+//		return "redirect:/detailSample.do?selectedId=" + resultNo;
 		return "redirect:/egovSampleList.do";
 	}
 	
