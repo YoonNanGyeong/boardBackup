@@ -97,7 +97,7 @@
    	]]>
     </select>
 
-	<insert id="sampleDAO.insertSample" useGeneratedKeys="true" keyColumn="board_sq" keyProperty="boardSq">
+	<insert id="sampleDAO.insertSample" parameterClass="egovframework.example.sample.service.SampleVO" >
 		
 		<![CDATA[
 			INSERT INTO test_board_tb 
@@ -114,10 +114,9 @@
 				  , #userNm#
 				  , #fileNm# )
 		]]>
-<!-- 		<selectKey keyProperty="board_sq" resultClass="java.lang.Long"> -->
-<!-- 			select last_insert_id() -->
-<!-- <!-- 			SELECT nvl(max(t1.BOARD_SQ),1) FROM TEST_BOARD_TB t1 --> -->
-<!-- 		</selectKey> -->
+		<selectKey keyProperty="boardSq"  resultClass="Long">
+			SELECT test_board_seq.currval AS board_sq FROM dual
+		</selectKey>
 	</insert>
 	
 	<update id="sampleDAO.updateSample">

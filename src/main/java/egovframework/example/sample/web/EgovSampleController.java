@@ -217,8 +217,8 @@ public class EgovSampleController {
 		}
 		
 		status.setComplete();
-//		return "redirect:/detailSample.do?selectedId=" + resultNo;
-		return "redirect:/egovSampleList.do";
+		return "redirect:/detailSample.do?selectedId=" + boardNo;
+//		return "redirect:/egovSampleList.do";
 	}
 	
 
