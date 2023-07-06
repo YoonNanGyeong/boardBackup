@@ -218,7 +218,6 @@ public class EgovSampleController {
 		
 		status.setComplete();
 		return "redirect:/detailSample.do?selectedId=" + boardNo;
-//		return "redirect:/egovSampleList.do";
 	}
 	
 
