@@ -71,14 +71,14 @@
 	           <!-- 글 검색 -->
 	           
 	              <ul class="search">
-<!-- 	              	 <li> -->
-<!-- 	              	 	<label for="searchKeyword">카테고리</label> -->
-<%-- 	              	 	<form:select path="searchKeyword"> --%>
-<%-- 	              	 		<form:option value="B0101" label="공지사항"/> --%>
-<%-- 	              	 		<form:option value="B0102" label="자유게시판"/> --%>
-<%-- 	              	 		<form:option value="B0103" label="코딩게시판"/> --%>
-<%-- 	              	 	</form:select> --%>
-<!-- 	              	 </li> -->
+	              <li>
+	                 <label for="boardCd">카테고리 선택</label>
+        				<form:select path="boardCd"  id="boardCd">
+        					<form:option value="B0101" label="공지사항" /> 
+        					<form:option value="B0102" label="자유게시판" />
+        					<form:option value="B0103" label="코딩게시판" />
+        				</form:select>	
+	                </li>
 	                <li>
 	                 <label for="searchCondition"><spring:message code="search.choose" /></label>
         				<form:select path="searchCondition"  id="searchCondition">

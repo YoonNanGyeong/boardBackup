@@ -153,7 +153,6 @@ public class EgovSampleServiceImpl extends EgovAbstractServiceImpl implements Eg
 	public int selectSampleListTotCnt(SampleDefaultVO searchVO) {
 		return sampleDAO.selectSampleListTotCnt(searchVO);
 	}
-
 	
 	
 	/**
@@ -217,6 +216,7 @@ public class EgovSampleServiceImpl extends EgovAbstractServiceImpl implements Eg
 	public void updateViewCnt(SampleVO vo) throws Exception {
 		sampleDAO.increaseViewCnt(vo);
 	}
+
 
 	
 	

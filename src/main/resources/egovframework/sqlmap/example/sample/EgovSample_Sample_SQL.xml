@@ -34,7 +34,7 @@
 		<result property="fileType" column="file_type"/>
 	</resultMap>
 	
-	<insert id="uploadFileDAO.insertFile" >
+	<insert id="uploadFileDAO.insertFile" parameterClass="egovframework.example.sample.service.UploadFileVO">
 		<![CDATA[
 			INSERT INTO test_uploadfile_tb 
 				( file_sq
@@ -54,6 +54,10 @@
 				  , #fileType#
 				  )
 		]]>
+		
+		<selectKey keyProperty="boardSq"  resultClass="Long">
+			SELECT test_uploadFile_seq.currval AS file_sq FROM dual
+		</selectKey>
 	</insert>
 	
 	<select id="uploadFileDAO.selectFileList" resultMap="uploadfile" remapResults="true">
@@ -157,12 +161,15 @@
         ]]>
     </select>
 	
-	<select id="sampleDAO.selectSampleList" parameterClass="searchVO" resultClass="egovMap">
+	<select id="sampleDAO.selectSampleList"  parameterClass="searchVO" resultClass="egovMap">
 
 			SELECT
 				board_sq, board_cd, title, view_cnt, user_nm, update_dt
 			FROM test_board_tb
 			WHERE 1=1
+			<isNotNull prepend="AND" property="boardCd">
+				board_cd = #boardCd#
+			</isNotNull>
 			<isEqual prepend="AND" property="searchCondition" compareValue="0">
 				title LIKE '%' || #searchKeyword# || '%'
 			</isEqual>
@@ -177,6 +184,12 @@
 			OFFSET #firstIndex# ROWS 
 			FETCH NEXT #recordCountPerPage# ROWS ONLY	
 	</select>
+	
+<!-- 	<select id="sampleDAO.selectListbyCategory" resultMap="sample" resultClass="egovMap"> -->
+		
+<!-- 	</select> -->
+	
+	
 	
 	<select id="sampleDAO.selectSampleListTotCnt" parameterClass="searchVO" resultClass="int">
 
