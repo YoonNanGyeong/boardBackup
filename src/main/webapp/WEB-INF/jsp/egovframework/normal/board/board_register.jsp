@@ -11,16 +11,14 @@
       <!-- 게시판 코드가 있으면 registerFlag변수에 modify, 없으면 create 저장 -->
     <c:set var="registerFlag" value="${empty boardVO.boardCd ? 'create' : 'modify'}"/>
     <title>게시글
-    	 <!-- 등록 -->
     	 <c:if test="${registerFlag == 'create'}"><spring:message code="button.create" /></c:if>
-    	 <!-- 수정 -->
          <c:if test="${registerFlag == 'modify'}"><spring:message code="button.modify" /></c:if>
     </title>
     <link type="text/css" rel="stylesheet" href="<c:url value='/css/write.css?after'/>"/>
     
     <!--For Commons Validator Client Side-->
-    <script type="text/javascript" src="<c:url value='/cmmn/validator.do'/>"></script>
-    <validator:javascript formName="boardVO" staticJavascript="false" xhtml="true" cdata="false"/>
+<%--     <script type="text/javascript" src="<c:url value='/cmmn/validator.do'/>"></script> --%>
+<%--     <validator:javascript formName="boardVO" staticJavascript="false" xhtml="true" cdata="false"/> --%>
     
     <script type="text/javaScript" language="javascript" defer="defer">
      
@@ -48,7 +46,7 @@
 	        let con = confirm(btnVal + "하시겠습니까?");
 	        
         	frm = document.detailForm;
-        	if(!validateBoardVO(frm)){
+        	if(con == false){
                 return;
             }else if(con == true){
             	frm.action = "<c:url value="${registerFlag == 'create' ? '/addBoard.do' : '/updateBoard.do'}"/>";
@@ -80,7 +78,7 @@
                 </div>
                 <!-- /글자 강조 박스 -->
                 <h3>
-					<c:if test="${registerFlag == 'create'}"><spring:message code="title.sample.create" /></c:if>
+					<c:if test="${registerFlag == 'create'}">게시글 등록</c:if>
                     <c:if test="${registerFlag == 'modify'}">게시글 수정</c:if>
 				</h3>
             </div>
@@ -126,8 +124,8 @@
 	                <c:if test = "${boardVO.fileNm ne null }"> 
 		                <div style= "margin-top: 10px;" id="fileDown">
 			                <label for="fileNm">다운로드</label>             
-			                        <a href="fileDownload.do?fileNm=${sampleVO.fileNm}" title="첨부파일 다운로드">
-			                        	<input type="text" id="fileNm" value="${sampleVO.fileNm}" name="fileNm" readonly="readonly"  title="첨부파일 다운로드"/>
+			                        <a href="fileDownload.do?fileNm=${boardVO.fileNm}" title="첨부파일 다운로드">
+			                        	<input type="text" id="fileNm" value="${boardVO.fileNm}" name="fileNm" readonly="readonly"  title="첨부파일 다운로드"/>
 			                        </a>
 				                   		<button id="fileDelete" type="button" onclick="fn_fileDelete()">파일삭제</button>
 		                </div>

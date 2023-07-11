@@ -16,9 +16,8 @@
     
     // 글 수정 화면
     function fn_egov_modifyView(id) {
-		document.detailForm.selectedId.value = id;
-	   	document.detailForm.action = "<c:url value='/updateBoardView.do'/>";
-	   	document.detailForm.submit();
+		var boardSq = document.detailForm.boardSq.value;
+		location.href = boardSq + "/updateBoard.do";
 	} 
 
     /* 글 목록 화면 function */
