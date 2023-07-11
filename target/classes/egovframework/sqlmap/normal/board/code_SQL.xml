@@ -14,7 +14,8 @@
 	<![CDATA[
         SELECT *
         	FROM TEST_CODE_TB 
-        	WHERE CODE_PID = #codePid#
+        	WHERE USE_YN = 'Y'
+        		AND CODE_PID = #codePid#
    	]]>
     </select>
     

@@ -8,8 +8,8 @@
     <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
         <property name="url" value="jdbc:oracle:thin:@127.0.0.1:1521:xe" />
-        <property name="username" value="c##board"/>
-        <property name="password" value="board1234"/>
+        <property name="username" value="c##board2"/>
+        <property name="password" value="board4321"/>
         
     </bean>
      

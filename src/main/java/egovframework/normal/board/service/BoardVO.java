@@ -29,17 +29,30 @@ public class BoardVO extends BoardDefaultVO {
 	private String content; // 내용 content
 	private long viewCnt;	// 조회수 view_cnt
 	private String userNm;	// 작성자 user_nm
+	private String useYn;	// 사용여부
 	private String createDt;	//등록일시
 	private String  updateDt;	//수정일시
 	
 	// 첨부파일
-	private String fileNm;
+	private Long fileNo;	//파일번호
 	private MultipartFile uploadFile;
 	
 	
 
 	
 	
+	public String getUseYn() {
+		return useYn;
+	}
+	public void setUseYn(String useYn) {
+		this.useYn = useYn;
+	}
+	public Long getFileNo() {
+		return fileNo;
+	}
+	public void setFileNo(Long fileNo) {
+		this.fileNo = fileNo;
+	}
 	public String getCreateDt() {
 		return createDt;
 	}
@@ -52,12 +65,7 @@ public class BoardVO extends BoardDefaultVO {
 	public void setUpdateDt(String updateDt) {
 		this.updateDt = updateDt;
 	}
-	public String getFileNm() {
-		return fileNm;
-	}
-	public void setFileNm(String fileNm) {
-		this.fileNm = fileNm;
-	}
+	
 	public MultipartFile getUploadFile() {
 		return uploadFile;
 	}

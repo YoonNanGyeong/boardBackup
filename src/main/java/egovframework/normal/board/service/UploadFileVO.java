@@ -10,9 +10,18 @@ public class UploadFileVO {
 		private String uploadNm;	//	 --업로드파일명(유저가 업로드한파일명)
 		private String fileSize;		//	 --업로드파일크기(단위byte)
 		private String fileType;		//  --파일유형(mimetype)
+		private String useYn;	// 사용여부
 		private LocalDateTime createDt;	//	 --등록일시
 		private LocalDateTime updateDt;	//	  --수정일시
 
+		
+		
+		public String getUseYn() {
+			return useYn;
+		}
+		public void setUseYn(String useYn) {
+			this.useYn = useYn;
+		}
 		public Long getFileSq() {
 			return fileSq;
 		}

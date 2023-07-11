@@ -7,11 +7,18 @@ public class CodeVO {
 	private String code; //code id
 	private String decode; //코드명
 	private String codePid; //부모 코드
+	private String useYn;	// 사용여부
 	private LocalDateTime createDt;	//등록일시
 	private LocalDateTime  updateDt;	//수정일시
 	
 	
 	
+	public String getUseYn() {
+		return useYn;
+	}
+	public void setUseYn(String useYn) {
+		this.useYn = useYn;
+	}
 	public LocalDateTime getCreateDt() {
 		return createDt;
 	}

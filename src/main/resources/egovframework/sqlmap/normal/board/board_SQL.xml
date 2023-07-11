@@ -13,7 +13,8 @@
 		<result property="content" column="content"/>
 		<result property="viewCnt" column="view_cnt"/>
 		<result property="userNm" column="user_nm"/>
-		<result property="fileNm" column="file_nm"/>
+		<result property="fileNo" column="file_no"/>
+		<result property="useYn" column="use_yn"/>
 		<result property="createDt" column="create_dt"/>
 		<result property="updateDt" column="update_dt"/>
 	</resultMap>
@@ -28,13 +29,13 @@
 				  , title
 				  , content
 				  , user_nm
-				  , file_nm )
+				  , file_no )
 			VALUES ( test_board_seq.nextval
 				  , #boardCd#
 				  , #title#  
 				  , #content#
 				  , #userNm#
-				  , #fileNm# )
+				  , #fileNo# )
 		]]>
 		<selectKey keyProperty="boardSq"  resultClass="Long">
 			SELECT test_board_seq.currval AS board_sq FROM dual
@@ -49,7 +50,7 @@
 				, update_dt=systimestamp
 				, user_nm = #userNm#
 				, board_cd = #boardCd#
-				, file_nm = #fileNm#
+				, file_no = #fileNo#
 			WHERE board_sq=#boardSq#
 		]]>
 	</update>
@@ -64,8 +65,13 @@
 	
 	
 	<delete id="boardDAO.deleteBoard">
+<!-- 		<![CDATA[ -->
+<!-- 			DELETE FROM test_board_tb  -->
+<!-- 			WHERE board_sq=#boardSq# -->
+<!-- 		]]> -->
 		<![CDATA[
-			DELETE FROM test_board_tb 
+			UPDATE test_board_tb
+			SET use_yn = 'N'
 			WHERE board_sq=#boardSq#
 		]]>
 	</delete>
@@ -84,7 +90,7 @@
 			SELECT
 				board_sq, board_cd, title, view_cnt, user_nm, update_dt
 			FROM test_board_tb
-			WHERE 1=1
+			WHERE 1=1 and use_yn = 'Y'	
 			<isNotEmpty prepend="AND" property="boardCd">
 				board_cd = #boardCd#
 			</isNotEmpty>
@@ -111,7 +117,7 @@
 
 			SELECT COUNT(*) totcnt
 			FROM test_board_tb
-			WHERE 1=1
+			WHERE 1=1 and use_yn = 'Y'
 			<isEqual prepend="AND" property="searchCondition" compareValue="0">
 				title LIKE '%' || #searchKeyword# || '%'
 			</isEqual>

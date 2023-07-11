@@ -34,9 +34,9 @@
     	if(!confirm("삭제 하시겠습니까?")){
     		document.detailForm.action = "<c:url value='/detailBoard.do'/>";
     	}else{    		
-    		alert("삭제 완료되었습니다.");
 	       	document.detailForm.action = "<c:url value='/deleteBoard.do'/>";
 	       	document.detailForm.submit();
+    		alert("삭제 완료되었습니다.");
     	}
     }
     

@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -34,7 +35,10 @@ public class FileDownloadController {
 			System.out.println("UnsupportedEncodingException 발생");
 		}
         
-        realFilename = "C:\\\\eGovFrameDev-3.10.0-64bit\\\\workspace\\\\.metadata\\\\.plugins\\\\org.eclipse.wst.server.core\\\\tmp0\\\\wtpwebapps\\\\normalBoard_backup\\\\images\\\\board\\\\upload\\\\" + filename;
+        ServletContext context = request.getSession().getServletContext();
+		String loot = context.getRealPath("/images/board/upload");
+        
+        realFilename = loot + filename;
         System.out.println("realFileName= "+realFilename);
  
         File file = new File(realFilename);

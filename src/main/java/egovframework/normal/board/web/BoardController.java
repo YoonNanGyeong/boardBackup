@@ -32,6 +32,8 @@ import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Controller;
@@ -133,7 +135,10 @@ public class BoardController {
 
 
 	@PostMapping(value = "/addBoard.do")
-	public String addBoard(@ModelAttribute("searchVO") BoardDefaultVO searchVO, BoardVO boardVO, BindingResult bindingResult, Model model, SessionStatus status)
+	public String addBoard(
+			@ModelAttribute("searchVO") BoardDefaultVO searchVO, BoardVO boardVO, 
+			BindingResult bindingResult, Model model, SessionStatus status,
+			HttpServletRequest request)
 			throws Exception {
 
 		// Server-Side Validation
@@ -153,23 +158,22 @@ public class BoardController {
 		MultipartFile uploadFile = boardVO.getUploadFile();
 		
 		if(uploadFile != null && !uploadFile.isEmpty()) {
-			ogFileName = uploadFile.getOriginalFilename();
+			ogFileName = uploadFile.getOriginalFilename();	//작성자 첨부파일 이름
 			String ext = FilenameUtils.getExtension(ogFileName);
 			UUID uuid = UUID.randomUUID();
-			fileName = uuid + "." + ext;
-			loot = "C:\\\\eGovFrameDev-3.10.0-64bit\\\\workspace\\\\.metadata\\\\.plugins\\\\org.eclipse.wst.server.core\\\\tmp0\\\\wtpwebapps\\\\normalBoard_backup\\\\images\\\\board\\\\upload\\\\";
+			fileName = uuid + "." + ext;	// 서버 보관용 파일 이름
+			ServletContext context = request.getSession().getServletContext();
+			loot = context.getRealPath("/images/board/upload");
+			uploadFile.transferTo(new File(loot + ogFileName));
+			System.out.println("loot = " + loot);
 			
-			uploadFile.transferTo(new File(loot + fileName));
 		}
 		
-		boardVO.setFileNm(fileName);
-		System.out.println("등록한 글 첨부파일이름: "+boardVO.getFileNm());
 		
 		// 게시글 저장
 		 Long boardNo = boardService.insertBoard(boardVO);
 		 model.addAttribute("boardNo",boardNo);
 
-		 System.out.println("boardNo: " + boardNo);
 		 
 		// 업로드 파일 객체
 		UploadFileVO uploadFileVO = new UploadFileVO();
@@ -187,9 +191,10 @@ public class BoardController {
 		uploadFileVO.setFileSize(String.valueOf(uploadFile.getSize()));
 		uploadFileVO.setFileType(uploadFile.getContentType());
 		
+		Long fileNo = null;
 		// 업로드 파일 테이블에 저장
 		if(uploadFileVO.getStoreNm() != null || uploadFileVO.getUploadNm()!= null) {			
-			uploadFileService.insertFile(uploadFileVO);
+			fileNo = uploadFileService.insertFile(uploadFileVO);
 		}
 		
 		status.setComplete();
@@ -228,7 +233,9 @@ public class BoardController {
 
 
 	@PostMapping("/updateBoard.do")
-	public String updateBoard(@ModelAttribute("searchVO") BoardDefaultVO searchVO, BoardVO boardVO, BindingResult bindingResult, Model model, SessionStatus status)
+	public String updateBoard(@ModelAttribute("searchVO") BoardDefaultVO searchVO, 
+			BoardVO boardVO, BindingResult bindingResult, Model model, SessionStatus status,
+			HttpServletRequest request)
 			throws Exception {
 		
 		beanValidator.validate(boardVO, bindingResult);
@@ -248,11 +255,12 @@ public class BoardController {
 			String ext = FilenameUtils.getExtension(ogFileName);
 			UUID uuid = UUID.randomUUID();
 			fileName = uuid + "." + ext;
-			loot = "C:\\\\\\\\eGovFrameDev-3.10.0-64bit\\\\\\\\workspace\\\\\\\\.metadata\\\\\\\\.plugins\\\\\\\\org.eclipse.wst.server.core\\\\\\\\tmp0\\\\\\\\wtpwebapps\\\\\\\\normalBoard_backup\\\\\\\\images\\\\\\\\board\\\\\\\\upload\\\\\\\\";
+			ServletContext context = request.getSession().getServletContext();
+			loot = context.getRealPath("/images/board/upload");
 			
-			uploadFile.transferTo(new File(loot + fileName));
+			uploadFile.transferTo(new File(loot + ogFileName));
 			
-			boardVO.setFileNm(fileName);
+//			boardVO.setFileNm(fileName);
 		}
 		
 
@@ -263,21 +271,23 @@ public class BoardController {
 
 
 	@PostMapping("/deleteBoard.do")
-	public String deleteBoard(BoardVO boardVO, @ModelAttribute("searchVO") BoardDefaultVO searchVO, SessionStatus status) throws Exception {
-		String boardFileNm = boardVO.getFileNm();
+	public String deleteBoard(BoardVO boardVO, @ModelAttribute("searchVO") BoardDefaultVO searchVO, SessionStatus status
+			, HttpServletRequest request) throws Exception {
+		Long boardFileNo = boardVO.getFileNo();
 		UploadFileVO uploadFile = new UploadFileVO();
-		uploadFile.setStoreNm(boardFileNm);
+		uploadFile.setFileSq(boardFileNo);
 		
 		// 물리 파일 삭제
 		String loot = null;
-		loot = "C:\\eGovFrameDev-3.10.0-64bit\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\normalBoard\\images\\board\\upload\\";
+		ServletContext context = request.getSession().getServletContext();
+		loot = context.getRealPath("/images/board/upload");
 		
-		String filePath = loot + boardFileNm;
-		File file = new File(filePath);
-		if(file.exists()) {			
-			file.delete();
-		}
-		
+//		String filePath = loot + boardFileNm;
+//		File file = new File(filePath);
+//		if(file.exists()) {			
+//			file.delete();
+//		}
+//		
 		// 게시글 삭제
 		boardService.deleteBoard(boardVO);
 		
