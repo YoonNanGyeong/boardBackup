@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
 
-<sqlMap namespace="Sample">
+<sqlMap namespace="board">
 
 	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
-	<typeAlias  alias="searchVO" type="egovframework.normal.board.service.SampleDefaultVO"/>
+	<typeAlias  alias="searchVO" type="egovframework.normal.board.service.BoardDefaultVO"/>
 
-	<resultMap id="sample" class="egovframework.normal.board.service.SampleVO" >
+	<resultMap id="board" class="egovframework.normal.board.service.BoardVO" >
 		<result property="boardSq" column="board_sq"/>
 		<result property="boardCd" column="board_cd"/>
 		<result property="title" column="title"/>
@@ -17,91 +17,9 @@
 		<result property="createDt" column="create_dt"/>
 		<result property="updateDt" column="update_dt"/>
 	</resultMap>
-	
-	<resultMap id="code" class="egovframework.normal.board.service.CodeVO">
-		<result property="code" column="code"/>
-		<result property="decode" column="decode"/>
-		<result property="codePid" column="code_pid"/>
-	</resultMap>
-	
-	<resultMap id="uploadfile" class="egovframework.normal.board.service.UploadFileVO">
-		<result property="fileSq" column="file_sq"/>
-		<result property="fileCd" column="file_cd"/>
-		<result property="boardNo" column="board_no"/>
-		<result property="storeNm" column="store_nm"/>
-		<result property="uploadNm" column="upload_nm"/>
-		<result property="fileSize" column="file_size"/>
-		<result property="fileType" column="file_type"/>
-	</resultMap>
-	
-	<insert id="uploadFileDAO.insertFile" parameterClass="egovframework.normal.board.service.UploadFileVO">
-		<![CDATA[
-			INSERT INTO test_uploadfile_tb 
-				( file_sq
-				  , file_cd
-				  , board_no
-				  , store_nm
-				  , upload_nm
-				  , file_size
-				  , file_type
-				   )
-			VALUES ( test_uploadfile_seq.nextval
-				  , #fileCd#
-				  , #boardNo#
-				  , #storeNm#
-				  , #uploadNm#
-				  , #fileSize#
-				  , #fileType#
-				  )
-		]]>
-		
-		<selectKey keyProperty="boardSq"  resultClass="Long">
-			SELECT test_uploadFile_seq.currval AS file_sq FROM dual
-		</selectKey>
-	</insert>
-	
-	<select id="uploadFileDAO.selectFileList" resultMap="uploadfile" remapResults="true">
-	<![CDATA[
-   		   SELECT *
-        	FROM TEST_UPLOADFILE_TB 
-        	WHERE FILE_CD = #fileCd# 
-        		AND BOARD_NO = #boardNo#
-   	]]>
-    </select>
-	
-	<select id="uploadFileDAO.selectFile"  resultMap="uploadfile" remapResults="true">
-       	<![CDATA[
-            SELECT *
-            FROM test_uploadfile_tb 
-            WHERE file_sq =#fileSq#
-        ]]>
-    </select>
-    
-    <delete id="uploadFileDAO.deleteFile">
-		<![CDATA[
-			DELETE FROM test_uploadfile_tb 
-			WHERE store_nm =#storeNm#
-		]]>
-	</delete>
-	
-	
-	<select id="codeDAO.selectCodeList" parameterClass="egovframework.normal.board.service.CodeVO" resultClass="egovframework.normal.board.service.CodeVO">
-	<![CDATA[
-        SELECT *
-        	FROM TEST_CODE_TB 
-        	WHERE CODE_PID = #codePid#
-   	]]>
-    </select>
-    
-    <select id="codeDAO.selectAllCodeList" resultMap="code" remapResults="true">
-	<![CDATA[
-        SELECT *
-        	FROM TEST_CODE_TB 
-        	WHERE CODE_PID is not null
-   	]]>
-    </select>
 
-	<insert id="sampleDAO.insertSample" parameterClass="egovframework.normal.board.service.SampleVO" >
+
+	<insert id="boardDAO.insertBoard" parameterClass="egovframework.normal.board.service.BoardVO" >
 		
 		<![CDATA[
 			INSERT INTO test_board_tb 
@@ -123,7 +41,7 @@
 		</selectKey>
 	</insert>
 	
-	<update id="sampleDAO.updateSample">
+	<update id="boardDAO.updateBoard">
 		<![CDATA[
 			UPDATE test_board_tb
 			SET title=#title#
@@ -136,7 +54,7 @@
 		]]>
 	</update>
 	
-	<update id="sampleDAO.updateViewCnt">
+	<update id="boardDAO.updateViewCnt">
 		<![CDATA[
 			UPDATE test_board_tb
 			SET view_cnt = view_cnt + 1
@@ -145,14 +63,14 @@
 	</update>
 	
 	
-	<delete id="sampleDAO.deleteSample">
+	<delete id="boardDAO.deleteBoard">
 		<![CDATA[
 			DELETE FROM test_board_tb 
 			WHERE board_sq=#boardSq#
 		]]>
 	</delete>
     
-    <select id="sampleDAO.selectSample" resultMap="sample" remapResults="true">
+    <select id="boardDAO.selectBoard" resultMap="board" remapResults="true">
        	<![CDATA[
             SELECT
              *
@@ -161,7 +79,7 @@
         ]]>
     </select>
 	
-	<select id="sampleDAO.selectSampleList"  parameterClass="searchVO" resultClass="egovMap">
+	<select id="boardDAO.selectBoardList"  parameterClass="searchVO" resultClass="egovMap">
 
 			SELECT
 				board_sq, board_cd, title, view_cnt, user_nm, update_dt
@@ -187,7 +105,7 @@
 	
 
 	
-	<select id="sampleDAO.selectSampleListTotCnt" parameterClass="searchVO" resultClass="int">
+	<select id="boardDAO.selectBoardListTotCnt" parameterClass="searchVO" resultClass="int">
 
 			SELECT COUNT(*) totcnt
 			FROM test_board_tb

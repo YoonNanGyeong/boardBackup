@@ -13,25 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package egovframework.normal.cmmn;
+package egovframework.normal.board.service;
 
-import egovframework.rte.fdl.cmmn.exception.handler.ExceptionHandler;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.List;
 
 
-public class BoardExcepHndlr implements ExceptionHandler {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(BoardExcepHndlr.class);
-
+public interface CodeService {
+	
+	
+	
 	/**
-	* @param ex
-	* @param packageName
-	* @see 개발프레임웍크 실행환경 개발팀
-	*/
-	@Override
-	public void occur(Exception ex, String packageName) {
-		LOGGER.debug(" ExceptionHandler run...............");
-	}
+	 * 하위코드 반환
+	 * @param codePid 부모코드
+	 * @return 하위코드
+	 */
+	List<?> selectCodeList(CodeVO codeVO) throws Exception;
+	
+	
+
 }

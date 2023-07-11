@@ -3,28 +3,13 @@
 <%@ taglib prefix="form"      uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="validator" uri="http://www.springmodules.org/tags/commons-validator" %>
 <%@ taglib prefix="spring"    uri="http://www.springframework.org/tags"%>
-<%
-  /**
-  * @Class Name : egovSampleRegister.jsp
-  * @Description : Sample Register 화면
-  * @Modification Information
-  *
-  *   수정일         수정자                   수정내용
-  *  -------    --------    ---------------------------
-  *  2009.02.01            최초 생성
-  *
-  * author 실행환경 개발팀
-  * since 2009.02.01
-  *
-  * Copyright (C) 2009 by MOPAS  All right reserved.
-  */
-%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
       <!-- 게시판 코드가 있으면 registerFlag변수에 modify, 없으면 create 저장 -->
-    <c:set var="registerFlag" value="${empty sampleVO.boardCd ? 'create' : 'modify'}"/>
+    <c:set var="registerFlag" value="${empty boardVO.boardCd ? 'create' : 'modify'}"/>
     <title>게시글
     	 <!-- 등록 -->
     	 <c:if test="${registerFlag == 'create'}"><spring:message code="button.create" /></c:if>
@@ -35,23 +20,23 @@
     
     <!--For Commons Validator Client Side-->
     <script type="text/javascript" src="<c:url value='/cmmn/validator.do'/>"></script>
-    <validator:javascript formName="sampleVO" staticJavascript="false" xhtml="true" cdata="false"/>
+    <validator:javascript formName="boardVO" staticJavascript="false" xhtml="true" cdata="false"/>
     
     <script type="text/javaScript" language="javascript" defer="defer">
      
         /* 글 목록 화면 function */
         function fn_egov_selectList() {
-           	document.detailForm.action = "<c:url value='/egovSampleList.do'/>";
+           	document.detailForm.action = "<c:url value='/boardList.do'/>";
            	document.detailForm.submit();
         }
         
         /* 글 삭제 function */
         function fn_egov_delete() {
         	if(!confirm("삭제하시겠습니까?")){
-        		document.detailForm.action = "<c:url value='/detailSample.do'/>";
+        		document.detailForm.action = "<c:url value='/detailBoard.do'/>";
         	}else{    		
         		alert("삭제완료되었습니다.");
-    	       	document.detailForm.action = "<c:url value='/deleteSample.do'/>";
+    	       	document.detailForm.action = "<c:url value='/deleteBoard.do'/>";
     	       	document.detailForm.submit();
         	}
         }
@@ -63,10 +48,10 @@
 	        let con = confirm(btnVal + "하시겠습니까?");
 	        
         	frm = document.detailForm;
-        	if(!validateSampleVO(frm)){
+        	if(!validateBoardVO(frm)){
                 return;
             }else if(con == true){
-            	frm.action = "<c:url value="${registerFlag == 'create' ? '/addSample.do' : '/updateSample.do'}"/>";
+            	frm.action = "<c:url value="${registerFlag == 'create' ? '/addBoard.do' : '/updateBoard.do'}"/>";
                 frm.submit();
             }
         }
@@ -75,8 +60,8 @@
 </head>
 <body >
 
-<form:form method ="post" commandName="sampleVO" id="detailForm" name="detailForm"  enctype="multipart/form-data" >
- <input type="hidden" name="boardSq" value="${sampleVO.boardSq}" />
+<form:form method ="post" commandName="boardVO" id="detailForm" name="detailForm"  enctype="multipart/form-data" >
+ <input type="hidden" name="boardSq" value="${boardVO.boardSq}" />
     <!-- 상단바 -->
         <div class="nv-l"></div>
         <nav class="nv">
@@ -138,7 +123,7 @@
 	                        
 	                	<form:input type="file" path="uploadFile" title="첨부파일 추가"/>
 	           
-	                <c:if test = "${sampleVO.fileNm ne null }"> 
+	                <c:if test = "${boardVO.fileNm ne null }"> 
 		                <div style= "margin-top: 10px;" id="fileDown">
 			                <label for="fileNm">다운로드</label>             
 			                        <a href="fileDownload.do?fileNm=${sampleVO.fileNm}" title="첨부파일 다운로드">

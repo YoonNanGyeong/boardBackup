@@ -13,29 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package egovframework.normal.board.service.impl;
+package egovframework.normal.board.service;
 
 import java.util.List;
 
-import egovframework.normal.board.service.SampleDefaultVO;
-import egovframework.normal.board.service.SampleVO;
-import egovframework.rte.psl.dataaccess.EgovAbstractDAO;
 
-import org.springframework.stereotype.Repository;
+public interface BoardService {
 
-
-@Repository("sampleDAO")
-public class SampleDAO extends EgovAbstractDAO {
-
+	   
 	/**
 	 * 글을 등록한다.
 	 * @param vo - 등록할 정보가 담긴 SampleVO
 	 * @return 등록 결과
 	 * @exception Exception
 	 */
-	public Long insertSample(SampleVO vo) throws Exception {
-		return (Long)insert("sampleDAO.insertSample", vo);
-	}
+	Long insertBoard(BoardVO vo) throws Exception;
 
 	/**
 	 * 글을 수정한다.
@@ -43,9 +35,7 @@ public class SampleDAO extends EgovAbstractDAO {
 	 * @return void형
 	 * @exception Exception
 	 */
-	public void updateSample(SampleVO vo) throws Exception {
-		update("sampleDAO.updateSample", vo);
-	}
+	void updateBoard(BoardVO vo) throws Exception;
 
 	/**
 	 * 글을 삭제한다.
@@ -53,9 +43,7 @@ public class SampleDAO extends EgovAbstractDAO {
 	 * @return void형
 	 * @exception Exception
 	 */
-	public void deleteSample(SampleVO vo) throws Exception {
-		delete("sampleDAO.deleteSample", vo);
-	}
+	void deleteBoard(BoardVO vo) throws Exception;
 
 	/**
 	 * 글을 조회한다.
@@ -63,38 +51,31 @@ public class SampleDAO extends EgovAbstractDAO {
 	 * @return 조회한 글
 	 * @exception Exception
 	 */
-	public SampleVO selectSample(SampleVO vo) throws Exception {
-		return (SampleVO) select("sampleDAO.selectSample", vo);
-	}
+	BoardVO selectBoard(BoardVO vo) throws Exception;
 
 	/**
 	 * 글 목록을 조회한다.
-	 * @param searchMap - 조회할 정보가 담긴 Map
+	 * @param searchVO - 조회할 정보가 담긴 VO
 	 * @return 글 목록
 	 * @exception Exception
 	 */
-	public List<?> selectSampleList(SampleDefaultVO searchVO) throws Exception {
-		return list("sampleDAO.selectSampleList", searchVO);
-	}
-
+	List<?> selectBoardList(BoardDefaultVO searchVO) throws Exception;
+	
+	
 	/**
 	 * 글 총 갯수를 조회한다.
-	 * @param searchMap - 조회할 정보가 담긴 Map
+	 * @param searchVO - 조회할 정보가 담긴 VO
 	 * @return 글 총 갯수
 	 * @exception
 	 */
-	public int selectSampleListTotCnt(SampleDefaultVO searchVO) {
-		return (Integer) select("sampleDAO.selectSampleListTotCnt", searchVO);
-	}
+	int selectBoardListTotCnt(BoardDefaultVO searchVO);
 	
 	
 	/**
 	 * 조회수 증가
-	 * @param vo 
+	 * @param vo
 	 * @throws Exception
 	 */
-	public void increaseViewCnt(SampleVO vo) throws Exception{
-		update("sampleDAO.updateViewCnt",vo);
-	}
+	void updateViewCnt(BoardVO vo) throws Exception;
 
 }

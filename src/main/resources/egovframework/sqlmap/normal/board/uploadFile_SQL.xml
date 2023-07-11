@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="uploadFile">
+
+	<resultMap id="board" class="egovframework.normal.board.service.BoardVO" >
+		<result property="boardSq" column="board_sq"/>
+		<result property="boardCd" column="board_cd"/>
+		<result property="title" column="title"/>
+		<result property="content" column="content"/>
+		<result property="viewCnt" column="view_cnt"/>
+		<result property="userNm" column="user_nm"/>
+		<result property="fileNm" column="file_nm"/>
+		<result property="createDt" column="create_dt"/>
+		<result property="updateDt" column="update_dt"/>
+	</resultMap>
+
+	
+	<resultMap id="uploadfile" class="egovframework.normal.board.service.UploadFileVO">
+		<result property="fileSq" column="file_sq"/>
+		<result property="fileCd" column="file_cd"/>
+		<result property="boardNo" column="board_no"/>
+		<result property="storeNm" column="store_nm"/>
+		<result property="uploadNm" column="upload_nm"/>
+		<result property="fileSize" column="file_size"/>
+		<result property="fileType" column="file_type"/>
+	</resultMap>
+	
+	<insert id="uploadFileDAO.insertFile" parameterClass="egovframework.normal.board.service.UploadFileVO">
+		<![CDATA[
+ 			INSERT INTO test_uploadfile_tb  -->
+ 				( file_sq -->
+				  , file_cd -->
+ 				  , board_no -->
+ 				  , store_nm -->
+ 				  , upload_nm -->
+ 				  , file_size -->
+ 				  , file_type -->
+ 				   ) -->
+ 			VALUES ( test_uploadfile_seq.nextval 
+ 				  , #fileCd# 
+ 				  , #boardNo# 
+ 				  , #storeNm# 
+				  , #uploadNm# 
+			  , #fileSize# 
+				  , #fileType# 
+ 				  ) 
+ 		]]> 
+		
+		<selectKey keyProperty="boardSq"  resultClass="Long">
+			SELECT test_uploadFile_seq.currval AS file_sq FROM dual
+		</selectKey>
+	</insert>
+	
+	<select id="uploadFileDAO.selectFileList" resultMap="uploadfile" remapResults="true">
+	<![CDATA[
+    		   SELECT * 
+         	FROM TEST_UPLOADFILE_TB  
+         	WHERE FILE_CD = #fileCd#  
+         		AND BOARD_NO = #boardNo#
+    	]]> 
+    </select>
+	
+	<select id="uploadFileDAO.selectFile"  resultMap="uploadfile" remapResults="true">
+       	<![CDATA[
+             SELECT * 
+             FROM test_uploadfile_tb  
+             WHERE file_sq =#fileSq# 
+         ]]> 
+    </select>
+    
+    <delete id="uploadFileDAO.deleteFile">
+		<![CDATA[
+ 			DELETE FROM test_uploadfile_tb  
+ 			WHERE store_nm =#storeNm# 
+ 		]]> 
+	</delete>
+	
+
+
+</sqlMap>

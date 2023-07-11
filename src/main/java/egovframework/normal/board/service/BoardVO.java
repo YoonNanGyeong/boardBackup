@@ -19,7 +19,7 @@ package egovframework.normal.board.service;
 import org.springframework.web.multipart.MultipartFile;
 
 
-public class SampleVO extends SampleDefaultVO {
+public class BoardVO extends BoardDefaultVO {
 
 	private static final long serialVersionUID = 1L;
 

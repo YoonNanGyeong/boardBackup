@@ -17,23 +17,23 @@
     // 글 수정 화면
     function fn_egov_modifyView(id) {
 		document.detailForm.selectedId.value = id;
-	   	document.detailForm.action = "<c:url value='/updateSampleView.do'/>";
+	   	document.detailForm.action = "<c:url value='/updateBoardView.do'/>";
 	   	document.detailForm.submit();
 	} 
 
     /* 글 목록 화면 function */
     function fn_egov_selectList() {
-    	document.detailForm.action = "<c:url value='/egovSampleList.do'/>";
+    	document.detailForm.action = "<c:url value='/boardList.do'/>";
        	document.detailForm.submit();
     }
     
     /* 글 삭제 function */
     function fn_egov_delete() {
     	if(!confirm("삭제 하시겠습니까?")){
-    		document.detailForm.action = "<c:url value='/detailSample.do'/>";
+    		document.detailForm.action = "<c:url value='/detailBoard.do'/>";
     	}else{    		
     		alert("삭제 완료되었습니다.");
-	       	document.detailForm.action = "<c:url value='/deleteSample.do'/>";
+	       	document.detailForm.action = "<c:url value='/deleteBoard.do'/>";
 	       	document.detailForm.submit();
     	}
     }
@@ -45,7 +45,7 @@
 <body>
 <form:form modelAttribute="searchVO" id="detailForm" name="detailForm" method="post">
         <input type="hidden" name="selectedId" />
-        <input type="hidden" name="boardSq" value="${sampleVO.boardSq}" />
+        <input type="hidden" name="boardSq" value="${boardVO.boardSq}" />
    		 <!-- 상단바 -->
         <div class="nv-l"></div>
         <nav class="nv">
@@ -61,12 +61,12 @@
                 <!-- list title -->
                 <div id="title">
                     <h4 style = "color: #0070D2;">
-						<c:set var = "key" value = "${sampleVO.boardCd}"/>
+						<c:set var = "key" value = "${boardVO.boardCd}"/>
 	            		<c:out value = "${category[key]}"/>
 					</h4>
                     
                     <h3>
-                      <c:out value="${sampleVO.title}"/>&nbsp;
+                      <c:out value="${boardVO.title}"/>&nbsp;
 					</h3>
                 </div>
                 <!-- /title -->
@@ -74,11 +74,11 @@
                 <!-- 작성자명, 시간, 조회수 -->
                 <div class="user">
                     <h5>
-                    <c:out value="${sampleVO.userNm}"/>&nbsp;
+                    <c:out value="${boardVO.userNm}"/>&nbsp;
 					</h5>
                     <div id="ect">
-                        <p><c:out value="${sampleVO.updateDt}"/>&nbsp;</p>
-                        <p>조회</p><p><c:out value="${sampleVO.viewCnt}"/>&nbsp;</p>
+                        <p><c:out value="${boardVO.updateDt}"/>&nbsp;</p>
+                        <p>조회</p><p><c:out value="${boardVO.viewCnt}"/>&nbsp;</p>
                         
                     </div>
                 </div>
@@ -91,17 +91,17 @@
             <main class="mn">
                 <div class="contents">
                     <div class="file-area">
-                    	<c:set var = "fileNm" value = "${sampleVO.fileNm}"/>
+                    	<c:set var = "fileNm" value = "${boardVO.fileNm}"/>
 	                    <c:if test="${fn:contains(fileNm,'png') || fn:contains(fileNm, 'jpg') || fn:contains(fileNm, 'gif') }">	                    
-	                      <img src="<c:url value='/images/egovframework/upload/${sampleVO.fileNm}'/>" alt="image">
+	                      <img src="<c:url value='/images/board/upload/${boardVO.fileNm}'/>" alt="image">
 	                    </c:if>
                     </div>
                     <div class="content-area">
-                       <p><c:out value="${sampleVO.content}"/>&nbsp;</p>
+                       <p><c:out value="${boardVO.content}"/>&nbsp;</p>
                     </div>
                 </div>
                 
-             	<c:if test = "${sampleVO.fileNm ne null }">
+             	<c:if test = "${boardVO.fileNm ne null }">
 	                <div class="download-title">
 	                    <h4>첨부파일 다운로드</h4>
 	                    <i class="fa-solid fa-download"></i>
@@ -109,8 +109,8 @@
 	
 	                <div class="download-area">
 	                		<label style="visibility: hidden;" for="fileNm">첨부파일 다운로드</label>
-	                        <a href="fileDownload.do?fileNm=${sampleVO.fileNm}">
-	                        	<input type="text" id="fileNm" value="${sampleVO.fileNm}" name="fileNm" readonly="readonly" alt="첨부파일명 링크"/>
+	                        <a href="fileDownload.do?fileNm=${boardVO.fileNm}">
+	                        	<input type="text" id="fileNm" value="${boardVO.fileNm}" name="fileNm" readonly="readonly" alt="첨부파일명 링크"/>
 	                        </a>
 	                   
 	                </div>
@@ -126,7 +126,7 @@
              <button id="listBtn" type= "button">목록</button>
              </a>
              <!-- 수정 버튼 -->
-             <a href="javascript:fn_egov_modifyView('${sampleVO.boardSq}');">
+             <a href="javascript:fn_egov_modifyView('${boardVO.boardSq}');">
              <button id="editBtn"  type= "button">수정 </button>
              </a>
              <!-- 삭제 버튼 -->

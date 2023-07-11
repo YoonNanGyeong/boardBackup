@@ -3,4 +3,6 @@
 
 <sqlMapConfig>
 	<sqlMap resource="egovframework/sqlmap/normal/board/board_SQL.xml"/>
+	<sqlMap resource="egovframework/sqlmap/normal/board/code_SQL.xml"/>
+	<sqlMap resource="egovframework/sqlmap/normal/board/uploadFile_SQL.xml"/>
 </sqlMapConfig>

@@ -22,9 +22,11 @@ import java.util.Map;
 import java.util.UUID;
 
 import egovframework.normal.board.service.CodeVO;
-import egovframework.normal.board.service.EgovSampleService;
-import egovframework.normal.board.service.SampleDefaultVO;
-import egovframework.normal.board.service.SampleVO;
+import egovframework.normal.board.service.UploadFileService;
+import egovframework.normal.board.service.BoardService;
+import egovframework.normal.board.service.BoardDefaultVO;
+import egovframework.normal.board.service.BoardVO;
+import egovframework.normal.board.service.CodeService;
 import egovframework.normal.board.service.UploadFileVO;
 import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
@@ -36,7 +38,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,30 +48,20 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springmodules.validation.commons.DefaultBeanValidator;
 
-/**
- * @Class Name : EgovSampleController.java
- * @Description : EgovSample Controller Class
- * @Modification Information
- * @
- * @  수정일      수정자              수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2009.03.16           최초생성
- *
- * @author 개발프레임웍크 실행환경 개발팀
- * @since 2009. 03.16
- * @version 1.0
- * @see
- *
- *  Copyright (C) by MOPAS All right reserved.
- */
 
 @Controller
-public class EgovSampleController {
+@RequestMapping("/")
+public class BoardController {
 	
 
-	/** EgovSampleService */
-	@Resource(name = "sampleService")
-	private EgovSampleService sampleService;
+	@Resource(name = "boardService")
+	private BoardService boardService;
+	
+	@Resource(name = "codeService")
+	private CodeService codeService;
+	
+	@Resource(name = "uploadFileService")
+	private UploadFileService uploadFileService;
 
 	/** EgovPropertyService */
 	@Resource(name = "propertiesService")
@@ -83,7 +77,7 @@ public class EgovSampleController {
 	public Map<String,String> classifier()throws Exception{
 	CodeVO codeVO = new CodeVO();
 		codeVO.setCodePid("B01");
-		List<?>resultCodes = sampleService.selectCodeList(codeVO);
+		List<?>resultCodes = codeService.selectCodeList(codeVO);
 	
 		Map<String,String> category = new HashMap<>();
 	
@@ -104,8 +98,8 @@ public class EgovSampleController {
 	 * @return "egovSampleList"
 	 * @exception Exception
 	 */
-	@RequestMapping(value = "/egovSampleList.do")
-	public String selectSampleList(@ModelAttribute("searchVO") SampleVO searchVO, @RequestParam(value="selectedCd", required=false) String boardCd, ModelMap model) throws Exception {
+	@RequestMapping(value = "/boardList.do")
+	public String selectSampleList(@ModelAttribute("searchVO") BoardVO searchVO, @RequestParam(value="selectedCd", required=false) String boardCd, ModelMap model) throws Exception {
 
 		System.out.println("-----Get selectSampleList");
 		
@@ -124,25 +118,15 @@ public class EgovSampleController {
 		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
 
 	
-		List<?> sampleList = sampleService.selectSampleList(searchVO);
-		model.addAttribute("resultList", sampleList);
+		List<?> boardList = boardService.selectBoardList(searchVO);
+		model.addAttribute("resultList", boardList);
 		
-//		String resultCd = null;
-//		if(!sampleList.isEmpty()) {
-//			SampleVO result = (SampleVO)sampleList.get(0);
-//			resultCd = result.getBoardCd();
-//		}
-//		SampleVO result = (SampleVO)sampleList.get(0);
-//		String resultCd = result.getBoardCd();
-//		
-//		model.addAttribute("resultCd",resultCd);
-//		System.out.println("resultCd = "+resultCd);
 
-		int totCnt = sampleService.selectSampleListTotCnt(searchVO);
+		int totCnt = boardService.selectBoardListTotCnt(searchVO);
 		paginationInfo.setTotalRecordCount(totCnt);
 		model.addAttribute("paginationInfo", paginationInfo);
 	
-		return "sample/egovSampleList";
+		return "board/board_list";
 	}
 
 	/**
@@ -152,10 +136,10 @@ public class EgovSampleController {
 	 * @return "egovSampleRegister"
 	 * @exception Exception
 	 */
-	@RequestMapping(value = "/addSample.do", method = RequestMethod.GET)
-	public String addSampleView(@ModelAttribute("searchVO") SampleDefaultVO searchVO, Model model) throws Exception {
-		model.addAttribute("sampleVO", new SampleVO());
-		return "sample/egovSampleRegister";
+	@GetMapping(value = "/addBoardView.do")
+	public String addSampleView(@ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model) throws Exception {
+		model.addAttribute("boardVO", new BoardVO());
+		return "board/board_register";
 	}
 
 	/**
@@ -166,17 +150,17 @@ public class EgovSampleController {
 	 * @return "forward:/egovSampleList.do"
 	 * @exception Exception
 	 */
-	@RequestMapping(value = "/addSample.do", method = RequestMethod.POST)
-	public String addSample(@ModelAttribute("searchVO") SampleDefaultVO searchVO, SampleVO sampleVO, BindingResult bindingResult, Model model, SessionStatus status)
+	@PostMapping(value = "/addBoard.do")
+	public String addSample(@ModelAttribute("searchVO") BoardDefaultVO searchVO, BoardVO boardVO, BindingResult bindingResult, Model model, SessionStatus status)
 			throws Exception {
 
 		// Server-Side Validation
-		beanValidator.validate(sampleVO, bindingResult);
+		beanValidator.validate(boardVO, bindingResult);
 
 		if (bindingResult.hasErrors()) {
 			System.out.println("bindingResult = " + bindingResult);
-			model.addAttribute("sampleVO", sampleVO);
-			return "sample/egovSampleRegister";
+			model.addAttribute("boardVO", boardVO);
+			return "board/board_register";
 		}
 
 		
@@ -184,30 +168,30 @@ public class EgovSampleController {
 		String loot = null;
 		String fileName = null;
 		String ogFileName = null;
-		MultipartFile uploadFile = sampleVO.getUploadFile();
+		MultipartFile uploadFile = boardVO.getUploadFile();
 		
 		if(uploadFile != null && !uploadFile.isEmpty()) {
 			ogFileName = uploadFile.getOriginalFilename();
 			String ext = FilenameUtils.getExtension(ogFileName);
 			UUID uuid = UUID.randomUUID();
 			fileName = uuid + "." + ext;
-			loot = "C:\\\\eGovFrameDev-3.10.0-64bit\\\\workspace\\\\.metadata\\\\.plugins\\\\org.eclipse.wst.server.core\\\\tmp0\\\\wtpwebapps\\\\normalBoard_backup\\\\images\\\\egovframework\\\\upload\\\\";
+			loot = "C:\\\\eGovFrameDev-3.10.0-64bit\\\\workspace\\\\.metadata\\\\.plugins\\\\org.eclipse.wst.server.core\\\\tmp0\\\\wtpwebapps\\\\normalBoard_backup\\\\images\\\\board\\\\upload\\\\";
 			
 			uploadFile.transferTo(new File(loot + fileName));
 		}
 		
-		sampleVO.setFileNm(fileName);
-		System.out.println("등록한 글 첨부파일이름: "+sampleVO.getFileNm());
+		boardVO.setFileNm(fileName);
+		System.out.println("등록한 글 첨부파일이름: "+boardVO.getFileNm());
 		
 		// 게시글 저장
-		 Long boardNo = sampleService.insertSample(sampleVO);
+		 Long boardNo = boardService.insertBoard(boardVO);
 //		 model.addAttribute("boardSq",boardNo);
 		 System.out.println("boardNo: " + boardNo);
 		 
 		// 업로드 파일 객체
 		UploadFileVO uploadFileVO = new UploadFileVO();
 		
-		String boardCode = sampleVO.getBoardCd();
+		String boardCode = boardVO.getBoardCd();
 		if(boardCode.contains("B") == true) { // boardCd에 B 포함되어 있으면 F로 변경
 			boardCode = boardCode.replace("B", "F");
 //			System.out.println("파일테이블에 들어갈 코드="+boardCode);
@@ -224,11 +208,11 @@ public class EgovSampleController {
 		
 		// 업로드 파일 테이블에 저장
 		if(uploadFileVO.getStoreNm() != null || uploadFileVO.getUploadNm()!= null) {			
-			sampleService.insertFile(uploadFileVO);
+			uploadFileService.insertFile(uploadFileVO);
 		}
 		
 		status.setComplete();
-		return "redirect:/detailSample.do?selectedId=" + boardNo;
+		return "redirect:/detailBoard.do?selectedId=" + boardNo;
 	}
 	
 
@@ -242,8 +226,8 @@ public class EgovSampleController {
 	 * @return @ModelAttribute("sampleVO") - 조회한 정보
 	 * @exception Exception
 	 */
-	public SampleVO selectSample( SampleVO sampleVO, @ModelAttribute("searchVO") SampleDefaultVO searchVO) throws Exception {
-		return sampleService.selectSample(sampleVO);
+	public BoardVO selectSample( BoardVO boardVO, @ModelAttribute("searchVO") BoardDefaultVO searchVO) throws Exception {
+		return boardService.selectBoard(boardVO);
 	}
 	
 	/**
@@ -253,18 +237,16 @@ public class EgovSampleController {
 	 * @return "egovSampleRegister"
 	 * @exception Exception
 	 */
-	@RequestMapping("/detailSample.do")
-	public String detailSampleView(@RequestParam("selectedId") Long boardSq, @ModelAttribute("searchVO") SampleDefaultVO searchVO, Model model)  throws Exception {
-		SampleVO sampleVO = new SampleVO();
-		sampleVO.setBoardSq(boardSq);
+	@PostMapping("/detailBoard.do")
+	public String detailSampleView(@RequestParam("selectedId") Long boardSq, @ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model)  throws Exception {
+		BoardVO boardVO = new BoardVO();
+		boardVO.setBoardSq(boardSq);
 		
-		SampleVO vo = selectSample(sampleVO, searchVO);
-		System.out.println("상세페이지 객체: " + vo);
+		BoardVO vo = selectSample(boardVO, searchVO);
 
-		// 변수명은 CoC 에 따라 sampleVO
-		model.addAttribute("sampleVO", vo);
+		model.addAttribute("boardVO", vo);
 		
-		return "sample/egovSampleDetail";
+		return "board/board_detail";
 	}
 	
 	/**
@@ -275,15 +257,14 @@ public class EgovSampleController {
 	 * @return "egovSampleRegister"
 	 * @exception Exception
 	 */
-	@RequestMapping("/updateSampleView.do")
-	public String updateSampleView(@RequestParam("selectedId") Long boardSq, @ModelAttribute("searchVO") SampleDefaultVO searchVO, Model model) throws Exception {
-		SampleVO sampleVO = new SampleVO();
+	@RequestMapping("/updateBoardView.do")
+	public String updateSampleView(@RequestParam("selectedId") Long boardSq, @ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model) throws Exception {
+		BoardVO sampleVO = new BoardVO();
 		sampleVO.setBoardSq(boardSq);
 		
-		// 변수명은 CoC 에 따라 sampleVO
 		model.addAttribute(selectSample(sampleVO, searchVO));
 		
-		return "sample/egovSampleRegister";
+		return "board/board_register";
 	}
 
 	/**
@@ -294,8 +275,8 @@ public class EgovSampleController {
 	 * @return "forward:/egovSampleList.do"
 	 * @exception Exception
 	 */
-	@RequestMapping("/updateSample.do")
-	public String updateSample(@ModelAttribute("searchVO") SampleDefaultVO searchVO, SampleVO sampleVO, BindingResult bindingResult, Model model, SessionStatus status)
+	@RequestMapping("/updateBoard.do")
+	public String updateSample(@ModelAttribute("searchVO") BoardDefaultVO searchVO, BoardVO sampleVO, BindingResult bindingResult, Model model, SessionStatus status)
 			throws Exception {
 		
 		beanValidator.validate(sampleVO, bindingResult);
@@ -303,7 +284,7 @@ public class EgovSampleController {
 		if (bindingResult.hasErrors()) {
 			System.out.println("bindingResult = " + bindingResult);
 			model.addAttribute("sampleVO", sampleVO);
-			return "sample/egovSampleRegister";
+			return "board/board_register";
 		}
 		
 		// 파일업로드
@@ -315,7 +296,7 @@ public class EgovSampleController {
 			String ext = FilenameUtils.getExtension(ogFileName);
 			UUID uuid = UUID.randomUUID();
 			fileName = uuid + "." + ext;
-			loot = "C:\\\\\\\\eGovFrameDev-3.10.0-64bit\\\\\\\\workspace\\\\\\\\.metadata\\\\\\\\.plugins\\\\\\\\org.eclipse.wst.server.core\\\\\\\\tmp0\\\\\\\\wtpwebapps\\\\\\\\normalBoard_backup\\\\\\\\images\\\\\\\\egovframework\\\\\\\\upload\\\\\\\\";
+			loot = "C:\\\\\\\\eGovFrameDev-3.10.0-64bit\\\\\\\\workspace\\\\\\\\.metadata\\\\\\\\.plugins\\\\\\\\org.eclipse.wst.server.core\\\\\\\\tmp0\\\\\\\\wtpwebapps\\\\\\\\normalBoard_backup\\\\\\\\images\\\\\\\\board\\\\\\\\upload\\\\\\\\";
 			
 			uploadFile.transferTo(new File(loot + fileName));
 			
@@ -323,9 +304,9 @@ public class EgovSampleController {
 		}
 		
 
-		sampleService.updateSample(sampleVO);
+		boardService.updateBoard(sampleVO);
 		status.setComplete();
-		return "forward:/egovSampleList.do";
+		return "forward:/boardList.do";
 	}
 
 	/**
@@ -336,15 +317,15 @@ public class EgovSampleController {
 	 * @return "forward:/egovSampleList.do"
 	 * @exception Exception
 	 */
-	@RequestMapping("/deleteSample.do")
-	public String deleteSample(SampleVO sampleVO, @ModelAttribute("searchVO") SampleDefaultVO searchVO, SessionStatus status) throws Exception {
+	@RequestMapping("/deleteBoard.do")
+	public String deleteSample(BoardVO sampleVO, @ModelAttribute("searchVO") BoardDefaultVO searchVO, SessionStatus status) throws Exception {
 		String boardFileNm = sampleVO.getFileNm();
 		UploadFileVO uploadFile = new UploadFileVO();
 		uploadFile.setStoreNm(boardFileNm);
 		
 		// 물리 파일 삭제
 		String loot = null;
-		loot = "C:\\eGovFrameDev-3.10.0-64bit\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\normalBoard\\images\\egovframework\\upload\\";
+		loot = "C:\\eGovFrameDev-3.10.0-64bit\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\normalBoard\\images\\board\\upload\\";
 		
 		String filePath = loot + boardFileNm;
 		File file = new File(filePath);
@@ -353,12 +334,12 @@ public class EgovSampleController {
 		}
 		
 		// 게시글 삭제
-		sampleService.deleteSample(sampleVO);
+		boardService.deleteBoard(sampleVO);
 		
 		// 파일 DB 정보 삭제
-		sampleService.deleteFile(uploadFile);
+		uploadFileService.deleteFile(uploadFile);
 		status.setComplete();
-		return "forward:/egovSampleList.do";
+		return "forward:/boardList.do";
 	}
 
 	

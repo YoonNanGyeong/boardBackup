@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="code">
+	
+	<resultMap id="code" class="egovframework.normal.board.service.CodeVO">
+		<result property="code" column="code"/>
+		<result property="decode" column="decode"/>
+		<result property="codePid" column="code_pid"/>
+	</resultMap>
+	
+	
+	<select id="codeDAO.selectCodeList" parameterClass="egovframework.normal.board.service.CodeVO" resultClass="egovframework.normal.board.service.CodeVO">
+	<![CDATA[
+        SELECT *
+        	FROM TEST_CODE_TB 
+        	WHERE CODE_PID = #codePid#
+   	]]>
+    </select>
+    
+    <select id="codeDAO.selectAllCodeList" resultMap="code" remapResults="true">
+	<![CDATA[
+        SELECT *
+        	FROM TEST_CODE_TB 
+        	WHERE CODE_PID is not null
+   	]]>
+    </select>
+
+
+</sqlMap>
