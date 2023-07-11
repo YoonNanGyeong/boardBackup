@@ -59,9 +59,8 @@
                 <!-- 글자 강조 박스 -->
             </div>
             <h3>
-            	게시글 목록
-<%--             	<c:set var = "boardCd" value = "${resultCd}"/> --%>
-<%--             	<c:out value = "${category[boardCd]}"/> --%>
+				<c:set var = "key" value = "${searchVO.boardCd}"/>
+         		<c:out value = "${category[key]}"/>
            	</h3>
           </div>
            <!-- /title -->

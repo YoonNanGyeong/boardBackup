@@ -96,7 +96,7 @@
 				board_cd = 'B0101'
 			</isEmpty>
 			<isNotEmpty prepend="AND" property="boardCd">			
-				and board_cd = #boardCd#
+				board_cd = #boardCd#
 			</isNotEmpty>
 			<isNotEmpty property="searchCondition">
 				<isEqual prepend="AND" property="searchCondition" compareValue="0">

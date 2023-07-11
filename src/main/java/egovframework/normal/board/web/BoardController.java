@@ -117,6 +117,8 @@ public class BoardController {
 		List<?> boardList = boardService.selectBoardList(searchVO);
 		model.addAttribute("resultList", boardList);
 		
+//		model.addAttribute("selectedCd",boardCd);
+		
 
 		int totCnt = boardService.selectBoardListTotCnt(searchVO);
 		paginationInfo.setTotalRecordCount(totCnt);
