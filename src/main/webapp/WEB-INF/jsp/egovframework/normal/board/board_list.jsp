@@ -72,6 +72,7 @@
 	              <li>
 	                 <label for="boardCd">카테고리 선택</label>
         				<form:select path="boardCd"  id="boardCd">
+        					<form:option value="" label="전체" /> 
         					<form:option value="B0101" label="공지사항" /> 
         					<form:option value="B0102" label="자유게시판" />
         					<form:option value="B0103" label="코딩게시판" />

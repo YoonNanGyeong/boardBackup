@@ -85,9 +85,10 @@
 				board_sq, board_cd, title, view_cnt, user_nm, update_dt
 			FROM test_board_tb
 			WHERE 1=1
-			<isNotNull prepend="AND" property="boardCd">
+			<isNotEmpty prepend="AND" property="boardCd">
 				board_cd = #boardCd#
-			</isNotNull>
+			</isNotEmpty>
+					
 			<isEqual prepend="AND" property="searchCondition" compareValue="0">
 				title LIKE '%' || #searchKeyword# || '%'
 			</isEqual>
@@ -97,6 +98,7 @@
 			<isEqual prepend="AND" property="searchCondition" compareValue="2">
 				user_nm LIKE '%' || #searchKeyword# || '%'
 			</isEqual>
+			
 			
 			ORDER BY board_sq DESC
 			OFFSET #firstIndex# ROWS 

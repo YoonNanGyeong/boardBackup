@@ -19,22 +19,7 @@ import java.io.Serializable;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-/**
- * @Class Name : SampleDefaultVO.java
- * @Description : SampleDefaultVO Class
- * @Modification Information
- * @
- * @  수정일      수정자              수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2009.03.16           최초생성
- *
- * @author 개발프레임웍크 실행환경 개발팀
- * @since 2009. 03.16
- * @version 1.0
- * @see
- *
- *  Copyright (C) by MOPAS All right reserved.
- */
+
 public class BoardDefaultVO implements Serializable {
 
 	/**

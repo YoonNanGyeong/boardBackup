@@ -97,7 +97,7 @@ public class BoardController {
 
 		System.out.println("-----Get selectSampleList");
 		
-		/** EgovPropertyService.sample */
+		/** EgovPropertyService.board */
 		searchVO.setPageUnit(propertiesService.getInt("pageUnit"));
 		searchVO.setPageSize(propertiesService.getInt("pageSize"));
 
@@ -118,6 +118,7 @@ public class BoardController {
 
 		int totCnt = boardService.selectBoardListTotCnt(searchVO);
 		paginationInfo.setTotalRecordCount(totCnt);
+		
 		model.addAttribute("paginationInfo", paginationInfo);
 	
 		return "board/board_list";

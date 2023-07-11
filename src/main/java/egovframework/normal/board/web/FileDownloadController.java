@@ -34,7 +34,7 @@ public class FileDownloadController {
 			System.out.println("UnsupportedEncodingException 발생");
 		}
         
-        realFilename = "C:\\\\eGovFrameDev-3.10.0-64bit\\\\workspace\\\\.metadata\\\\.plugins\\\\org.eclipse.wst.server.core\\\\tmp0\\\\wtpwebapps\\\\normalBoard_backup\\\\images\\\\egovframework\\\\upload\\\\" + filename;
+        realFilename = "C:\\\\eGovFrameDev-3.10.0-64bit\\\\workspace\\\\.metadata\\\\.plugins\\\\org.eclipse.wst.server.core\\\\tmp0\\\\wtpwebapps\\\\normalBoard_backup\\\\images\\\\board\\\\upload\\\\" + filename;
         System.out.println("realFileName= "+realFilename);
  
         File file = new File(realFilename);
