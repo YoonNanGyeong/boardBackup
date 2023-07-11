@@ -59,8 +59,9 @@
                 <!-- 글자 강조 박스 -->
             </div>
             <h3>
+            	
 				<c:set var = "key" value = "${searchVO.boardCd}"/>
-         		<c:out value = "${category[key]}"/>
+         		<c:out value = "${category[key]}" default = "공지사항"/>
            	</h3>
           </div>
            <!-- /title -->
