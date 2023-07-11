@@ -79,7 +79,8 @@
     <select id="boardDAO.selectBoard" resultMap="board" remapResults="true">
        	<![CDATA[
             SELECT
-             *
+            	board_sq, board_cd, title, content, view_cnt, user_nm, file_no, use_yn,
+            	TO_CHAR(update_dt,'YYYY.MM.DD HH24:MI')update_dt, create_dt
             FROM test_board_tb 
             WHERE board_sq=#boardSq#
         ]]>
@@ -88,7 +89,7 @@
 	<select id="boardDAO.selectBoardList"  parameterClass="searchVO" resultClass="egovMap">
 
 			SELECT
-				board_sq, board_cd, title, view_cnt, user_nm, update_dt
+				board_sq, board_cd, title, view_cnt, user_nm, TO_CHAR(update_dt,'YYYY.MM.DD')update_dt
 			FROM test_board_tb
 			WHERE 1=1 and use_yn = 'Y'	
 			<isNotEmpty prepend="AND" property="boardCd">
