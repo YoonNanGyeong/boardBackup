@@ -216,8 +216,8 @@ public class BoardController {
 	}
 	
 
-	@GetMapping("{selectedId}/updateBoard.do")
-	public String updateBoardView(@PathVariable("selectedId") Long boardSq, @ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model) throws Exception {
+	@RequestMapping("updateBoardView.do")
+	public String updateBoardView(@RequestParam("selectedId") Long boardSq, @ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model) throws Exception {
 		BoardVO boardVO = new BoardVO();
 		boardVO.setBoardSq(boardSq);
 		
