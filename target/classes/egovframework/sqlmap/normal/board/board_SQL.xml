@@ -91,20 +91,24 @@
 			SELECT
 				board_sq, board_cd, title, view_cnt, user_nm, TO_CHAR(update_dt,'YYYY.MM.DD')update_dt
 			FROM test_board_tb
-			WHERE 1=1 and use_yn = 'Y'	
-			<isNotEmpty prepend="AND" property="boardCd">
-				board_cd = #boardCd#
+			WHERE 1=1 and use_yn = 'Y'
+			<isEmpty prepend="AND" property="boardCd">
+				board_cd = 'B0101'
+			</isEmpty>
+			<isNotEmpty prepend="AND" property="boardCd">			
+				and board_cd = #boardCd#
 			</isNotEmpty>
-					
-			<isEqual prepend="AND" property="searchCondition" compareValue="0">
-				title LIKE '%' || #searchKeyword# || '%'
-			</isEqual>
-			<isEqual prepend="AND" property="searchCondition" compareValue="1">
-				content LIKE '%' || #searchKeyword# || '%'
-			</isEqual>
-			<isEqual prepend="AND" property="searchCondition" compareValue="2">
-				user_nm LIKE '%' || #searchKeyword# || '%'
-			</isEqual>
+			<isNotEmpty property="searchCondition">
+				<isEqual prepend="AND" property="searchCondition" compareValue="0">
+					title LIKE '%' || #searchKeyword# || '%'
+				</isEqual>
+				<isEqual prepend="AND" property="searchCondition" compareValue="1">
+					content LIKE '%' || #searchKeyword# || '%'
+				</isEqual>
+				<isEqual prepend="AND" property="searchCondition" compareValue="2">
+					user_nm LIKE '%' || #searchKeyword# || '%'
+				</isEqual>
+			</isNotEmpty>		
 			
 			
 			ORDER BY board_sq DESC

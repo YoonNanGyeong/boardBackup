@@ -70,17 +70,17 @@
 	           
 	              <ul class="search">
 	              <li>
-	                 <label for="boardCd">카테고리 선택</label>
+	                 <label for="boardCd">카테고리</label>
         				<form:select path="boardCd"  id="boardCd">
-        					<form:option value="" label="전체" /> 
         					<form:option value="B0101" label="공지사항" /> 
         					<form:option value="B0102" label="자유게시판" />
         					<form:option value="B0103" label="코딩게시판" />
         				</form:select>	
 	                </li>
 	                <li>
-	                 <label for="searchCondition"><spring:message code="search.choose" /></label>
+	                 <label for="searchCondition">검색 구분</label>
         				<form:select path="searchCondition"  id="searchCondition">
+        					<form:option value="" label="선택" />
         					<form:option value="0" label="제목" /> 
         					<form:option value="1" label="내용" />
         					<form:option value="2" label="작성자" />
