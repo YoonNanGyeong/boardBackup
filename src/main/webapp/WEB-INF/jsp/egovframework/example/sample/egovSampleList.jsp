@@ -64,6 +64,8 @@
             </div>
             <h3>
             	게시글 목록
+<%--             	<c:set var = "boardCd" value = "${resultCd}"/> --%>
+<%--             	<c:out value = "${category[boardCd]}"/> --%>
            	</h3>
           </div>
            <!-- /title -->

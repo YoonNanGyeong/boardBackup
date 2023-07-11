@@ -7,7 +7,6 @@
 	        <map>
 	        	<entry key="pageUnit" value="10"/>
 	        	<entry key="pageSize" value="10"/>
-<!-- 	        	<entry key="Globals.fileStorePath" value="/product/upload/"/> -->
 	        </map>
 		</property>
 	</bean>
