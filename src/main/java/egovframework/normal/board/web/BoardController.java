@@ -45,11 +45,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
-import org.springmodules.validation.commons.DefaultBeanValidator;
 
 
 @Controller
@@ -70,9 +68,6 @@ public class BoardController {
 	@Resource(name = "propertiesService")
 	protected EgovPropertyService propertiesService;
 
-	/** Validator */
-	@Resource(name = "beanValidator")
-	protected DefaultBeanValidator beanValidator; 
 
 	
 	// 게시판 코드 디코드 
@@ -141,8 +136,6 @@ public class BoardController {
 			HttpServletRequest request)
 			throws Exception {
 
-		// Server-Side Validation
-		beanValidator.validate(boardVO, bindingResult);
 
 		if (bindingResult.hasErrors()) {
 			System.out.println("bindingResult = " + bindingResult);
@@ -238,7 +231,6 @@ public class BoardController {
 			HttpServletRequest request)
 			throws Exception {
 		
-		beanValidator.validate(boardVO, bindingResult);
 
 		if (bindingResult.hasErrors()) {
 			System.out.println("bindingResult = " + bindingResult);

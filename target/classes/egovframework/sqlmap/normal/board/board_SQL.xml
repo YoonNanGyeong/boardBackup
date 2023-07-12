@@ -65,10 +65,6 @@
 	
 	
 	<delete id="boardDAO.deleteBoard">
-<!-- 		<![CDATA[ -->
-<!-- 			DELETE FROM test_board_tb  -->
-<!-- 			WHERE board_sq=#boardSq# -->
-<!-- 		]]> -->
 		<![CDATA[
 			UPDATE test_board_tb
 			SET use_yn = 'N'

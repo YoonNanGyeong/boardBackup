@@ -1,7 +1,6 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c"         uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form"      uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="validator" uri="http://www.springmodules.org/tags/commons-validator" %>
 <%@ taglib prefix="spring"    uri="http://www.springframework.org/tags"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -15,10 +14,6 @@
          <c:if test="${registerFlag == 'modify'}"><spring:message code="button.modify" /></c:if>
     </title>
     <link type="text/css" rel="stylesheet" href="<c:url value='/css/write.css?after'/>"/>
-    
-    <!--For Commons Validator Client Side-->
-<%--     <script type="text/javascript" src="<c:url value='/cmmn/validator.do'/>"></script> --%>
-<%--     <validator:javascript formName="boardVO" staticJavascript="false" xhtml="true" cdata="false"/> --%>
     
     <script type="text/javaScript" language="javascript" defer="defer">
      
@@ -99,19 +94,19 @@
 	                <form:errors path="boardCd" class="errors"/>
 	             <label id="userNmLabel" for="userNm">작성자</label>
              	<form:input path="userNm"  id="userNm" placeholder="닉네임 입력" maxlength="6"/>
-             	 <form:errors path="userNm"  class="errors"/>
+<%--              	 <form:errors path="userNm"  class="errors"/> --%>
             </div>
             
             <div class="contents">
                 <div class="title-area">
                     <label for="title" id="titleLabel">제목</label>
                     <form:input path="title"  placeholder="제목을 입력하세요." maxlength="45"/>
-                     <form:errors path="title"  class="errors" style="margin-left: 10px;"/>
+<%--                      <form:errors path="title"  class="errors" style="margin-left: 10px;"/> --%>
                 </div>
                 <div class="content-area">
                     <label for="content">내용</label>
                     <form:textarea path="content" name="content" id="content" cols="150" rows="20" placeholder="내용을 입력하세요."/>
-                    <form:errors path="content"  class="errors" style="margin-left: 10px;"/>
+<%--                     <form:errors path="content"  class="errors" style="margin-left: 10px;"/> --%>
                 </div>
             </div>
             
@@ -124,8 +119,8 @@
 <%-- 	                <c:if test = "${boardVO.fileNm ne null }">  --%>
 <!-- 		                <div style= "margin-top: 10px;" id="fileDown"> -->
 <!-- 			                <label for="fileNm">다운로드</label>              -->
-<%-- 			                        <a href="fileDownload.do?fileNm=${boardVO.fileNo}" title="첨부파일 다운로드"> --%>
-<%-- 			                        	<input type="text" id="fileNm" value="${boardVO.fileNm}" name="fileNm" readonly="readonly"  title="첨부파일 다운로드"/> --%>
+<%-- 			                        <a href="fileDownload.do?fileNo=${boardVO.fileNo}" title="첨부파일 다운로드"> --%>
+<%-- 			                        	<input type="text" id="fileNo" value="${boardVO.fileNo}" name="fileNo readonly="readonly"  title="첨부파일 다운로드"/> --%>
 <!-- 			                        </a> -->
 <!-- 				                   		<button id="fileDelete" type="button" onclick="fn_fileDelete()">파일삭제</button> -->
 <!-- 		                </div> -->

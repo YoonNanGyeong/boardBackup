@@ -93,9 +93,8 @@
             <main class="mn">
                 <div class="contents">
                     <div class="file-area">
-<%--                     	<c:set var = "fileNm" value = "${boardVO.fileNm}"/> --%>
-<%-- 	                    <c:if test="${fn:contains(fileNm,'png') || fn:contains(fileNm, 'jpg') || fn:contains(fileNm, 'gif') }">	                     --%>
-<%-- 	                      <img src="<c:url value='/images/board/upload/${boardVO.fileNm}'/>" alt="image"> --%>
+<%-- 	                    <c:if test="${fn:contains(fileType,'image')}">	                     --%>
+<%-- 	                      <img src="<c:url value='/images/board/upload/${uploadFileVO.fileNm}'/>" alt="image"> --%>
 <%-- 	                    </c:if> --%>
                     </div>
                     <div class="content-area">
@@ -103,7 +102,7 @@
                     </div>
                 </div>
                 
-<%--              	<c:if test = "${boardVO.fileNm ne null }"> --%>
+<%--              	<c:if test = "${boardVO.fileNo ne null }"> --%>
 <!-- 	                <div class="download-title"> -->
 <!-- 	                    <h4>첨부파일 다운로드</h4> -->
 <!-- 	                    <i class="fa-solid fa-download"></i> -->
@@ -111,7 +110,7 @@
 	
 <!-- 	                <div class="download-area"> -->
 <!-- 	                		<label style="visibility: hidden;" for="fileNm">첨부파일 다운로드</label> -->
-<%-- 	                        <a href="fileDownload.do?fileNm=${boardVO.fileNm}"> --%>
+<%-- 	                        <a href="fileDownload.do?fileNo=${boardVO.fileNo}"> --%>
 <%-- 	                        	<input type="text" id="fileNm" value="${boardVO.fileNm}" name="fileNm" readonly="readonly" alt="첨부파일명 링크"/> --%>
 <!-- 	                        </a> -->
 	                   

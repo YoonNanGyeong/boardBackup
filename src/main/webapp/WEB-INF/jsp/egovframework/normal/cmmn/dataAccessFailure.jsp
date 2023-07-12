@@ -8,6 +8,6 @@
 </head>
 
 <body>
-    <spring:message code='fail.common.sql' />
+    <h3>dataAccessFailure!</h3>
 </body>
 </html>
