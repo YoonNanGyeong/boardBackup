@@ -18,14 +18,6 @@
         		AND CODE_PID = #codePid#
    	]]>
     </select>
-    
-    <select id="codeDAO.selectAllCodeList" resultMap="code" remapResults="true">
-	<![CDATA[
-        SELECT *
-        	FROM TEST_CODE_TB 
-        	WHERE CODE_PID is not null
-   	]]>
-    </select>
 
 
 </sqlMap>

@@ -171,13 +171,6 @@ public class BoardController {
 		// 업로드 파일 객체
 		UploadFileVO uploadFileVO = new UploadFileVO();
 		
-		String boardCode = boardVO.getBoardCd();
-		if(boardCode.contains("B") == true) { // boardCd에 B 포함되어 있으면 F로 변경
-			boardCode = boardCode.replace("B", "F");
-		}
-		
-
-		uploadFileVO.setFileCd(boardCode);
 		uploadFileVO.setBoardNo(boardNo);
 		uploadFileVO.setStoreNm(fileName);
 		uploadFileVO.setUploadNm(ogFileName);

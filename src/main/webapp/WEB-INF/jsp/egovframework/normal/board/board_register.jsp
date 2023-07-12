@@ -7,48 +7,45 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-      <!-- 게시판 코드가 있으면 registerFlag변수에 modify, 없으면 create 저장 -->
     <c:set var="registerFlag" value="${empty boardVO.boardCd ? 'create' : 'modify'}"/>
     <title>게시글
     	 <c:if test="${registerFlag == 'create'}"><spring:message code="button.create" /></c:if>
          <c:if test="${registerFlag == 'modify'}"><spring:message code="button.modify" /></c:if>
     </title>
     <link type="text/css" rel="stylesheet" href="<c:url value='/css/write.css?after'/>"/>
-    
-    <script type="text/javaScript" language="javascript" defer="defer">
-     
-        /* 글 목록 화면 function */
-        function fn_egov_selectList() {
-           	document.detailForm.action = "<c:url value='/boardList.do'/>";
-           	document.detailForm.submit();
-        }
-        
-        /* 글 삭제 function */
-        function fn_egov_delete() {
-        	if(!confirm("삭제하시겠습니까?")){
-        		document.detailForm.action = "<c:url value='/detailBoard.do'/>";
-        	}else{    		
-        		alert("삭제완료되었습니다.");
-    	       	document.detailForm.action = "<c:url value='/deleteBoard.do'/>";
-    	       	document.detailForm.submit();
-        	}
-        }
-        
-        /* 글 등록 function */
-        function fn_egov_save() {
-	        var errors = document.querySelectorAll(".errors");
-	        var btnVal = document.getElementById("writeBtn").innerText;
-	        let con = confirm(btnVal + "하시겠습니까?");
+    <script type="text/javascript" language="javaScript" defer = "defer">    
+		/* 글 목록 화면 function */
+	    function fn_egov_selectList() {
+	       	document.detailForm.action = "<c:url value='/boardList.do'/>";
+	       	document.detailForm.submit();
+	    }
+	    
+	    /* 글 삭제 function */
+	    function fn_egov_delete() {
+	    	if(!confirm("삭제하시겠습니까?")){
+	    		document.detailForm.action = "<c:url value='/detailBoard.do'/>";
+	    	}else{    		
+	    		alert("삭제완료되었습니다.");
+		       	document.detailForm.action = "<c:url value='/deleteBoard.do'/>";
+		       	document.detailForm.submit();
+	    	}
+	    }
+	    
+	    /* 글 등록 function */
+// 	    function fn_egov_save() {
+// 	        var errors = document.querySelectorAll(".errors");
+// 	        var btnVal = document.getElementById("writeBtn").innerText;
+// 	        let con = confirm(btnVal + "하시겠습니까?");
 	        
-        	frm = document.detailForm;
-        	if(con == false){
-                return;
-            }else if(con == true){
-            	frm.action = "<c:url value="${registerFlag == 'create' ? '/addBoard.do' : '/updateBoard.do'}"/>";
-                frm.submit();
-            }
-        }
-       
+// 	    	frm = document.detailForm;
+// 	    	if(con == false){
+// 	            return;
+// 	        }else if(con == true){
+// 	        	fn_validation();
+// 	        	frm.action = "<c:url value="${registerFlag == 'create' ? '/addBoard.do' : '/updateBoard.do'}"/>";
+// 	            frm.submit();
+// 	        }
+// 	    }
     </script>
 </head>
 <body >
@@ -91,22 +88,22 @@
 	                    <form:option value="B0102" label="자유게시판"/>
 	                    <form:option value="B0103" label="코딩게시판"/>
 	                </form:select>
-	                <form:errors path="boardCd" class="errors"/>
+	                <span class = "error error-category"></span>
 	             <label id="userNmLabel" for="userNm">작성자</label>
              	<form:input path="userNm"  id="userNm" placeholder="닉네임 입력" maxlength="6"/>
-<%--              	 <form:errors path="userNm"  class="errors"/> --%>
+             	 <span class = "errors error-user"></span>
             </div>
             
             <div class="contents">
                 <div class="title-area">
                     <label for="title" id="titleLabel">제목</label>
                     <form:input path="title"  placeholder="제목을 입력하세요." maxlength="45"/>
-<%--                      <form:errors path="title"  class="errors" style="margin-left: 10px;"/> --%>
+					<span class = "errors error-title"></span>
                 </div>
                 <div class="content-area">
                     <label for="content">내용</label>
                     <form:textarea path="content" name="content" id="content" cols="150" rows="20" placeholder="내용을 입력하세요."/>
-<%--                     <form:errors path="content"  class="errors" style="margin-left: 10px;"/> --%>
+					<span class = "errors error-content"></span>
                 </div>
             </div>
             
@@ -178,14 +175,6 @@
     <input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 </form:form>
 </body>
-<script  type="text/javaScript" language="javascript">
-	var fileName = document.getElementById("fileNm");
-	var fileDelete = document.getElementById("fileDelete");
-	var fileDown = document.getElementById("fileDown");
-	
-	function fn_fileDelete(){
-		fileName.value = null;
-		fileDown.remove();
-	}
-</script>
+<script type="text/javascript" language="javaScript" src="/js/board_register.js"></script>
+
 </html>

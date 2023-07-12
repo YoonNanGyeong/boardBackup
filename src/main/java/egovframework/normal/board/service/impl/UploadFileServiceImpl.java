@@ -33,7 +33,7 @@ public class UploadFileServiceImpl extends EgovAbstractServiceImpl implements Up
 	private UploadFileDAO uploadFileDAO;
 	
 	/**
-	   * 업로드 파일 등록 - 단건
+	   * 업로드 파일 등록 
 	   * @param uploadFile
 	   * @return 파일Id
 	   */

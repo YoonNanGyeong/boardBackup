@@ -20,7 +20,7 @@ public class UploadFileDAO extends EgovAbstractDAO{
 	  }
 	  
 	  /**
-	   * 업로드파일조회
+	   * 업로드파일 리스트조회
 	   * @param 
 	   * @param 
 	   * @return

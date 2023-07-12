@@ -15,10 +15,4 @@ public class CodeDAO extends EgovAbstractDAO{
 		return list("codeDAO.selectCodeList", codeVO);
 	}
 
-	
-	// 전체 코드 반환
-	public List<?> selectAllCodeList(CodeVO codeVO) throws Exception{	
-		return list("codeDAO.selectAllCodeList", codeVO);
-	}
-
 }

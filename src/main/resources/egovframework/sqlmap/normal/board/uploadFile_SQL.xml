@@ -5,7 +5,6 @@
 	
 	<resultMap id="uploadfile" class="egovframework.normal.board.service.UploadFileVO">
 		<result property="fileSq" column="file_sq"/>
-		<result property="fileCd" column="file_cd"/>
 		<result property="boardNo" column="board_no"/>
 		<result property="storeNm" column="store_nm"/>
 		<result property="uploadNm" column="upload_nm"/>
@@ -18,7 +17,6 @@
 		<![CDATA[
  			INSERT INTO test_uploadfile_tb  
  				( file_sq 
-				  , file_cd 
  				  , board_no 
  				  , store_nm 
  				  , upload_nm 
@@ -26,7 +24,6 @@
  				  , file_type 
  				   ) 
  			VALUES ( test_uploadfile_seq.nextval 
- 				  , #fileCd# 
  				  , #boardNo# 
  				  , #storeNm# 
 				  , #uploadNm# 
@@ -40,24 +37,27 @@
 		</selectKey>
 	</insert>
 	
+	<!--  게시물 첨부파일 목록 조회 	-->
 	<select id="uploadFileDAO.selectFileList" resultMap="uploadfile" remapResults="true">
 	<![CDATA[
     		   SELECT * 
          	FROM TEST_UPLOADFILE_TB  
          	WHERE  USE_YN = 'Y'
-         		AND FILE_CD = #fileCd#  
          		AND BOARD_NO = #boardNo#
     	]]> 
     </select>
 	
+	<!-- 	파일 단건 조회 -->
 	<select id="uploadFileDAO.selectFile"  resultMap="uploadfile" remapResults="true">
        	<![CDATA[
-             SELECT * 
+             SELECT file_sq, board_no, 
+             			store_nm, upload_nm, file_size, file_type, use_yn
              FROM test_uploadfile_tb  
              WHERE file_sq =#fileSq# 
          ]]> 
     </select>
     
+    <!-- 	파일 삭제 처리  -->
     <delete id="uploadFileDAO.deleteFile">
 		<![CDATA[
 			UPDATE test_uploadfile_tb

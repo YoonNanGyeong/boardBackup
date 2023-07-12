@@ -170,7 +170,7 @@ header {
 
 /* 에러문구 */
 .errors{
-	display: none;
+	display: hidden;
 }
 
 /* 파일 이름 */

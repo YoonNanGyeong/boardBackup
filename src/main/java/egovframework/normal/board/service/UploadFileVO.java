@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 public class UploadFileVO {
 		private Long fileSq; 			//	 --파일아이디
-		private String fileCd;		//	--분류코드
 		private Long boardNo;		//	--참조번호(게시글번호)
 		private String storeNm;	//	 --서버보관파일명
 		private String uploadNm;	//	 --업로드파일명(유저가 업로드한파일명)
@@ -27,12 +26,6 @@ public class UploadFileVO {
 		}
 		public void setFileSq(Long fileSq) {
 			this.fileSq = fileSq;
-		}
-		public String getFileCd() {
-			return fileCd;
-		}
-		public void setFileCd(String fileCd) {
-			this.fileCd = fileCd;
 		}
 		public Long getBoardNo() {
 			return boardNo;
