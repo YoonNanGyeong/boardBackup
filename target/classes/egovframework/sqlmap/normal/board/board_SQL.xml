@@ -79,7 +79,7 @@
             	TO_CHAR(update_dt,'YYYY.MM.DD HH24:MI')update_dt, create_dt
             FROM test_board_tb 
             WHERE board_sq=#boardSq#
-            	AND use_yn = 'Y';
+            	AND use_yn = 'Y'
         ]]>
     </select>
 	

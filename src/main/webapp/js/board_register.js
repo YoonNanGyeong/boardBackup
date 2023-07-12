@@ -17,14 +17,14 @@
  
 
 // 필드 검증 결과값
- let resultOfUser = false;
- let resultOfTitle = false;
- let resultOfContent = false;
+ let resultOfUser = true;
+ let resultOfTitle = true;
+ let resultOfContent = true;
  
 // 닉네임 검증
 const fn_validationOfUser = e => {
 	// 입력 필드 값
-	let $userValue = document.getElementById("userNm").value;
+	let $userValue = e.target.value;
 	// 필드 입력값 길이
  	let lenOfUser = $userValue.length;
 
@@ -53,6 +53,12 @@ const fn_validationOfUser = e => {
 	 	}
 	 	return;
 	}
+	
+	/*e.target.onblur = function(){
+		if(lenOfUser > 0 && $errUser.classList.includes('hidden')){
+			
+		}
+	}*/
 		
 	
 	
