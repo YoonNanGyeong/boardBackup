@@ -16,8 +16,6 @@
     
     // 글 수정 화면
     function fn_egov_modifyView(id) {
-// 		const selectBoardSq = document.detailForm.boardSq.value;
-// 		location.href = "/updateBoardView.do";
 		document.detailForm.selectedId.value = id;
 		document.detailForm.action = "<c:url value='/updateBoardView.do'/>";
 		document.detailForm.submit();

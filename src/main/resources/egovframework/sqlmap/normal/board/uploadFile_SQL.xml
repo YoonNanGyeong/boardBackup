@@ -40,7 +40,8 @@
 	<!--  게시물 첨부파일 목록 조회 	-->
 	<select id="uploadFileDAO.selectFileList" resultMap="uploadfile" remapResults="true">
 	<![CDATA[
-    		   SELECT * 
+    		   SELECT FILE_SQ, BOARD_NO, STORE_NM, UPLOAD_NM
+    		   			  FILE_SIZE, FILE_TYPE, USE_YN 
          	FROM TEST_UPLOADFILE_TB  
          	WHERE  USE_YN = 'Y'
          		AND BOARD_NO = #boardNo#

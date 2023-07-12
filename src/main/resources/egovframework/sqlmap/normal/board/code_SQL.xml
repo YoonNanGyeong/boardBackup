@@ -12,7 +12,7 @@
 	
 	<select id="codeDAO.selectCodeList" parameterClass="egovframework.normal.board.service.CodeVO" resultClass="egovframework.normal.board.service.CodeVO">
 	<![CDATA[
-        SELECT *
+        SELECT CODE, DECODE, CODE_PID
         	FROM TEST_CODE_TB 
         	WHERE USE_YN = 'Y'
         		AND CODE_PID = #codePid#
