@@ -31,27 +31,12 @@
 	    	}
 	    }
 	    
-	    /* 글 등록 function */
-// 	    function fn_egov_save() {
-// 	        var errors = document.querySelectorAll(".errors");
-// 	        var btnVal = document.getElementById("writeBtn").innerText;
-// 	        let con = confirm(btnVal + "하시겠습니까?");
-	        
-// 	    	frm = document.detailForm;
-// 	    	if(con == false){
-// 	            return;
-// 	        }else if(con == true){
-// 	        	fn_validation();
-// 	        	frm.action = "<c:url value="${registerFlag == 'create' ? '/addBoard.do' : '/updateBoard.do'}"/>";
-// 	            frm.submit();
-// 	        }
-// 	    }
     </script>
 </head>
 <body >
 
 <form:form method ="post" commandName="boardVO" id="detailForm" name="detailForm"  enctype="multipart/form-data" >
- <input type="hidden" name="boardSq" value="${boardVO.boardSq}" />
+ <input type="hidden" id="boardSq" name="boardSq" value="${boardVO.boardSq}" />
     <!-- 상단바 -->
         <div class="nv-l"></div>
         <nav class="nv">
@@ -91,19 +76,19 @@
 	                <span class = "error error-category"></span>
 	             <label id="userNmLabel" for="userNm">작성자</label>
              	<form:input path="userNm"  id="userNm" placeholder="닉네임 입력" maxlength="6"/>
-             	 <span class = "errors error-user"></span>
+             	 <span class = "error-user hidden"></span>
             </div>
             
             <div class="contents">
                 <div class="title-area">
                     <label for="title" id="titleLabel">제목</label>
                     <form:input path="title"  placeholder="제목을 입력하세요." maxlength="45"/>
-					<span class = "errors error-title"></span>
+					<span class = "error-title hidden"></span>
                 </div>
                 <div class="content-area">
                     <label for="content">내용</label>
                     <form:textarea path="content" name="content" id="content" cols="150" rows="20" placeholder="내용을 입력하세요."/>
-					<span class = "errors error-content"></span>
+					<span class = "error-content hidden"></span>
                 </div>
             </div>
             
@@ -132,14 +117,12 @@
         <div class="ft-l"></div>
         <footer class="ft">
          <div class="btns">
-             <a href="javascript:fn_egov_save();" >
          	<button id="writeBtn" type="button">
 							<!--  등록 -->
 	                     <c:if test="${registerFlag == 'create'}"><spring:message code="button.create" /></c:if>
 							<!--  수정 -->
 	                     <c:if test="${registerFlag == 'modify'}"><spring:message code="button.modify" /></c:if>
          	</button>
-             </a>      	
          	
          	     	
 	         	 <a  href="javascript:document.detailForm.reset();">

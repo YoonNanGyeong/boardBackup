@@ -169,8 +169,11 @@ header {
 /* /글 작성 영역 */
 
 /* 에러문구 */
-.errors{
-	display: hidden;
+.error-user.hidden, .error-title.hidden, .error-content.hidden {
+	display: none;
+}
+.error-user, .error-title, .error-content {
+	color: red;
 }
 
 /* 파일 이름 */
