@@ -36,7 +36,7 @@ public interface UploadFileService {
 	   * @param uploadfileId 첨부파일아이디
 	   * @return 삭제한 레코드수
 	   */
-	   void deleteFile(UploadFileVO vo) throws Exception;
+	   int deleteFile(UploadFileVO vo) throws Exception;
 	   
 	   /**
 	    * 첨부파일 수정

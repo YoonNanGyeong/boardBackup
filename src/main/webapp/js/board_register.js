@@ -1,3 +1,5 @@
+ import { ajax } from '/js/ajax.js';
+ 
  // form
  let frm = document.detailForm;
  
@@ -173,14 +175,36 @@ const fn_validationOfContent = e => {
     }
  });
  
+
  	
- // 파일 다운로드 영역 삭제
- 	const fileName = document.getElementById("fileNm");
-	const fileDelete = document.getElementById("fileDelete");
-	const fileDown = document.getElementById("fileDown");
-	
-	function fn_fileDelete(){
-		fileName.value = null;
-		fileDown.remove();
-	}
+ // 파일 삭제 처리
+const $delBtn =  document.querySelector('.fa-solid.fa-trash-can');
+const fileSq = document.getElementById("fileSq");
+$delBtn?.addEventListener('click', e => {
+    if(e.target.tagName != 'I') return;
+    if(!confirm('삭제하시겠습니까?')) return;
+    
+    const url = `/deleteFile.do/${fileSq.value}`;
+    
+    ajax
+        .delete(url)
+        .then(res => res.json())
+        .then(res => {
+            if(res.header.rtcd == '00'){
+                //첨부파일 정보 화면에서 제거
+                removeAttachFileFromView(e);
+            }else{
+                console.log(res.rtmsg);
+            }
+        })
+        .catch(console.error);
+	});
+function removeAttachFileFromView(e){
+    const $parent = document.querySelector('.download-area');
+    const $child = e.target.closest('.files');
+    $parent.removeChild($child);
+}	
+
+
+
 	

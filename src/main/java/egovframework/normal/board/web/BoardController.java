@@ -42,12 +42,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -248,12 +250,17 @@ public class BoardController {
 	}
 	
 
-	@RequestMapping("updateBoardView.do")
+	@RequestMapping("/updateBoardView.do")
 	public String updateBoardView(@RequestParam("selectedId") Long boardSq, @ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model) throws Exception {
 		BoardVO boardVO = new BoardVO();
 		boardVO.setBoardSq(boardSq);
-		
 		model.addAttribute(selectBoard(boardVO, searchVO));
+		
+		UploadFileVO uploadFileVO = new UploadFileVO();
+		uploadFileVO.setBoardNo(boardSq);
+		List<?> fileList = uploadFileService.selectFileList(uploadFileVO);
+		model.addAttribute("fileList", fileList);
+		model.addAttribute("fileSize",fileList.size());
 		
 		return "board/board_register";
 	}
@@ -262,6 +269,7 @@ public class BoardController {
 	@PostMapping("/updateBoard.do")
 	public String updateBoard(@ModelAttribute("searchVO") BoardDefaultVO searchVO, 
 			BoardVO boardVO, BindingResult bindingResult, Model model, SessionStatus status,
+			@RequestParam("uploadFile")List<MultipartFile>uploadFile,
 			HttpServletRequest request)
 			throws Exception {
 		
@@ -272,10 +280,75 @@ public class BoardController {
 			return "board/board_register";
 		}
 		
-
+		// 게시글 수정
+		boardService.updateBoard(boardVO);
+		Long boardNo = boardVO.getBoardSq();
+		
+		// path 가져오기
+		ServletContext context = request.getSession().getServletContext();
+		
+		String loot = context.getRealPath("/images/board/upload");	// 저장경로
+		
+		File fileCheck = new File(loot);
+		
+		if(!fileCheck.exists()) fileCheck.mkdirs();
+		
+		List<Map<String, String>> fileList = new ArrayList<>();
+		
+		UploadFileVO uploadFileVO = new UploadFileVO();
+		uploadFileVO.setBoardNo(boardNo);
+		
+		
+		for(int i = 0; i < uploadFile.size(); i++) {
+			String originFile = uploadFile.get(i).getOriginalFilename();	// 업로드 파일명 
+			String ext = originFile.substring(originFile.lastIndexOf("."));
+			String changeFile = UUID.randomUUID().toString() + ext;		// 서버 저장용 파일명
+			
+			Map<String, String> map = new HashMap<>();
+			map.put("originFile", originFile);
+			map.put("changeFile", changeFile);
+			fileList.add(map);
+			
+			String fileSize = String.valueOf(uploadFile.get(i).getSize());	//파일크기
+			String fileType = uploadFile.get(i).getContentType();	//파일타입
+			
+			// 저장할 정보를 담고 있는 첨부파일 세팅 
+			uploadFileVO.setUploadNm(originFile);
+			uploadFileVO.setStoreNm(changeFile);
+			uploadFileVO.setFileSize(fileSize);
+			uploadFileVO.setFileType(fileType);
+			List<?> files = uploadFileService.selectFileList(uploadFileVO);	
+			if(files.size() > 0) {
+				for(Object item : files) {
+					UploadFileVO result = (UploadFileVO) item;
+					Long fileSq = result.getFileSq();
+					uploadFileVO.setFileSq(fileSq);
+					
+					uploadFileService.updateFile(uploadFileVO);	//첨부파일 정보 업데이트
+				}	
+			}
+			
+		}
+		
+		
+		
+		// 파일 업로드 처리(디렉토리에 저장)
+		try {
+			for(int i = 0; i < uploadFile.size(); i++) {
+				File uplaodFile = new File(loot + "\\" + fileList.get(i).get("changeFile"));
+				uploadFile.get(i).transferTo(uplaodFile);
+			}
+			System.out.println("다중 파일 업로드 성공!");
+		}catch(IllegalStateException | IOException e){
+			System.out.println("다중 파일 업로드 실패...");
+			// 업로드 실패 시 파일 삭제
+			for(int i = 0; i < uploadFile.size(); i++) {
+				new File(loot + "\\" + fileList.get(i).get("changeFile")).delete();		
+			}
+			e.printStackTrace();
+		}
 		
 
-		boardService.updateBoard(boardVO);
 		status.setComplete();
 		return "forward:/boardList.do";
 	}
@@ -285,32 +358,48 @@ public class BoardController {
 	public String deleteBoard(BoardVO boardVO, @ModelAttribute("searchVO") BoardDefaultVO searchVO, SessionStatus status
 			, HttpServletRequest request) throws Exception {
 		UploadFileVO uploadFile = new UploadFileVO();
+		Long boardNo = boardVO.getBoardSq();
+		uploadFile.setBoardNo(boardNo);
 		
-//		MultipartFile ufile = boardVO.getUploadFile();
-//		String ogFileName = ufile.getOriginalFilename();
-//		
-//		
-//		// 물리 파일 삭제
-//		String loot = null;
-//		ServletContext context = request.getSession().getServletContext();
-//		loot = context.getRealPath("/images/board/upload");
-//		
-//		String filePath = loot + ogFileName;
-//		File file = new File(filePath);
-//		if(file.exists()) {			
-//			file.delete();
+//		List<?> files = uploadFileService.selectFileList(uploadFile);	
+//		if(files.size() > 0) {
+//			for(Object item : files) {
+//				UploadFileVO result = (UploadFileVO) item;
+//				Long fileSq = result.getFileSq();
+//				uploadFile.setFileSq(fileSq);
+//				
+//				uploadFileService.deleteFile(uploadFile);	//첨부파일 정보 삭제처리
+//			}	
 //		}
+		
 		
 		// 게시글 삭제
 		boardService.deleteBoard(boardVO);
 		
-		// 파일 DB 정보 삭제
-//		uploadFileService.deleteFile(uploadFile);
-		
 		status.setComplete();
-		return "forward:/boardList.do";
+		return "redirect:/boardList.do";
 	}
-
+	
+	// 파일 삭제 처리
+	@ResponseBody
+	@DeleteMapping("/deleteFile.do/{fileSq}")
+	public RestResponse<Object> deleteFile(@PathVariable("fileSq")Long fileSq, Model model ) throws Exception{
+		UploadFileVO uploadFile = new UploadFileVO();
+		uploadFile.setFileSq(fileSq);
+		int cnt = uploadFileService.deleteFile(uploadFile);	//첨부파일 정보 삭제처리
+	
+		
+		model.addAttribute("fileSq",fileSq);
+		
+		RestResponse<Object> result = null;
+		
+	    if(cnt == 1){
+	      result = RestResponse.createRestResponse("00", "성공", null);
+	    }else{
+	      result = RestResponse.createRestResponse("99", "fail", null);
+	    }
+	    return result;
+	}
 	
 	
 		

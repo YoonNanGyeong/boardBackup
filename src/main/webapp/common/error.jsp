@@ -16,7 +16,7 @@
                     <tr>
                         <td class="error">
                             <span style="font-family: Tahoma; font-weight: bold; color: #000000; line-height: 150%; width: 440px; height: 70px;">
-                            	error가 발생하였습니다. :()
+                            	error가 발생하였습니다. :(
                             </span>
                         </td>
                     </tr>

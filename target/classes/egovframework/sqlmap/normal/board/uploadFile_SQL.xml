@@ -14,7 +14,7 @@
 		<result property="useYn" column="use_yn"/>
 	</resultMap>
 	
-	<insert id="uploadFileDAO.insertFile" parameterClass="egovframework.normal.board.service.UploadFileVO">
+	<insert id="uploadFileDAO.insertFile" parameterClass="uploadFileVO">
 		<![CDATA[
  			INSERT INTO test_uploadfile_tb  
  				( file_sq 

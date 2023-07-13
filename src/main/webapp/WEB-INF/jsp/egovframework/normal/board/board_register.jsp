@@ -2,11 +2,15 @@
 <%@ taglib prefix="c"         uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form"      uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring"    uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fn" 		uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-- fontawesome 아이콘 -->
+    <script src="https://kit.fontawesome.com/dcfc9e7feb.js" ></script>
+    
     <c:set var="registerFlag" value="${empty boardVO.boardCd ? 'create' : 'modify'}"/>
     <title>게시글
     	 <c:if test="${registerFlag == 'create'}"><spring:message code="button.create" /></c:if>
@@ -97,16 +101,27 @@
 	                <label for="uploadFile">첨부파일</label>
 	                        
 	                	<form:input type="file" path="uploadFile" title="첨부파일 추가" multiple="multiple" />
-	           
-<%-- 	                <c:if test = "${boardVO.fileNo ne null }">  --%>
-<!-- 		                <div style= "margin-top: 10px;" id="fileDown"> -->
-<!-- 			                <label for="fileNo">다운로드</label>              -->
-<%-- 			                        <a href="fileDownload.do?fileNo=${boardVO.fileNo}" title="첨부파일 다운로드"> --%>
-<%-- 			                        	<input type="text" id="fileNo" value="${boardVO.fileNo}" name="fileNo" readonly = "readonly"  title="첨부파일 다운로드"/> --%>
-<!-- 			                        </a> -->
-<!-- 				                   		<button id="fileDelete" type="button" onclick="fn_fileDelete()">파일삭제</button> -->
-<!-- 		                </div> -->
-<%--                  	</c:if> --%>
+	           			
+						<c:if test="${fileSize gt 0}">			
+				                <div class="download-area">
+		                		  <label for="fileSq" style="margin-bottom: 20px;">
+		                		  	첨부파일 다운로드
+		                		  	<i class="fa-solid fa-download" style="color: #0070D2;"></i>
+	                		  	  </label>
+									<c:forEach var="file" items="${fileList}" varStatus="status">
+										<input id="fileSq" name="fileSq" value = "${file.fileSq}" style="display:none;"/>
+			              		  		<div class="files">
+						                         <a href="fileDownload.do?fileSq=${file.fileSq}">
+						                        	<input type="text" id="uploadNm" value="${file.fileSize}" name="uploadNm" readonly="readonly" alt="첨부파일명 링크"/>
+							                         <c:if test="${fn:contains(file.fileType,'image')}">	
+							                          <img src="<c:url value='/images/board/upload/${file.storeNm}'/>" alt="image" style="width: 20px; heigth: 20px;">
+							                         </c:if>
+						                         </a>
+			               		  		 <i class="fa-solid fa-trash-can"></i>
+			               		  		</div>
+									</c:forEach>
+				                </div>
+						</c:if>
 	            </div>
             
             
@@ -158,6 +173,6 @@
     <input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 </form:form>
 </body>
-<script type="text/javascript" language="javaScript" src="/js/board_register.js"></script>
+<script type="module" language="javaScript" src="/js/board_register.js?after"></script>
 
 </html>

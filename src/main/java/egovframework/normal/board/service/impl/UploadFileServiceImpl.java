@@ -47,9 +47,10 @@ public class UploadFileServiceImpl extends EgovAbstractServiceImpl implements Up
 	   * 
 	   */
 	@Override
-	public void deleteFile(UploadFileVO vo) throws Exception {
-		uploadFileDAO.deleteFile(vo);
+	public int deleteFile(UploadFileVO vo) throws Exception {
+		return uploadFileDAO.deleteFile(vo);
 	}
+	
 
 	/**
 	 * 첨부파일 수정
@@ -58,6 +59,7 @@ public class UploadFileServiceImpl extends EgovAbstractServiceImpl implements Up
 	public void updateFile(UploadFileVO vo) throws Exception {
 		uploadFileDAO.updateFile(vo);
 	}
+
 
 
 }

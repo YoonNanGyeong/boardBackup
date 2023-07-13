@@ -168,6 +168,51 @@ header {
 
 /* /글 작성 영역 */
 
+/* 다운로드 */
+.files {
+	display: flex;
+	align-items: center; 
+}
+.files a{
+	display: flex;
+	align-items: center; 
+}
+#fileSq {
+	border: none; 
+	cursor: pointer; 
+	width: 100%;
+}
+#fileSq:hover {
+	background-color: #0070D2;
+	opacity: 50%;
+}
+.fa-trash-can{
+	cursor: pointer;
+	margin-left: 10px;
+	color: #a3a3a3;
+}
+.fa-trash-can:hover{
+	color: red;
+}
+.download-area {
+	width: 74%;
+    margin-top: 10px;
+    padding: 20px;
+    border: 1px solid #D5D9DE;
+    border-radius: 10px;
+}
+
+.download-area .prev-img a {
+    color: #0070D2;
+}
+
+.download-area .prev-img img{
+    width: 10px; height: 10px;
+    margin-left: 10px;
+}
+/* /다운로드 */
+
+
 /* 에러문구 */
 .error-user.hidden, .error-title.hidden, .error-content.hidden {
 	display: none;
@@ -224,7 +269,7 @@ header {
     height: 42px;
     border-radius: 12px;
     border: 1px solid #EBEBEB;
-    background-color: EBEBEB;
+    background-color: #EBEBEB;
     color: #2E2E2E;
     font-weight: bold;
 }
