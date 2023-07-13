@@ -2,6 +2,8 @@
 package egovframework.normal.board.service;
 
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -21,7 +23,8 @@ public class BoardVO extends BoardDefaultVO {
 	
 	// 첨부파일
 	private Long fileNo;	//파일번호
-	private MultipartFile uploadFile;
+	private List<MultipartFile> uploadFile;
+	
 	
 	// 이전, 다음글 번호
 	private long nextNo;
@@ -65,15 +68,13 @@ public class BoardVO extends BoardDefaultVO {
 	public void setUpdateDt(String updateDt) {
 		this.updateDt = updateDt;
 	}
-	
-	public MultipartFile getUploadFile() {
+
+	public List<MultipartFile> getUploadFile() {
 		return uploadFile;
 	}
-	public void setUploadFile(MultipartFile uploadFile) {
+	public void setUploadFile(List<MultipartFile> uploadFile) {
 		this.uploadFile = uploadFile;
 	}
-	
-	
 	public long getBoardSq() {
 		return boardSq;
 	}

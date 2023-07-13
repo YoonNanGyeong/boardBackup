@@ -16,6 +16,8 @@
 package egovframework.normal.board.web;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -131,6 +133,7 @@ public class BoardController {
 
 	@PostMapping(value = "/addBoard.do")
 	public String addBoard(
+			@RequestParam("uploadFile")List<MultipartFile>uploadFile, 
 			@ModelAttribute("searchVO") BoardDefaultVO searchVO, BoardVO boardVO, 
 			BindingResult bindingResult, Model model, SessionStatus status,
 			HttpServletRequest request)
@@ -142,25 +145,66 @@ public class BoardController {
 			model.addAttribute("boardVO", boardVO);
 			return "board/board_register";
 		}
+//		String fileName = null;
+//		String ogFileName = null;
+//		MultipartFile uploadFile = boardVO.getUploadFile();
+		
+		
+//		if(uploadFile != null && !uploadFile.isEmpty()) {
+//			ogFileName = uploadFile.getOriginalFilename();	//작성자 첨부파일 이름
+//			String ext = FilenameUtils.getExtension(ogFileName);
+//			UUID uuid = UUID.randomUUID();
+//			fileName = uuid + "." + ext;	// 서버 보관용 파일 이름
+//			
+//			uploadFile.transferTo(new File(loot + fileName));
+//			System.out.println("loot = " + loot);
+//			
+//		}
+		
+		// requestParam 확인
+		System.out.println("multiFileList = " + uploadFile);
 
+		// path 가져오기
+		ServletContext context = request.getSession().getServletContext();
+		
+		String loot = context.getRealPath("/images/board/upload");
+		
+		File fileCheck = new File(loot);
+		
+		if(!fileCheck.exists()) fileCheck.mkdirs();
+		
+		List<Map<String, String>> fileList = new ArrayList<>();
+		
+		String originFile = null;
+		for(int i = 0; i < uploadFile.size(); i++) {
+			originFile = uploadFile.get(i).getOriginalFilename();
+			String ext = originFile.substring(originFile.lastIndexOf("."));
+			String changeFile = UUID.randomUUID().toString() + ext;
+			
+			Map<String, String> map = new HashMap<>();
+			map.put("originFile", originFile);
+			map.put("changeFile", changeFile);
+			
+			fileList.add(map);
+		}
+		System.out.println("originFile = " + originFile);
 		
 		// 파일 업로드 처리
-		String loot = null;
-		String fileName = null;
-		String ogFileName = null;
-		MultipartFile uploadFile = boardVO.getUploadFile();
-		
-		if(uploadFile != null && !uploadFile.isEmpty()) {
-			ogFileName = uploadFile.getOriginalFilename();	//작성자 첨부파일 이름
-			String ext = FilenameUtils.getExtension(ogFileName);
-			UUID uuid = UUID.randomUUID();
-			fileName = uuid + "." + ext;	// 서버 보관용 파일 이름
-			ServletContext context = request.getSession().getServletContext();
-			loot = context.getRealPath("/images/board/upload");
-			uploadFile.transferTo(new File(loot + fileName));
-			System.out.println("loot = " + loot);
-			
+		try {
+			for(int i = 0; i < uploadFile.size(); i++) {
+				File uplaodFile = new File(loot + "\\" + fileList.get(i).get("changeFile"));
+				uploadFile.get(i).transferTo(uplaodFile);
+			}
+			System.out.println("다중 파일 업로드 성공!");
+		}catch(IllegalStateException | IOException e){
+			System.out.println("다중 파일 업로드 실패...");
+			// 업로드 실패 시 파일 삭제
+			for(int i = 0; i < uploadFile.size(); i++) {
+				new File(loot + "\\" + fileList.get(i).get("changeFile")).delete();
+			}
+			e.printStackTrace();
 		}
+		
 		
 		
 		// 게시글 저장
@@ -169,20 +213,21 @@ public class BoardController {
 
 		 
 		// 업로드 파일 객체
-		UploadFileVO uploadFileVO = new UploadFileVO();
-		
-		uploadFileVO.setBoardNo(boardNo);
-		uploadFileVO.setStoreNm(fileName);
-		uploadFileVO.setUploadNm(ogFileName);
-		uploadFileVO.setFileSize(String.valueOf(uploadFile.getSize()));
-		uploadFileVO.setFileType(uploadFile.getContentType());
-		
-		Long fileNo = null;
-		// 업로드 파일 테이블에 저장
-		if(uploadFileVO.getStoreNm() != null || uploadFileVO.getUploadNm()!= null) {			
-			fileNo = uploadFileService.insertFile(uploadFileVO);
-			boardVO.setFileNo(fileNo);
-		}
+//		UploadFileVO uploadFileVO = new UploadFileVO();
+//		
+//		uploadFileVO.setBoardNo(boardNo);
+//		uploadFileVO.setStoreNm(fileName);
+//		uploadFileVO.setUploadNm(ogFileName);
+//		uploadFileVO.setFileSize(String.valueOf(uploadFile.getSize()));
+//		uploadFileVO.setFileType(uploadFile.getContentType());
+//		
+//		Long fileNo = null;
+//		// 업로드 파일 테이블에 저장
+//		if(uploadFileVO.getStoreNm() != null || uploadFileVO.getUploadNm()!= null) {			
+//			fileNo = uploadFileService.insertFile(uploadFileVO);
+//			boardVO.setFileNo(fileNo);
+//			boardService.updateBoard(boardVO);
+//		}
 		
 		
 		status.setComplete();
@@ -243,31 +288,31 @@ public class BoardController {
 			return "board/board_register";
 		}
 		
-		// 파일업로드
-		String fileName = null;
-		String loot = null;
-		MultipartFile uploadFile = boardVO.getUploadFile();
-		
-		if(!uploadFile.isEmpty()) {
-			String ogFileName = uploadFile.getOriginalFilename();
-			String ext = FilenameUtils.getExtension(ogFileName);
-			UUID uuid = UUID.randomUUID();
-			fileName = uuid + "." + ext;
-			ServletContext context = request.getSession().getServletContext();
-			loot = context.getRealPath("/images/board/upload");
-			
-			uploadFile.transferTo(new File(loot + fileName));
-			
-			// 업로드 파일 객체
-			UploadFileVO uploadFileVO = new UploadFileVO();
-			uploadFileVO.setBoardNo(boardVO.getBoardSq());
-			uploadFileService.selectFileList(uploadFileVO);
-			
-			
-			Long fileNo = uploadFileService.insertFile(uploadFileVO);
-			
-			boardVO.setFileNo(fileNo);
-		}
+//		// 파일업로드
+//		String fileName = null;
+//		String loot = null;
+//		MultipartFile uploadFile = boardVO.getUploadFile();
+//		
+//		if(!uploadFile.isEmpty()) {
+//			String ogFileName = uploadFile.getOriginalFilename();
+//			String ext = FilenameUtils.getExtension(ogFileName);
+//			UUID uuid = UUID.randomUUID();
+//			fileName = uuid + "." + ext;
+//			ServletContext context = request.getSession().getServletContext();
+//			loot = context.getRealPath("/images/board/upload");
+//			
+//			uploadFile.transferTo(new File(loot + fileName));
+//			
+//			// 업로드 파일 객체
+//			UploadFileVO uploadFileVO = new UploadFileVO();
+//			uploadFileVO.setBoardNo(boardVO.getBoardSq());
+//			uploadFileService.selectFileList(uploadFileVO);
+//			
+//			
+//			Long fileNo = uploadFileService.insertFile(uploadFileVO);
+//			
+//			boardVO.setFileNo(fileNo);
+//		}
 		
 
 		boardService.updateBoard(boardVO);
@@ -283,26 +328,26 @@ public class BoardController {
 		UploadFileVO uploadFile = new UploadFileVO();
 		uploadFile.setFileSq(boardFileNo);
 		
-		MultipartFile ufile = boardVO.getUploadFile();
-		String ogFileName = ufile.getOriginalFilename();
-		
-		
-		// 물리 파일 삭제
-		String loot = null;
-		ServletContext context = request.getSession().getServletContext();
-		loot = context.getRealPath("/images/board/upload");
-		
-		String filePath = loot + ogFileName;
-		File file = new File(filePath);
-		if(file.exists()) {			
-			file.delete();
-		}
+//		MultipartFile ufile = boardVO.getUploadFile();
+//		String ogFileName = ufile.getOriginalFilename();
+//		
+//		
+//		// 물리 파일 삭제
+//		String loot = null;
+//		ServletContext context = request.getSession().getServletContext();
+//		loot = context.getRealPath("/images/board/upload");
+//		
+//		String filePath = loot + ogFileName;
+//		File file = new File(filePath);
+//		if(file.exists()) {			
+//			file.delete();
+//		}
 		
 		// 게시글 삭제
 		boardService.deleteBoard(boardVO);
 		
 		// 파일 DB 정보 삭제
-		uploadFileService.deleteFile(uploadFile);
+//		uploadFileService.deleteFile(uploadFile);
 		status.setComplete();
 		return "forward:/boardList.do";
 	}
