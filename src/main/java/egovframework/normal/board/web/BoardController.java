@@ -145,29 +145,15 @@ public class BoardController {
 			model.addAttribute("boardVO", boardVO);
 			return "board/board_register";
 		}
-//		String fileName = null;
-//		String ogFileName = null;
-//		MultipartFile uploadFile = boardVO.getUploadFile();
-		
-		
-//		if(uploadFile != null && !uploadFile.isEmpty()) {
-//			ogFileName = uploadFile.getOriginalFilename();	//작성자 첨부파일 이름
-//			String ext = FilenameUtils.getExtension(ogFileName);
-//			UUID uuid = UUID.randomUUID();
-//			fileName = uuid + "." + ext;	// 서버 보관용 파일 이름
-//			
-//			uploadFile.transferTo(new File(loot + fileName));
-//			System.out.println("loot = " + loot);
-//			
-//		}
-		
+
+
 		// requestParam 확인
 		// System.out.println("multiFileList = " + uploadFile);
 
 		// path 가져오기
 		ServletContext context = request.getSession().getServletContext();
 		
-		String loot = context.getRealPath("/images/board/upload");
+		String loot = context.getRealPath("/images/board/upload");	// 저장경로
 		
 		File fileCheck = new File(loot);
 		
@@ -200,7 +186,7 @@ public class BoardController {
 			System.out.println("다중 파일 업로드 실패...");
 			// 업로드 실패 시 파일 삭제
 			for(int i = 0; i < uploadFile.size(); i++) {
-				new File(loot + "\\" + fileList.get(i).get("changeFile")).delete();
+				new File(loot + "\\" + fileList.get(i).get("changeFile")).delete();		
 			}
 			e.printStackTrace();
 		}
@@ -211,25 +197,7 @@ public class BoardController {
 		 Long boardNo = boardService.insertBoard(boardVO);
 		 model.addAttribute("boardNo",boardNo);
 
-		 
-		// 업로드 파일 객체
-//		UploadFileVO uploadFileVO = new UploadFileVO();
-//		
-//		uploadFileVO.setBoardNo(boardNo);
-//		uploadFileVO.setStoreNm(fileName);
-//		uploadFileVO.setUploadNm(ogFileName);
-//		uploadFileVO.setFileSize(String.valueOf(uploadFile.getSize()));
-//		uploadFileVO.setFileType(uploadFile.getContentType());
-//		
-//		Long fileNo = null;
-//		// 업로드 파일 테이블에 저장
-//		if(uploadFileVO.getStoreNm() != null || uploadFileVO.getUploadNm()!= null) {			
-//			fileNo = uploadFileService.insertFile(uploadFileVO);
-//			boardVO.setFileNo(fileNo);
-//			boardService.updateBoard(boardVO);
-//		}
-		
-		
+
 		status.setComplete();
 		return "redirect:{boardNo}/detailBoard.do";
 	}
