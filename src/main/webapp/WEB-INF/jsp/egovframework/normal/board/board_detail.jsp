@@ -95,29 +95,35 @@
             <main class="mn">
                 <div class="contents">
                     <div class="file-area">
-<%-- 	                    <c:if test="${fn:contains(fileType,'image')}">	                     --%>
-<%-- 	                      <img src="<c:url value='/images/board/upload/${uploadFileVO.fileNm}'/>" alt="image"> --%>
-<%-- 	                    </c:if> --%>
+                    	<c:forEach var="file" items="${fileList}" varStatus="status">
+		                    <c:if test="${fn:contains(file.fileType,'image')}">	                    
+		                      <img src="<c:url value='/images/board/upload/${file.storeNm}'/>" alt="image">
+		                    </c:if>
+                    	</c:forEach>
                     </div>
                     <div class="content-area">
                        <p><c:out value="${boardVO.content}"/>&nbsp;</p>
                     </div>
                 </div>
-                
-             	<c:if test = "${boardVO.fileNo ne null }">
+				<c:if test="${fileSize gt 0}">				
 	                <div class="download-title">
 	                    <h4>첨부파일 다운로드</h4>
 	                    <i class="fa-solid fa-download"></i>
 	                </div>
-	
-	                <div class="download-area">
-	                		<label style="visibility: hidden;" for="fileNo">첨부파일 다운로드</label>
-	                        <a href="fileDownload.do?fileNo=${boardVO.fileNo}">
-	                        	<input type="text" id="fileNo" value="${boardVO.fileNo}" name="fileNo" readonly="readonly" alt="첨부파일명 링크"/>
-	                        </a>
-	                   
-	                </div>
-              	</c:if>
+		                <div class="download-area">
+                		  <label style="visibility: hidden;" for="fileSq">첨부파일 다운로드</label>
+							<c:forEach var="file" items="${fileList}" varStatus="status">
+	              		  		<div class="files">
+				                         <a href="fileDownload.do?fileSq=${file.fileSq}">
+				                        	<input type="text" id="fileSq" value="${file.fileSize}" name="fileSq" readonly="readonly" alt="첨부파일명 링크"/>
+					                         <c:if test="${fn:contains(file.fileType,'image')}">	
+					                          <img src="<c:url value='/images/board/upload/${file.storeNm}'/>" alt="image" style="width: 20px; heigth: 20px;">
+					                         </c:if>
+				                         </a>
+	               		  		</div>
+							</c:forEach>
+		                </div>
+				</c:if>
             </main>
             <div class="mn-r"></div>
         </div>

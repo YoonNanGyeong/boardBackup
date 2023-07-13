@@ -22,7 +22,6 @@ public class BoardVO extends BoardDefaultVO {
 	private String  updateDt;	//수정일시
 	
 	// 첨부파일
-	private Long fileNo;	//파일번호
 	private List<MultipartFile> uploadFile;
 	
 	
@@ -50,12 +49,7 @@ public class BoardVO extends BoardDefaultVO {
 	public void setUseYn(String useYn) {
 		this.useYn = useYn;
 	}
-	public Long getFileNo() {
-		return fileNo;
-	}
-	public void setFileNo(Long fileNo) {
-		this.fileNo = fileNo;
-	}
+
 	public String getCreateDt() {
 		return createDt;
 	}

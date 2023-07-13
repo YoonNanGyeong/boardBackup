@@ -76,7 +76,20 @@ nav h4 {
 .prev-next {
 	display: flex;
 	justify-content: space-between;
+	margin-bottom : 20px;
 }
+
+.prev-next button {
+	cursor: pointer;
+	border-radius: 10px;
+    border: 1px solid #EBEBEB;
+    background-color: EBEBEB;
+    color: #2E2E2E;
+    padding: 0.4rem;
+    font-size: 0.8rem;
+	
+}
+/* / 이전, 다음 버튼 */
 
 /* 타이틀 */
 header {
@@ -161,16 +174,20 @@ header {
 /* /글 작성 영역 */
 
 /* 첨부파일 영역 */
-#fileNo {
+#fileSq {
 	width: 100%;
     border: none;
     color: #0070D2;
     cursor: pointer;
 }
-
-.file-area img {
-	width: 50%;
+.file-area {
+	display: flex;
+	flex-wrap: wrap;
 }
+.file-area img {
+	width: 30%;
+}
+
 
 .ft {
     margin-top: 10px;

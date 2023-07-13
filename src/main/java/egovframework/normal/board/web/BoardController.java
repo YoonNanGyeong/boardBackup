@@ -145,10 +145,15 @@ public class BoardController {
 			model.addAttribute("boardVO", boardVO);
 			return "board/board_register";
 		}
+		
+
+		// 게시글 저장
+		 Long boardNo = boardService.insertBoard(boardVO);
+		 model.addAttribute("boardNo",boardNo);
 
 
 		// requestParam 확인
-		// System.out.println("multiFileList = " + uploadFile);
+//		 System.out.println("multiFileList = " + uploadFile);
 
 		// path 가져오기
 		ServletContext context = request.getSession().getServletContext();
@@ -161,6 +166,7 @@ public class BoardController {
 		
 		List<Map<String, String>> fileList = new ArrayList<>();
 		
+		UploadFileVO uploadFileVO = new UploadFileVO();
 		
 		for(int i = 0; i < uploadFile.size(); i++) {
 			String originFile = uploadFile.get(i).getOriginalFilename();	// 업로드 파일명 
@@ -170,12 +176,22 @@ public class BoardController {
 			Map<String, String> map = new HashMap<>();
 			map.put("originFile", originFile);
 			map.put("changeFile", changeFile);
-			
 			fileList.add(map);
+			
+			String fileSize = String.valueOf(uploadFile.get(i).getSize());	//파일크기
+			String fileType = uploadFile.get(i).getContentType();	//파일타입
+			
+			uploadFileVO.setUploadNm(originFile);
+			uploadFileVO.setStoreNm(changeFile);
+			uploadFileVO.setFileSize(fileSize);
+			uploadFileVO.setFileType(fileType);
+			uploadFileVO.setBoardNo(boardNo);
+			uploadFileService.insertFile(uploadFileVO);
+			
 		}
 		System.out.println("fileList = " + fileList);	// 업로드 파일 확인
 		
-		// 파일 업로드 처리
+		// 파일 업로드 처리(디렉토리에 저장)
 		try {
 			for(int i = 0; i < uploadFile.size(); i++) {
 				File uplaodFile = new File(loot + "\\" + fileList.get(i).get("changeFile"));
@@ -193,9 +209,6 @@ public class BoardController {
 		
 		
 		
-		// 게시글 저장
-		 Long boardNo = boardService.insertBoard(boardVO);
-		 model.addAttribute("boardNo",boardNo);
 
 
 		status.setComplete();
@@ -216,6 +229,17 @@ public class BoardController {
 		
 		// 조회한 객체 
 		BoardVO vo = selectBoard(boardVO, searchVO);
+		model.addAttribute("boardVO", vo);
+		
+		
+		UploadFileVO uploadFileVO = new UploadFileVO();
+		uploadFileVO.setBoardNo(boardSq);
+		
+		List<?> fileList = uploadFileService.selectFileList(uploadFileVO);
+		model.addAttribute("fileList",fileList);
+		System.out.println("fileList = " + fileList);
+		
+		model.addAttribute("fileSize",fileList.size());
 		   
 		// 이전글 다음글 행번호를 가지고 있는 객체
 //		BoardVO nextPrev = boardService.boardPrevNext(vo);
@@ -226,7 +250,6 @@ public class BoardController {
 //		BoardVO nextPrevVO = boardService.selectPrevNext(nextPrev);
 		
 
-		model.addAttribute("boardVO", vo);
 		
 		return "board/board_detail";
 	}
@@ -256,31 +279,7 @@ public class BoardController {
 			return "board/board_register";
 		}
 		
-//		// 파일업로드
-//		String fileName = null;
-//		String loot = null;
-//		MultipartFile uploadFile = boardVO.getUploadFile();
-//		
-//		if(!uploadFile.isEmpty()) {
-//			String ogFileName = uploadFile.getOriginalFilename();
-//			String ext = FilenameUtils.getExtension(ogFileName);
-//			UUID uuid = UUID.randomUUID();
-//			fileName = uuid + "." + ext;
-//			ServletContext context = request.getSession().getServletContext();
-//			loot = context.getRealPath("/images/board/upload");
-//			
-//			uploadFile.transferTo(new File(loot + fileName));
-//			
-//			// 업로드 파일 객체
-//			UploadFileVO uploadFileVO = new UploadFileVO();
-//			uploadFileVO.setBoardNo(boardVO.getBoardSq());
-//			uploadFileService.selectFileList(uploadFileVO);
-//			
-//			
-//			Long fileNo = uploadFileService.insertFile(uploadFileVO);
-//			
-//			boardVO.setFileNo(fileNo);
-//		}
+
 		
 
 		boardService.updateBoard(boardVO);
@@ -292,9 +291,7 @@ public class BoardController {
 	@PostMapping("/deleteBoard.do")
 	public String deleteBoard(BoardVO boardVO, @ModelAttribute("searchVO") BoardDefaultVO searchVO, SessionStatus status
 			, HttpServletRequest request) throws Exception {
-		Long boardFileNo = boardVO.getFileNo();
 		UploadFileVO uploadFile = new UploadFileVO();
-		uploadFile.setFileSq(boardFileNo);
 		
 //		MultipartFile ufile = boardVO.getUploadFile();
 //		String ogFileName = ufile.getOriginalFilename();
@@ -316,6 +313,7 @@ public class BoardController {
 		
 		// 파일 DB 정보 삭제
 //		uploadFileService.deleteFile(uploadFile);
+		
 		status.setComplete();
 		return "forward:/boardList.do";
 	}

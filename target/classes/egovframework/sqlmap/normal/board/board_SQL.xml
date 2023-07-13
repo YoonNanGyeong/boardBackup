@@ -13,7 +13,6 @@
 		<result property="content" column="content"/>
 		<result property="viewCnt" column="view_cnt"/>
 		<result property="userNm" column="user_nm"/>
-		<result property="fileNo" column="file_no"/>
 		<result property="useYn" column="use_yn"/>
 		<result property="createDt" column="create_dt"/>
 		<result property="updateDt" column="update_dt"/>
@@ -31,13 +30,13 @@
 				  , title
 				  , content
 				  , user_nm
-				  , file_no )
+				  )
 			VALUES ( test_board_seq.nextval
 				  , #boardCd#
 				  , #title#  
 				  , #content#
 				  , #userNm#
-				  , #fileNo# )
+					 )
 		]]>
 		<selectKey keyProperty="boardSq"  resultClass="Long">
 			SELECT test_board_seq.currval AS board_sq FROM dual
@@ -52,7 +51,6 @@
 				, update_dt=systimestamp
 				, user_nm = #userNm#
 				, board_cd = #boardCd#
-				, file_no = #fileNo#
 			WHERE board_sq=#boardSq#
 		]]>
 	</update>
@@ -77,7 +75,7 @@
     <select id="boardDAO.selectBoard" resultMap="board" remapResults="true">
        	<![CDATA[
             SELECT
-            	board_sq, board_cd, title, content, view_cnt, user_nm, file_no, use_yn,
+            	board_sq, board_cd, title, content, view_cnt, user_nm, use_yn,
             	TO_CHAR(update_dt,'YYYY.MM.DD HH24:MI')update_dt, create_dt
             FROM test_board_tb 
             WHERE board_sq=#boardSq#

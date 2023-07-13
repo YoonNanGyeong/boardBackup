@@ -2,6 +2,7 @@
 <!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
 
 <sqlMap namespace="uploadFile">
+	<typeAlias  alias="uploadFileVO" type="egovframework.normal.board.service.UploadFileVO"/>
 	
 	<resultMap id="uploadfile" class="egovframework.normal.board.service.UploadFileVO">
 		<result property="fileSq" column="file_sq"/>
@@ -38,7 +39,7 @@
 	</insert>
 	
 	<!--  게시물 첨부파일 목록 조회 	-->
-	<select id="uploadFileDAO.selectFileList" resultMap="uploadfile" remapResults="true">
+	<select id="uploadFileDAO.selectFileList" parameterClass="uploadFileVO" resultClass="egovMap">
 	<![CDATA[
     		   SELECT FILE_SQ, BOARD_NO, STORE_NM, UPLOAD_NM
     		   			  FILE_SIZE, FILE_TYPE, USE_YN 

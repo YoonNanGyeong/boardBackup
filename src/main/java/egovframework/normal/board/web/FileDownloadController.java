@@ -26,12 +26,14 @@ public class FileDownloadController {
 	
 	@RequestMapping(value = "fileDownload.do")
 	public void fileDownload(HttpServletRequest request, HttpServletResponse response)throws Exception {
-		String fileno = request.getParameter("fileNo");
-		Long longFileNo = Long.parseLong(fileno);
+		String fileSq = request.getParameter("fileSq");
+		Long longFileNo = Long.parseLong(fileSq);
+		
 		UploadFileVO uploadFile = new UploadFileVO();
 		uploadFile.setFileSq(longFileNo);
 		
 		UploadFileVO selectedFile = uploadFileService.selectFile(uploadFile);
+		
 		String filename =  selectedFile.getStoreNm();
 		
         String realFilename = "";
