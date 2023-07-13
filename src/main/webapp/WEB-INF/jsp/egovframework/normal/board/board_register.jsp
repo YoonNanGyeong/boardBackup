@@ -96,17 +96,17 @@
 	            <div class="file-area">
 	                <label for="uploadFile">첨부파일</label>
 	                        
-	                	<form:input type="file" path="uploadFile" title="첨부파일 추가"/>
+	                	<form:input type="file" path="uploadFile" title="첨부파일 추가" multiple="multiple" />
 	           
-<%-- 	                <c:if test = "${boardVO.fileNm ne null }">  --%>
-<!-- 		                <div style= "margin-top: 10px;" id="fileDown"> -->
-<!-- 			                <label for="fileNm">다운로드</label>              -->
-<%-- 			                        <a href="fileDownload.do?fileNo=${boardVO.fileNo}" title="첨부파일 다운로드"> --%>
-<%-- 			                        	<input type="text" id="fileNo" value="${boardVO.fileNo}" name="fileNo readonly="readonly"  title="첨부파일 다운로드"/> --%>
-<!-- 			                        </a> -->
-<!-- 				                   		<button id="fileDelete" type="button" onclick="fn_fileDelete()">파일삭제</button> -->
-<!-- 		                </div> -->
-<%--                  	</c:if> --%>
+	                <c:if test = "${boardVO.fileNo ne null }"> 
+		                <div style= "margin-top: 10px;" id="fileDown">
+			                <label for="fileNo">다운로드</label>             
+			                        <a href="fileDownload.do?fileNo=${boardVO.fileNo}" title="첨부파일 다운로드">
+			                        	<input type="text" id="fileNo" value="${boardVO.fileNo}" name="fileNo" readonly = "readonly"  title="첨부파일 다운로드"/>
+			                        </a>
+				                   		<button id="fileDelete" type="button" onclick="fn_fileDelete()">파일삭제</button>
+		                </div>
+                 	</c:if>
 	            </div>
             
             

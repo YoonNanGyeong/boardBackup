@@ -54,7 +54,8 @@
              SELECT file_sq, board_no, 
              			store_nm, upload_nm, file_size, file_type, use_yn
              FROM test_uploadfile_tb  
-             WHERE file_sq =#fileSq# 
+             WHERE use_yn = 'Y'
+             	AND  file_sq =#fileSq# 
          ]]> 
     </select>
     

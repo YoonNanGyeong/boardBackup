@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,13 +14,26 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import egovframework.normal.board.service.UploadFileService;
+import egovframework.normal.board.service.UploadFileVO;
+
 
 @Controller
 public class FileDownloadController {
 	
+	@Resource(name = "uploadFileService")
+	private UploadFileService uploadFileService;
+	
 	@RequestMapping(value = "fileDownload.do")
 	public void fileDownload(HttpServletRequest request, HttpServletResponse response)throws Exception {
-		String filename = request.getParameter("fileNm");
+		String fileno = request.getParameter("fileNo");
+		Long longFileNo = Long.parseLong(fileno);
+		UploadFileVO uploadFile = new UploadFileVO();
+		uploadFile.setFileSq(longFileNo);
+		
+		UploadFileVO selectedFile = uploadFileService.selectFile(uploadFile);
+		String filename =  selectedFile.getStoreNm();
+		
         String realFilename = "";
         
         try {			

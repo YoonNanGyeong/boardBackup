@@ -157,7 +157,7 @@ public class BoardController {
 			fileName = uuid + "." + ext;	// 서버 보관용 파일 이름
 			ServletContext context = request.getSession().getServletContext();
 			loot = context.getRealPath("/images/board/upload");
-			uploadFile.transferTo(new File(loot + ogFileName));
+			uploadFile.transferTo(new File(loot + fileName));
 			System.out.println("loot = " + loot);
 			
 		}
@@ -181,7 +181,9 @@ public class BoardController {
 		// 업로드 파일 테이블에 저장
 		if(uploadFileVO.getStoreNm() != null || uploadFileVO.getUploadNm()!= null) {			
 			fileNo = uploadFileService.insertFile(uploadFileVO);
+			boardVO.setFileNo(fileNo);
 		}
+		
 		
 		status.setComplete();
 		return "redirect:{boardNo}/detailBoard.do";
@@ -199,7 +201,17 @@ public class BoardController {
 		BoardVO boardVO = new BoardVO();
 		boardVO.setBoardSq(boardSq);
 		
+		// 조회한 객체 
 		BoardVO vo = selectBoard(boardVO, searchVO);
+		   
+		// 이전글 다음글 행번호를 가지고 있는 객체
+//		BoardVO nextPrev = boardService.boardPrevNext(vo);
+//		nextPrev.setBoardCd(vo.getBoardCd());
+//		model.addAttribute("nextPrev",nextPrev);
+		
+		// 행번호로 이전 다음글 조회
+//		BoardVO nextPrevVO = boardService.selectPrevNext(nextPrev);
+		
 
 		model.addAttribute("boardVO", vo);
 		
@@ -235,6 +247,7 @@ public class BoardController {
 		String fileName = null;
 		String loot = null;
 		MultipartFile uploadFile = boardVO.getUploadFile();
+		
 		if(!uploadFile.isEmpty()) {
 			String ogFileName = uploadFile.getOriginalFilename();
 			String ext = FilenameUtils.getExtension(ogFileName);
@@ -243,9 +256,17 @@ public class BoardController {
 			ServletContext context = request.getSession().getServletContext();
 			loot = context.getRealPath("/images/board/upload");
 			
-			uploadFile.transferTo(new File(loot + ogFileName));
+			uploadFile.transferTo(new File(loot + fileName));
 			
-//			boardVO.setFileNm(fileName);
+			// 업로드 파일 객체
+			UploadFileVO uploadFileVO = new UploadFileVO();
+			uploadFileVO.setBoardNo(boardVO.getBoardSq());
+			uploadFileService.selectFileList(uploadFileVO);
+			
+			
+			Long fileNo = uploadFileService.insertFile(uploadFileVO);
+			
+			boardVO.setFileNo(fileNo);
 		}
 		
 
@@ -262,17 +283,21 @@ public class BoardController {
 		UploadFileVO uploadFile = new UploadFileVO();
 		uploadFile.setFileSq(boardFileNo);
 		
+		MultipartFile ufile = boardVO.getUploadFile();
+		String ogFileName = ufile.getOriginalFilename();
+		
+		
 		// 물리 파일 삭제
 		String loot = null;
 		ServletContext context = request.getSession().getServletContext();
 		loot = context.getRealPath("/images/board/upload");
 		
-//		String filePath = loot + boardFileNm;
-//		File file = new File(filePath);
-//		if(file.exists()) {			
-//			file.delete();
-//		}
-//		
+		String filePath = loot + ogFileName;
+		File file = new File(filePath);
+		if(file.exists()) {			
+			file.delete();
+		}
+		
 		// 게시글 삭제
 		boardService.deleteBoard(boardVO);
 		

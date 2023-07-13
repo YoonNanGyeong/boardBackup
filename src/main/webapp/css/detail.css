@@ -72,6 +72,12 @@ nav h4 {
 }
 /* /상단바 */
 
+/* 이전, 다음 버튼 */
+.prev-next {
+	display: flex;
+	justify-content: space-between;
+}
+
 /* 타이틀 */
 header {
     margin: 30px 0;
@@ -155,7 +161,7 @@ header {
 /* /글 작성 영역 */
 
 /* 첨부파일 영역 */
-#fileNm {
+#fileNo {
 	width: 100%;
     border: none;
     color: #0070D2;

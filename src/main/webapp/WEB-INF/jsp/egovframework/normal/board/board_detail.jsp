@@ -58,6 +58,10 @@
         <div class="border">
             <div class="hd-l"></div>
             <header class="hd">
+            	<div class = "prev-next">
+            		<button id="prevNo" type="button" value="prev">이전</button>
+            		<button id="nextNo" type="button" value="next">다음</button>
+            	</div>
                 <!-- list title -->
                 <div id="title">
                     <h4 style = "color: #0070D2;">
@@ -100,20 +104,20 @@
                     </div>
                 </div>
                 
-<%--              	<c:if test = "${boardVO.fileNo ne null }"> --%>
-<!-- 	                <div class="download-title"> -->
-<!-- 	                    <h4>첨부파일 다운로드</h4> -->
-<!-- 	                    <i class="fa-solid fa-download"></i> -->
-<!-- 	                </div> -->
+             	<c:if test = "${boardVO.fileNo ne null }">
+	                <div class="download-title">
+	                    <h4>첨부파일 다운로드</h4>
+	                    <i class="fa-solid fa-download"></i>
+	                </div>
 	
-<!-- 	                <div class="download-area"> -->
-<!-- 	                		<label style="visibility: hidden;" for="fileNm">첨부파일 다운로드</label> -->
-<%-- 	                        <a href="fileDownload.do?fileNo=${boardVO.fileNo}"> --%>
-<%-- 	                        	<input type="text" id="fileNm" value="${boardVO.fileNm}" name="fileNm" readonly="readonly" alt="첨부파일명 링크"/> --%>
-<!-- 	                        </a> -->
+	                <div class="download-area">
+	                		<label style="visibility: hidden;" for="fileNo">첨부파일 다운로드</label>
+	                        <a href="fileDownload.do?fileNo=${boardVO.fileNo}">
+	                        	<input type="text" id="fileNo" value="${boardVO.fileNo}" name="fileNo" readonly="readonly" alt="첨부파일명 링크"/>
+	                        </a>
 	                   
-<!-- 	                </div> -->
-<%--               	</c:if> --%>
+	                </div>
+              	</c:if>
             </main>
             <div class="mn-r"></div>
         </div>

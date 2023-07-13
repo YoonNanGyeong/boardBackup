@@ -17,6 +17,8 @@
 		<result property="useYn" column="use_yn"/>
 		<result property="createDt" column="create_dt"/>
 		<result property="updateDt" column="update_dt"/>
+<!-- 		<result property="nextNo" column="next_no"/> -->
+<!-- 		<result property="prevNo" column="prev_no"/> -->
 	</resultMap>
 
 
@@ -127,8 +129,42 @@
 				content LIKE '%' || #searchKeyword# || '%'
 			</isEqual>
 			<isEqual prepend="AND" property="searchCondition" compareValue="2">
-				user_nm LIKE '%' || #searchKeyword# || '%'
+				user_nm LIKE '%' || #searchKeyword# || '%v'
 			</isEqual>
 	</select>
+	
+<!-- 	<select id="boardDAO.boardPrevNext"  resultMap="board"  remapResults="true"> -->
+<!-- 	<![CDATA[ -->
+<!-- 		SELECT  t2.next_no, t2.prev_no -->
+<!-- 		FROM (SELECT rownum, lag(rownum)over(ORDER BY rownum) AS prev_no, lead(rownum)over(ORDER BY rownum) AS next_no, board_sq -->
+<!-- 				FROM (SELECT board_sq, board_cd, title, content, view_cnt, user_nm,  -->
+<!-- 						 use_yn, to_char(update_dt, 'yyyy.mm.dd hh24:mi')as update_dt , create_dt  -->
+<!-- 					FROM TEST_BOARD_TB  -->
+<!-- 				   WHERE use_yn = 'Y' AND board_cd = #boardCd#)t1 -->
+<!-- 				ORDER BY rownum)t2 -->
+<!-- 		 WHERE board_sq = #boardSq# -->
+<!-- 	]]> -->
+<!-- 	</select> -->
+
+<!-- 	<select id="boardDAO.selectPrevNext" resultMap="board"  remapResults="true"> -->
+<!-- 	<![CDATA[ -->
+<!-- 		SELECT t2.board_sq, t2.board_cd, t2.title, t2.content, t2.view_cnt, t2.user_nm,  -->
+<!-- 		  		   t2.use_yn, t2.update_dt , t2.create_dt 	 -->
+<!-- 		FROM (SELECT rownum, lag(rownum)over(ORDER BY rownum) AS prev_no, lead(rownum)over(ORDER BY rownum) AS next_no, t1.* -->
+<!-- 					FROM (SELECT board_sq, board_cd, title, content, view_cnt, user_nm,  -->
+<!-- 							 use_yn, to_char(update_dt, 'yyyy.mm.dd hh24:mi')as update_dt , create_dt  -->
+<!-- 						FROM TEST_BOARD_TB  -->
+<!-- 					   WHERE use_yn = 'Y' AND board_cd = #boardCd#)t1 -->
+<!-- 					ORDER BY rownum)t2 -->
+<!-- 	   WHERE -->
+<!-- 	  ]]> -->
+<!-- 	   <isEqual property="nextNo" compareValue="next"> -->
+<!-- 	   		 next_no = #nextNo# -->
+<!-- 	   </isEqual> -->
+<!-- 	   <isEqual property="prevNo" compareValue="prev"> -->
+<!-- 	   		 prev_no = #prevNo# -->
+<!-- 	   </isEqual> -->
+<!-- 	</select> -->
+	
 
 </sqlMap>

@@ -40,7 +40,7 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 
 	/**
 	 * 글을 등록한다.
-	 * @param vo - 등록할 정보가 담긴 SampleVO
+	 * @param vo - 등록할 정보가 담긴 BoardVO
 	 * @return 등록 결과
 	 * @exception Exception
 	 */
@@ -58,7 +58,7 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 
 	/**
 	 * 글을 수정한다.
-	 * @param vo - 수정할 정보가 담긴 SampleVO
+	 * @param vo - 수정할 정보가 담긴 BoardVO
 	 * @return void형
 	 * @exception Exception
 	 */
@@ -69,7 +69,7 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 
 	/**
 	 * 글을 삭제한다.
-	 * @param vo - 삭제할 정보가 담긴 SampleVO
+	 * @param vo - 삭제할 정보가 담긴 BoardVO
 	 * @return void형
 	 * @exception Exception
 	 */
@@ -80,14 +80,13 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 
 	/**
 	 * 글을 조회한다.
-	 * @param vo - 조회할 정보가 담긴 SampleVO
+	 * @param vo - 조회할 정보가 담긴 BoardVO
 	 * @return 조회한 글
 	 * @exception Exception
 	 */
 	@Override
 	public BoardVO selectBoard(BoardVO vo) throws Exception {
 		BoardVO resultVO = boardDAO.selectBoard(vo);
-//		System.out.println("글 조회 객체 : " + resultVO);
 
 		if (resultVO == null)
 			throw processException("info.nodata.msg");
@@ -127,10 +126,27 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 		boardDAO.increaseViewCnt(vo);
 	}
 
+	
+	
+	/**
+	 * 조회한 글 이전 다음글 번호
+	 */
+//	@Override
+//	public BoardVO boardPrevNext(BoardVO vo) throws Exception {
+//		return boardDAO.boardPrevNext(vo);
+//	}
 
 	
 	
-	
-	
+	/**
+	 * 이전, 다음글 번호로 글 조회
+	 */
+//	@Override
+//	public BoardVO selectPrevNext(BoardVO vo) throws Exception {
+//		return boardDAO.selectPrevNext(vo);
+//	}
+//
+
+
 
 }
