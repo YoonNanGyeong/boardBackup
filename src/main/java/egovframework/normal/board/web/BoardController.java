@@ -318,6 +318,7 @@ public class BoardController {
 			uploadFileVO.setFileSize(fileSize);
 			uploadFileVO.setFileType(fileType);
 			List<?> files = uploadFileService.selectFileList(uploadFileVO);	
+			System.out.println("수정에서 기존files = "+files);
 			if(files.size() > 0) {
 				for(Object item : files) {
 					UploadFileVO result = (UploadFileVO) item;
@@ -326,6 +327,8 @@ public class BoardController {
 					
 					uploadFileService.updateFile(uploadFileVO);	//첨부파일 정보 업데이트
 				}	
+			}else {
+				uploadFileService.insertFile(uploadFileVO); //첨부파일 정보 추가
 			}
 			
 		}
