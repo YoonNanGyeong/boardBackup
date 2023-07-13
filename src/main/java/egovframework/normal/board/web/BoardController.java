@@ -162,7 +162,7 @@ public class BoardController {
 //		}
 		
 		// requestParam 확인
-		System.out.println("multiFileList = " + uploadFile);
+		// System.out.println("multiFileList = " + uploadFile);
 
 		// path 가져오기
 		ServletContext context = request.getSession().getServletContext();
@@ -177,9 +177,9 @@ public class BoardController {
 		
 		
 		for(int i = 0; i < uploadFile.size(); i++) {
-			String originFile = uploadFile.get(i).getOriginalFilename();
+			String originFile = uploadFile.get(i).getOriginalFilename();	// 업로드 파일명 
 			String ext = originFile.substring(originFile.lastIndexOf("."));
-			String changeFile = UUID.randomUUID().toString() + ext;
+			String changeFile = UUID.randomUUID().toString() + ext;		// 서버 저장용 파일명
 			
 			Map<String, String> map = new HashMap<>();
 			map.put("originFile", originFile);
@@ -187,7 +187,7 @@ public class BoardController {
 			
 			fileList.add(map);
 		}
-		System.out.println("fileList = " + fileList);
+		System.out.println("fileList = " + fileList);	// 업로드 파일 확인
 		
 		// 파일 업로드 처리
 		try {
