@@ -38,5 +38,12 @@ public interface UploadFileService {
 	   */
 	   void deleteFile(UploadFileVO vo) throws Exception;
 	   
+	   /**
+	    * 첨부파일 수정
+	    * @param vo
+	    * @throws Exception
+	   */
+	   void updateFile(UploadFileVO vo) throws Exception;
+	   
 
 }

@@ -60,6 +60,7 @@
          ]]> 
     </select>
     
+
     <!-- 	파일 삭제 처리  -->
     <delete id="uploadFileDAO.deleteFile">
 		<![CDATA[
@@ -69,6 +70,18 @@
 		]]>
 	</delete>
 	
-
+	
+	<!-- 	파일 수정 처리  -->
+	<update id="uploadFileDAO.updateFile">
+		<![CDATA[
+			UPDATE test_uploadFile_tb
+				SET board_no=#boardNo#
+					, store_nm=#storeNm#
+					, upload_nm = #uploadNm#
+					, file_size = #fileSize#
+					, update_dt=systimestamp
+			WHERE file_sq=#fileSq#
+		]]>
+	</update>
 
 </sqlMap>

@@ -20,8 +20,6 @@ public class UploadFileServiceImpl extends EgovAbstractServiceImpl implements Up
 	
 	/**
 	   * 업로드 파일 등록 
-	   * @param uploadFile
-	   * @return 파일Id
 	   */
 	@Override
 	public Long insertFile(UploadFileVO vo) throws Exception {
@@ -30,9 +28,6 @@ public class UploadFileServiceImpl extends EgovAbstractServiceImpl implements Up
 
 	/**
 	   * 업로드파일조회
-	   * @param code
-	   * @param rid
-	   * @return
 	   */
 	@Override
 	public List<?> selectFileList(UploadFileVO vo) throws Exception {
@@ -41,9 +36,6 @@ public class UploadFileServiceImpl extends EgovAbstractServiceImpl implements Up
 
 	/**
 	   * 첨부파일조회
-	   * @param uploadfileId
-	   * 
-	   * @return
 	   */
 	@Override
 	public UploadFileVO selectFile(UploadFileVO vo) {
@@ -51,13 +43,20 @@ public class UploadFileServiceImpl extends EgovAbstractServiceImpl implements Up
 	}
 
 	/**
-	   * 첨부파일 삭제 by uplaodfileId
-	   * @param uploadfileId 첨부파일아이디
-	   * @return 삭제한 레코드수
+	   * 첨부파일 삭제 
+	   * 
 	   */
 	@Override
 	public void deleteFile(UploadFileVO vo) throws Exception {
 		uploadFileDAO.deleteFile(vo);
+	}
+
+	/**
+	 * 첨부파일 수정
+	 */
+	@Override
+	public void updateFile(UploadFileVO vo) throws Exception {
+		uploadFileDAO.updateFile(vo);
 	}
 
 

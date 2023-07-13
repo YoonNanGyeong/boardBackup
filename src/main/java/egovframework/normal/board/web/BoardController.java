@@ -152,9 +152,6 @@ public class BoardController {
 		 model.addAttribute("boardNo",boardNo);
 
 
-		// requestParam 확인
-//		 System.out.println("multiFileList = " + uploadFile);
-
 		// path 가져오기
 		ServletContext context = request.getSession().getServletContext();
 		
@@ -189,7 +186,7 @@ public class BoardController {
 			uploadFileService.insertFile(uploadFileVO);
 			
 		}
-		System.out.println("fileList = " + fileList);	// 업로드 파일 확인
+//		System.out.println("fileList = " + fileList);	// 업로드 파일 확인
 		
 		// 파일 업로드 처리(디렉토리에 저장)
 		try {
@@ -206,9 +203,6 @@ public class BoardController {
 			}
 			e.printStackTrace();
 		}
-		
-		
-		
 
 
 		status.setComplete();
@@ -237,7 +231,6 @@ public class BoardController {
 		
 		List<?> fileList = uploadFileService.selectFileList(uploadFileVO);
 		model.addAttribute("fileList",fileList);
-		System.out.println("fileList = " + fileList);
 		
 		model.addAttribute("fileSize",fileList.size());
 		   

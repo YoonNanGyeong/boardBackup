@@ -41,12 +41,21 @@ public class UploadFileDAO extends EgovAbstractDAO{
 
 
 	  /**
-	   * 첨부파일 삭제 by uplaodfileId
+	   * 첨부파일 삭제
 	   * @param 
 	   * @return 
 	   */
 	  public void deleteFile(UploadFileVO vo) throws Exception{
 		  delete("uploadFileDAO.deleteFile",vo);
+	  }
+	  
+	  /**
+	   * 첨부파일 수정
+	   * @param vo
+	   * @throws Exception
+	  */
+	public void updateFile(UploadFileVO vo) throws Exception{
+		  update("uploadFileDAO.updateFile",vo);
 	  }
 	  
 	  
