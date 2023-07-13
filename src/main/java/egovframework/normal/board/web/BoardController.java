@@ -175,9 +175,9 @@ public class BoardController {
 		
 		List<Map<String, String>> fileList = new ArrayList<>();
 		
-		String originFile = null;
+		
 		for(int i = 0; i < uploadFile.size(); i++) {
-			originFile = uploadFile.get(i).getOriginalFilename();
+			String originFile = uploadFile.get(i).getOriginalFilename();
 			String ext = originFile.substring(originFile.lastIndexOf("."));
 			String changeFile = UUID.randomUUID().toString() + ext;
 			
@@ -187,7 +187,7 @@ public class BoardController {
 			
 			fileList.add(map);
 		}
-		System.out.println("originFile = " + originFile);
+		System.out.println("fileList = " + fileList);
 		
 		// 파일 업로드 처리
 		try {
