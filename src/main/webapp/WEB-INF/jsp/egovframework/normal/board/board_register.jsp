@@ -116,8 +116,9 @@
 									<c:forEach var="file" items="${fileList}" varStatus="status">
 										<input id="fileSq" name="fileSq" value = "${file.fileSq}" style="display:none;"/>
 			              		  		<div class="files">
-						                         <a href="fileDownload.do?fileSq=${file.fileSq}">
-						                        	<input type="text" id="uploadNm" value="${file.fileSize}" name="uploadNm" readonly="readonly" alt="첨부파일명 링크"/>
+						                         <a href="/fileDownload.do?storeNm=${file.storeNm}">
+						                        	<input type="text" id="storeNm" value="${file.storeNm}" name="storeNm" readonly="readonly" alt="첨부파일명 링크" style="display: none;"/>
+				                        			<input type="text" id="uploadNm" value="${file.uploadNm}" name="uploadNm" readonly="readonly" alt="첨부파일명 링크"/>
 							                         <c:if test="${fn:contains(file.fileType,'image')}">	
 							                          <img src="<c:url value='/images/board/upload/${file.storeNm}'/>" alt="image" style="width: 20px; heigth: 20px;">
 							                         </c:if>
