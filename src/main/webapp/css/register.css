@@ -177,12 +177,14 @@ header {
 	display: flex;
 	align-items: center; 
 }
-#fileSq {
+
+
+#uploadNm {
 	border: none; 
 	cursor: pointer; 
 	width: 100%;
 }
-#fileSq:hover {
+#uploadNm:hover {
 	background-color: #0070D2;
 	opacity: 50%;
 }

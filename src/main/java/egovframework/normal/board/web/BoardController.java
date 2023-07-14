@@ -242,6 +242,7 @@ public class BoardController {
 		
 		UploadFileVO uploadFileVO = new UploadFileVO();
 		uploadFileVO.setBoardNo(boardSq);
+		
 		List<?> fileList = uploadFileService.selectFileList(uploadFileVO);
 		model.addAttribute("fileList", fileList);
 		model.addAttribute("fileSize",fileList.size());

@@ -15,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import egovframework.normal.board.service.UploadFileService;
-import egovframework.normal.board.service.UploadFileVO;
 
 
 @Controller
@@ -26,15 +25,8 @@ public class FileDownloadController {
 	
 	@RequestMapping(value = "fileDownload.do")
 	public void fileDownload(HttpServletRequest request, HttpServletResponse response)throws Exception {
-		String fileSq = request.getParameter("fileSq");
-		Long longFileNo = Long.parseLong(fileSq);
-		
-		UploadFileVO uploadFile = new UploadFileVO();
-		uploadFile.setFileSq(longFileNo);
-		
-		UploadFileVO selectedFile = uploadFileService.selectFile(uploadFile);
-		
-		String filename =  selectedFile.getStoreNm();
+
+		String filename =   request.getParameter("storeNm");
 		
         String realFilename = "";
         
@@ -52,7 +44,7 @@ public class FileDownloadController {
 		}
         
         ServletContext context = request.getSession().getServletContext();
-		String loot = context.getRealPath("/images/board/upload");
+		String loot = context.getRealPath("/images/board/upload/");
         
         realFilename = loot + filename;
         System.out.println("realFileName= "+realFilename);

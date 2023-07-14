@@ -13,8 +13,8 @@
     
     <c:set var="registerFlag" value="${empty boardVO.boardCd ? 'create' : 'modify'}"/>
     <title>게시글
-    	 <c:if test="${registerFlag == 'create'}"><spring:message code="button.create" /></c:if>
-         <c:if test="${registerFlag == 'modify'}"><spring:message code="button.modify" /></c:if>
+    	 <c:if test="${registerFlag == 'create'}">작성</c:if>
+         <c:if test="${registerFlag == 'modify'}">수정</c:if>
     </title>
     <link type="text/css" rel="stylesheet" href="<c:url value='/css/register.css?after'/>"/>
     <script type="text/javascript" language="javaScript" defer = "defer">    
@@ -59,7 +59,7 @@
                 </div>
                 <!-- /글자 강조 박스 -->
                 <h3>
-					<c:if test="${registerFlag == 'create'}">게시글 등록</c:if>
+					<c:if test="${registerFlag == 'create'}">게시글 작성</c:if>
                     <c:if test="${registerFlag == 'modify'}">게시글 수정</c:if>
 				</h3>
             </div>

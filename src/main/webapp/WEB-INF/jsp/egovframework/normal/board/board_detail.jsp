@@ -114,8 +114,9 @@
                 		  <label style="visibility: hidden;" for="fileSq">첨부파일 다운로드</label>
 							<c:forEach var="file" items="${fileList}" varStatus="status">
 	              		  		<div class="files">
-				                         <a href="/fileDownload.do?fileSq=${file.fileSq}">
-				                        	<input type="text" id="fileSq" value="${file.fileSize}" name="fileSq" readonly="readonly" alt="첨부파일명 링크"/>
+				                         <a href="/fileDownload.do?storeNm=${file.storeNm}">
+				                        	<input type="text" id="storeNm" value="${file.storeNm}" name="storeNm" readonly="readonly" alt="첨부파일명 링크" style="display: none;"/>
+				                        	<input type="text" id="uploadNm" value="${file.uploadNm}" name="uploadNm" readonly="readonly" alt="첨부파일명 링크"/>
 					                         <c:if test="${fn:contains(file.fileType,'image')}">	
 					                          <img src="<c:url value='/images/board/upload/${file.storeNm}'/>" alt="image" style="width: 20px; heigth: 20px;">
 					                         </c:if>

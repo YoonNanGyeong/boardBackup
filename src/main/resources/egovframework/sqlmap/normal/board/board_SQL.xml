@@ -120,6 +120,12 @@
 			SELECT COUNT(*) totcnt
 			FROM test_board_tb
 			WHERE 1=1 and use_yn = 'Y'
+			<isEmpty prepend="AND" property="boardCd">
+				board_cd = 'B0101'
+			</isEmpty>
+			<isNotEmpty prepend="AND" property="boardCd">			
+				board_cd = #boardCd#
+			</isNotEmpty>
 			<isEqual prepend="AND" property="searchCondition" compareValue="0">
 				title LIKE '%' || #searchKeyword# || '%'
 			</isEqual>

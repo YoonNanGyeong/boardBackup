@@ -152,7 +152,7 @@
 		               </div>
 		               <div id="sysbtn">
 	       	              <a href="javascript:fn_egov_addView();" id="writeBtn">
-	       	              	<spring:message code="button.create" />
+	       	              	글 작성
 	       	              </a>
 		               </div>
 		           </div>	
