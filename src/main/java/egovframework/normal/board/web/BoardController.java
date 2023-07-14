@@ -1,18 +1,3 @@
-/*
- * Copyright 2008-2009 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package egovframework.normal.board.web;
 
 import java.io.File;
@@ -37,7 +22,6 @@ import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -92,17 +76,17 @@ public class BoardController {
 		
 	}
 
-
+	// 글 목록
 	@RequestMapping(value = "/boardList.do")
 	public String selectBoardList(@ModelAttribute("searchVO") BoardVO searchVO, @RequestParam(value="selectedCd", required=false) String boardCd, ModelMap model) throws Exception {
 
 		System.out.println("-----Get selectSampleList");
 		
-		/** EgovPropertyService.board */
+		/** EgovPropertyService */
 		searchVO.setPageUnit(propertiesService.getInt("pageUnit"));
 		searchVO.setPageSize(propertiesService.getInt("pageSize"));
 
-		/** pageing setting */
+		/** 페이징 세팅 */
 		PaginationInfo paginationInfo = new PaginationInfo();
 		paginationInfo.setCurrentPageNo(searchVO.getPageIndex());
 		paginationInfo.setRecordCountPerPage(searchVO.getPageUnit());
@@ -125,14 +109,14 @@ public class BoardController {
 		return "board/board_list";
 	}
 
-	
+	// 등록 화면
 	@GetMapping(value = "/addBoardView.do")
 	public String addBoardView(@ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model) throws Exception {
 		model.addAttribute("boardVO", new BoardVO());
 		return "board/board_register";
 	}
 
-
+	// 등록
 	@PostMapping(value = "/addBoard.do")
 	public String addBoard(
 			@RequestParam("uploadFile")List<MultipartFile>uploadFile, 
@@ -212,12 +196,12 @@ public class BoardController {
 	}
 	
 
-
+	// 게시글 조회
 	public BoardVO selectBoard( BoardVO boardVO, @ModelAttribute("searchVO") BoardDefaultVO searchVO) throws Exception {
 		return boardService.selectBoard(boardVO);
 	}
 	
-
+	// 상세 조회 화면
 	@GetMapping("{selectedId}/detailBoard.do")
 	public String detailBoardView(@PathVariable("selectedId") Long boardSq, @ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model)  throws Exception {
 		BoardVO boardVO = new BoardVO();
@@ -249,7 +233,7 @@ public class BoardController {
 		return "board/board_detail";
 	}
 	
-
+	// 수정화면
 	@RequestMapping("/updateBoardView.do")
 	public String updateBoardView(@RequestParam("selectedId") Long boardSq, @ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model) throws Exception {
 		BoardVO boardVO = new BoardVO();
@@ -265,7 +249,7 @@ public class BoardController {
 		return "board/board_register";
 	}
 
-
+	// 수정
 	@PostMapping("/updateBoard.do")
 	public String updateBoard(@ModelAttribute("searchVO") BoardDefaultVO searchVO, 
 			BoardVO boardVO, BindingResult bindingResult, Model model, SessionStatus status,
@@ -283,6 +267,7 @@ public class BoardController {
 		// 게시글 수정
 		boardService.updateBoard(boardVO);
 		Long boardNo = boardVO.getBoardSq();
+		model.addAttribute("boardNo",boardNo);
 		
 		// path 가져오기
 		ServletContext context = request.getSession().getServletContext();
@@ -317,20 +302,10 @@ public class BoardController {
 			uploadFileVO.setStoreNm(changeFile);
 			uploadFileVO.setFileSize(fileSize);
 			uploadFileVO.setFileType(fileType);
-			List<?> files = uploadFileService.selectFileList(uploadFileVO);	
-			System.out.println("수정에서 기존files = "+files);
-			if(files.size() > 0) {
-				for(Object item : files) {
-					UploadFileVO result = (UploadFileVO) item;
-					Long fileSq = result.getFileSq();
-					uploadFileVO.setFileSq(fileSq);
-					
-					uploadFileService.updateFile(uploadFileVO);	//첨부파일 정보 업데이트
-				}	
-			}else {
-				uploadFileService.insertFile(uploadFileVO); //첨부파일 정보 추가
-			}
 			
+			uploadFileService.insertFile(uploadFileVO); //첨부파일 정보 추가
+			
+
 		}
 		
 		
@@ -353,28 +328,17 @@ public class BoardController {
 		
 
 		status.setComplete();
-		return "forward:/boardList.do";
+		return "redirect:{boardNo}/detailBoard.do";
 	}
 
 
+	// 게시글 삭제 처리
 	@PostMapping("/deleteBoard.do")
 	public String deleteBoard(BoardVO boardVO, @ModelAttribute("searchVO") BoardDefaultVO searchVO, SessionStatus status
 			, HttpServletRequest request) throws Exception {
 		UploadFileVO uploadFile = new UploadFileVO();
 		Long boardNo = boardVO.getBoardSq();
 		uploadFile.setBoardNo(boardNo);
-		
-//		List<?> files = uploadFileService.selectFileList(uploadFile);	
-//		if(files.size() > 0) {
-//			for(Object item : files) {
-//				UploadFileVO result = (UploadFileVO) item;
-//				Long fileSq = result.getFileSq();
-//				uploadFile.setFileSq(fileSq);
-//				
-//				uploadFileService.deleteFile(uploadFile);	//첨부파일 정보 삭제처리
-//			}	
-//		}
-		
 		
 		// 게시글 삭제
 		boardService.deleteBoard(boardVO);
@@ -390,7 +354,6 @@ public class BoardController {
 		UploadFileVO uploadFile = new UploadFileVO();
 		uploadFile.setFileSq(fileSq);
 		int cnt = uploadFileService.deleteFile(uploadFile);	//첨부파일 정보 삭제처리
-	
 		
 		model.addAttribute("fileSq",fileSq);
 		

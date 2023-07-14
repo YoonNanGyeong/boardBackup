@@ -16,7 +16,7 @@
     	 <c:if test="${registerFlag == 'create'}"><spring:message code="button.create" /></c:if>
          <c:if test="${registerFlag == 'modify'}"><spring:message code="button.modify" /></c:if>
     </title>
-    <link type="text/css" rel="stylesheet" href="<c:url value='/css/write.css?after'/>"/>
+    <link type="text/css" rel="stylesheet" href="<c:url value='/css/register.css?after'/>"/>
     <script type="text/javascript" language="javaScript" defer = "defer">    
 		/* 글 목록 화면 function */
 	    function fn_egov_selectList() {
@@ -99,9 +99,14 @@
                         
 	            <div class="file-area">
 	                <label for="uploadFile">첨부파일</label>
-	                        
 	                	<form:input type="file" path="uploadFile" title="첨부파일 추가" multiple="multiple" />
+	              
+	                      <!-- 첨부한 파일명 표시 영역  -->   
+	           			<div id="fileName">
 	           			
+	           			</div>
+	           			
+	           			<!-- 기존에 첨부된 파일이 있으면 표시  -->   
 						<c:if test="${fileSize gt 0}">			
 				                <div class="download-area">
 		                		  <label for="fileSq" style="margin-bottom: 20px;">
@@ -173,6 +178,7 @@
     <input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 </form:form>
 </body>
+
 <script type="module" language="javaScript" src="/js/board_register.js?after"></script>
 
 </html>

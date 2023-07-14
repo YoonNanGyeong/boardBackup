@@ -1,4 +1,3 @@
-
 package egovframework.normal.board.service.impl;
 
 import egovframework.normal.board.service.UploadFileService;
@@ -50,15 +49,7 @@ public class UploadFileServiceImpl extends EgovAbstractServiceImpl implements Up
 	public int deleteFile(UploadFileVO vo) throws Exception {
 		return uploadFileDAO.deleteFile(vo);
 	}
-	
-
-	/**
-	 * 첨부파일 수정
-	 */
-	@Override
-	public void updateFile(UploadFileVO vo) throws Exception {
-		uploadFileDAO.updateFile(vo);
-	}
+		
 
 
 

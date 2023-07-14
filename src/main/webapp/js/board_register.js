@@ -205,6 +205,20 @@ function removeAttachFileFromView(e){
     $parent.removeChild($child);
 }	
 
+// 첨부한 파일명 보이게
+const $uploadFile = document.getElementById('uploadFile');
+const $fileNameDiv = document.getElementById('fileName');
+ 
+ $uploadFile.addEventListener('change', function(){
+ 	$fileNameDiv.innerHTML = '';
+ 	for(let i = 0; i < $uploadFile.files.length; i++){
+ 		const fileNm = $uploadFile.files[i].name;
+ 		const fileNameEle = document.createElement('p');
+ 		fileNameEle.textContent = fileNm;
+ 		$fileNameDiv.appendChild(fileNameEle);
+ 	}
+ });
+
 
 
 	

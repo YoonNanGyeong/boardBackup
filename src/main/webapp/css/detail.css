@@ -187,6 +187,22 @@ header {
 .file-area img {
 	width: 30%;
 }
+.files {
+	display: flex;
+	align-items: center; 
+}
+.files a{
+	display: flex;
+	align-items: center; 
+}
+
+#fileName {
+    margin-left: 80px;
+    font-size: 0.8rem;
+}
+
+
+/* /첨부파일 영역 */
 
 
 .ft {
