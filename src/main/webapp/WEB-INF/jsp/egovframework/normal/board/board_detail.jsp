@@ -107,19 +107,18 @@
                 </div>
 				<c:if test="${fileSize gt 0}">				
 	                <div class="download-title">
-	                    <h4>첨부파일 다운로드</h4>
+	                     <label for="uploadNm" style="margin-right: 0;">첨부파일 다운로드</label>
 	                    <i class="fa-solid fa-download"></i>
 	                </div>
 		                <div class="download-area">
-                		  <label style="visibility: hidden;" for="fileSq">첨부파일 다운로드</label>
 							<c:forEach var="file" items="${fileList}" varStatus="status">
 	              		  		<div class="files">
 				                         <a href="/fileDownload.do?storeNm=${file.storeNm}">
 				                        	<input type="text" id="storeNm" value="${file.storeNm}" name="storeNm" readonly="readonly" alt="첨부파일명 링크" style="display: none;"/>
 				                        	<input type="text" id="uploadNm" value="${file.uploadNm}" name="uploadNm" readonly="readonly" alt="첨부파일명 링크"/>
-					                         <c:if test="${fn:contains(file.fileType,'image')}">	
-					                          <img src="<c:url value='/images/board/upload/${file.storeNm}'/>" alt="image" style="width: 20px; heigth: 20px;">
-					                         </c:if>
+<%-- 					                         <c:if test="${fn:contains(file.fileType,'image')}">	 --%>
+<%-- 					                          <img src="<c:url value='/images/board/upload/${file.storeNm}'/>" alt="image" style="width: 20px; heigth: 20px;"> --%>
+<%-- 					                         </c:if> --%>
 				                         </a>
 	               		  		</div>
 							</c:forEach>

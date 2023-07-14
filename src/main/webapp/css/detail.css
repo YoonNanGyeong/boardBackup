@@ -174,7 +174,7 @@ header {
 /* /글 작성 영역 */
 
 /* 첨부파일 영역 */
-#fileSq {
+#uploadNm {
 	width: 100%;
     border: none;
     color: #0070D2;
@@ -194,6 +194,10 @@ header {
 .files a{
 	display: flex;
 	align-items: center; 
+	width: 100%;
+}
+.files a:hover{
+	opacity: 50%;
 }
 
 #fileName {

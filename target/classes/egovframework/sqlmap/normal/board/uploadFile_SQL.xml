@@ -41,7 +41,7 @@
 	<!--  게시물 첨부파일 목록 조회 	-->
 	<select id="uploadFileDAO.selectFileList" parameterClass="uploadFileVO" resultClass="egovMap">
 	<![CDATA[
-    		   SELECT FILE_SQ, BOARD_NO, STORE_NM, UPLOAD_NM
+    		   SELECT FILE_SQ, BOARD_NO, STORE_NM, UPLOAD_NM, 
     		   			  FILE_SIZE, FILE_TYPE, USE_YN 
          	FROM TEST_UPLOADFILE_TB  
          	WHERE  USE_YN = 'Y'
