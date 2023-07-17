@@ -141,7 +141,8 @@ public class BoardController {
 		// path 가져오기
 		ServletContext context = request.getSession().getServletContext();
 		
-		String loot = context.getRealPath("/images/board/upload");	// 저장경로
+		String loot = context.getRealPath("/images/board/upload");	// 원본 저장경로
+		String loot2 = context.getRealPath("/images/board/upload/thm");	// 썸네일 저장경로
 		
 		File fileCheck = new File(loot);
 		
