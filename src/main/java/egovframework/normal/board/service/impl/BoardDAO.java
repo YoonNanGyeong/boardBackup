@@ -60,9 +60,9 @@ public class BoardDAO extends EgovAbstractDAO {
 	 * @return	이전, 다음글 행번호
 	 * @throws Exception
 	 */
-//	public BoardVO boardPrevNext(BoardVO vo) throws Exception {
-//		return(BoardVO) select("boardDAO.boardPrevNext", vo);
-//	}
+	public BoardVO boardPrevNext(BoardVO vo) throws Exception {
+		return(BoardVO) select("boardDAO.boardPrevNext", vo);
+	}
 	
 	/**
 	 * 이전, 다음글 번호로 글 조회
@@ -70,9 +70,9 @@ public class BoardDAO extends EgovAbstractDAO {
 	 * @return 조회한 글
 	 * @throws Exception
 	 */
-//	public BoardVO selectPrevNext(BoardVO vo) throws Exception {
-//		return(BoardVO) select("boardDAO.selectPrevNext", vo);
-//	}
+	public BoardVO selectPrevNext(BoardVO vo) throws Exception {
+		return(BoardVO) select("boardDAO.selectPrevNext", vo);
+	}
 
 	/**
 	 * 글 목록을 조회한다.

@@ -59,8 +59,8 @@
             <div class="hd-l"></div>
             <header class="hd">
             	<div class = "prev-next">
-            		<button id="prevNo" type="button" value="prev">이전</button>
-            		<button id="nextNo" type="button" value="next">다음</button>
+            		<button id="prev" name="prev"  type="button" value="prev">이전</button>
+            		<button id="next" name="next" type="button" value="next">다음</button>
             	</div>
                 <!-- list title -->
                 <div id="title">

@@ -99,12 +99,14 @@
                         
 	            <div class="file-area">
 	                <label for="uploadFile">첨부파일</label>
-	                	<form:input type="file" path="uploadFile" title="첨부파일 추가" multiple="multiple" />
-	              
-	                      <!-- 첨부한 파일명 표시 영역  -->   
-	           			<div id="fileName">
-	           			
-	           			</div>
+						<div class="file-list">
+							<form:input type="file" path="uploadFile" title="첨부파일 추가" multiple="multiple" />
+					  
+							  <!-- 첨부한 파일명 표시 영역  -->   
+							   <div id="fileName">
+							   		
+							   </div>
+						</div>
 	           			
 	           			<!-- 기존에 첨부된 파일이 있으면 표시  -->   
 						<c:if test="${fileSize gt 0}">			

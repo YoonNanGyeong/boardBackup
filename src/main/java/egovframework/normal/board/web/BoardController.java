@@ -151,6 +151,9 @@ public class BoardController {
 		
 		UploadFileVO uploadFileVO = new UploadFileVO();
 		
+		
+		
+		// 업로드 파일 정보 저장(DB정보 저장)
 		for(int i = 0; i < uploadFile.size(); i++) {
 			String originFile = uploadFile.get(i).getOriginalFilename();	// 업로드 파일명 
 			String ext = originFile.substring(originFile.lastIndexOf("."));
@@ -171,24 +174,29 @@ public class BoardController {
 			uploadFileVO.setBoardNo(boardNo);
 			uploadFileService.insertFile(uploadFileVO);
 			
+			List<?> files = uploadFileService.selectFileList(uploadFileVO);
+			model.addAttribute("addFileList",files);
+					
 		}
-//		System.out.println("fileList = " + fileList);	// 업로드 파일 확인
 		
 		// 파일 업로드 처리(디렉토리에 저장)
-		try {
-			for(int i = 0; i < uploadFile.size(); i++) {
-				File uplaodFile = new File(loot + "\\" + fileList.get(i).get("changeFile"));
-				uploadFile.get(i).transferTo(uplaodFile);
-			}
-			System.out.println("다중 파일 업로드 성공!");
-		}catch(IllegalStateException | IOException e){
-			System.out.println("다중 파일 업로드 실패...");
-			// 업로드 실패 시 파일 삭제
-			for(int i = 0; i < uploadFile.size(); i++) {
-				new File(loot + "\\" + fileList.get(i).get("changeFile")).delete();		
-			}
-			e.printStackTrace();
-		}
+				try {
+					for(int i = 0; i < uploadFile.size(); i++) {
+						File uplaodFile = new File(loot + "\\" + fileList.get(i).get("changeFile"));
+						uploadFile.get(i).transferTo(uplaodFile);
+					}
+					System.out.println("다중 파일 업로드 성공!");
+				}catch(IllegalStateException | IOException e){
+					System.out.println("다중 파일 업로드 실패...");
+					// 업로드 실패 시 파일 삭제
+					for(int i = 0; i < uploadFile.size(); i++) {
+						new File(loot + "\\" + fileList.get(i).get("changeFile")).delete();		
+					}
+					e.printStackTrace();
+				}
+	
+//		System.out.println("fileList = " + fileList);	// 업로드 파일 확인
+		
 
 
 		status.setComplete();
@@ -227,7 +235,7 @@ public class BoardController {
 		
 		// 행번호로 이전 다음글 조회
 //		BoardVO nextPrevVO = boardService.selectPrevNext(nextPrev);
-		
+//		model.addAttribute("nextPrevVO",nextPrevVO);
 
 		
 		return "board/board_detail";
@@ -284,6 +292,7 @@ public class BoardController {
 		UploadFileVO uploadFileVO = new UploadFileVO();
 		uploadFileVO.setBoardNo(boardNo);
 		
+	
 		
 		for(int i = 0; i < uploadFile.size(); i++) {
 			String originFile = uploadFile.get(i).getOriginalFilename();	// 업로드 파일명 
@@ -310,7 +319,6 @@ public class BoardController {
 		}
 		
 		
-		
 		// 파일 업로드 처리(디렉토리에 저장)
 		try {
 			for(int i = 0; i < uploadFile.size(); i++) {
@@ -326,6 +334,8 @@ public class BoardController {
 			}
 			e.printStackTrace();
 		}
+		
+		
 		
 
 		status.setComplete();

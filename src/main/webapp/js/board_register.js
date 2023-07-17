@@ -212,11 +212,20 @@ const $fileNameDiv = document.getElementById('fileName');
  $uploadFile.addEventListener('change', function(){
  	$fileNameDiv.innerHTML = '';
  	for(let i = 0; i < $uploadFile.files.length; i++){
- 		const fileNm = $uploadFile.files[i].name;
- 		const fileNameEle = document.createElement('p');
- 		fileNameEle.textContent = fileNm;
- 		$fileNameDiv.appendChild(fileNameEle);
+ 		const fileNm = $uploadFile.files[i].name;	// 첨부한 파일명
+		const fileType = $uploadFile.files[i].type;	// 첨부한 파일 유형(image/png..)
+
+		const fileNameEle = document.createElement('p');	// 파일명을 표시할 태그
+		fileNameEle.textContent = fileNm;
+		$fileNameDiv.appendChild(fileNameEle);	//fileName div에 자식 태그로 fileNameEle 추가
+
+		if(fileType.inlcudes('image')){
+			const fileImgEle = document.createElement('img');	// 파일명을 표시할 태그
+			// fileImgEle.src = `<c:url value='/images/board/upload/${file.storeNm}'/>`;
+		}
+
  	}
+
  });
 
 

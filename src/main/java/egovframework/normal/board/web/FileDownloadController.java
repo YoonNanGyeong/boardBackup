@@ -27,6 +27,7 @@ public class FileDownloadController {
 	public void fileDownload(HttpServletRequest request, HttpServletResponse response)throws Exception {
 
 		String filename =   request.getParameter("storeNm");
+
 		
         String realFilename = "";
         
