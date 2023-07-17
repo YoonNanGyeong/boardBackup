@@ -216,8 +216,12 @@ const $fileNameDiv = document.getElementById('fileName');
  	for(let i = 0; i < $uploadFile.files.length; i++){
  		const fileNm = $uploadFile.files[i].name;	// 첨부한 파일명
 		const $addFile = document.createElement('div');
-		$addFile.classList.add("addFile");
+		$addFile.classList.add("addFile");	// 파일명, 이미지 표시할 태그 생성하고 클래스 추가
 		
+		const fileNameEle = document.createElement('p');	// 파일명을 표시할 태그
+		fileNameEle.textContent = fileNm;
+		$addFile.appendChild(fileNameEle);	//fileName div에 자식 태그로 addFile 추가
+
 		//첨부파일이 이미지면 썸네일 제공
 		if(/\.(jpe?g|png|gif)$/i.test(fileNm)){
 			const fileImgEle = document.createElement('img');	// 이미지를 표시할 태그
@@ -236,9 +240,6 @@ const $fileNameDiv = document.getElementById('fileName');
 		}
 
 
-		const fileNameEle = document.createElement('p');	// 파일명을 표시할 태그
-		fileNameEle.textContent = fileNm;
-		$addFile.appendChild(fileNameEle);	//fileName div에 자식 태그로 fileNameEle 추가
 		
 		$fileNameDiv.appendChild($addFile);
 
