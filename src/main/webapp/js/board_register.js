@@ -205,6 +205,8 @@ function removeAttachFileFromView(e){
     $parent.removeChild($child);
 }	
 
+
+
 // 첨부한 파일명 보이게
 const $uploadFile = document.getElementById('uploadFile');
 const $fileNameDiv = document.getElementById('fileName');
@@ -213,7 +215,8 @@ const $fileNameDiv = document.getElementById('fileName');
  	$fileNameDiv.innerHTML = '';
  	for(let i = 0; i < $uploadFile.files.length; i++){
  		const fileNm = $uploadFile.files[i].name;	// 첨부한 파일명
-		const fileType = $uploadFile.files[i].type;	// 첨부한 파일 유형(image/png..)
+		const $addFile = document.createElement('div');
+		$addFile.classList.add("addFile");
 		
 		//첨부파일이 이미지면 썸네일 제공
 		if(/\.(jpe?g|png|gif)$/i.test(fileNm)){
@@ -227,7 +230,7 @@ const $fileNameDiv = document.getElementById('fileName');
 				fileImgEle.setAttribute("height", "40px");
 			}
 			reader.readAsDataURL(event.target.files[i]);
-			$fileNameDiv.appendChild(fileImgEle);
+			$addFile.appendChild(fileImgEle);
 		}else{
 			console.log('not contains image!');
 		}
@@ -235,8 +238,9 @@ const $fileNameDiv = document.getElementById('fileName');
 
 		const fileNameEle = document.createElement('p');	// 파일명을 표시할 태그
 		fileNameEle.textContent = fileNm;
-		$fileNameDiv.appendChild(fileNameEle);	//fileName div에 자식 태그로 fileNameEle 추가
-
+		$addFile.appendChild(fileNameEle);	//fileName div에 자식 태그로 fileNameEle 추가
+		
+		$fileNameDiv.appendChild($addFile);
 
  	}
 

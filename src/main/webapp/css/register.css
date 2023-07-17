@@ -178,8 +178,17 @@ header {
 
 #uploadFile {
     border: none;
-    padding: 0;
+    padding: 0 5px;
     margin-bottom: 10px;
+}
+
+.addFile{
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.addFile img {
+    margin-right: 10px;
 }
 
 

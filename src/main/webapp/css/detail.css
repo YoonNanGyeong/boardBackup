@@ -186,7 +186,8 @@ header {
     align-items: center;
 }
 .file-area img {
-	width: 40%;
+	max-width: 40%;
+    margin-bottom: 10px;
 }
 .files {
 	display: flex;

@@ -122,7 +122,7 @@
 						                        	<input type="text" id="storeNm" value="${file.storeNm}" name="storeNm" readonly="readonly" alt="첨부파일명 링크" style="display: none;"/>
 				                        			<input type="text" id="uploadNm" value="${file.uploadNm}" name="uploadNm" readonly="readonly" alt="첨부파일명 링크"/>
 							                         <c:if test="${fn:contains(file.fileType,'image')}">	
-							                          <img src="<c:url value='/images/board/upload/${file.storeNm}'/>" alt="image" style="width: 20px; heigth: 20px;">
+							                          <img src="<c:url value='/images/board/upload/${file.storeNm}'/>" alt="image" style="width: 60px; height: 60px;">
 							                         </c:if>
 						                         </a>
 			               		  		 <i class="fa-solid fa-trash-can"></i>
