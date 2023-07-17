@@ -145,8 +145,10 @@ public class BoardController {
 		String loot2 = context.getRealPath("/images/board/upload/thm");	// 썸네일 저장경로
 		
 		File fileCheck = new File(loot);
+		File fileCheck2 = new File(loot2);
 		
 		if(!fileCheck.exists()) fileCheck.mkdirs();
+		if(!fileCheck2.exists()) fileCheck2.mkdirs();
 		
 		List<Map<String, String>> fileList = new ArrayList<>();
 		
@@ -190,6 +192,7 @@ public class BoardController {
 						uploadFile.get(i).transferTo(uplaodFile);
 						
 						//썸네일 파일 객체 생성
+						File thumFile = new File(loot2 + "\\" + "");
 					}
 					System.out.println("다중 파일 업로드 성공!");
 				}catch(IllegalStateException | IOException e){
