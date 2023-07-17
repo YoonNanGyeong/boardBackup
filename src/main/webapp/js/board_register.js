@@ -185,9 +185,10 @@ $delBtn?.addEventListener('click', e => {
     if(!confirm('삭제하시겠습니까?')) return;
     
     const url = `/deleteFile.do/${fileSq.value}`;
+	console.log("fileSq = "+fileSq.value);
     
     ajax
-        .delete(url)
+        .get(url)
         .then(res => res.json())
         .then(res => {
             if(res.header.rtcd == '00'){
@@ -199,6 +200,7 @@ $delBtn?.addEventListener('click', e => {
         })
         .catch(console.error);
 	});
+	
 function removeAttachFileFromView(e){
     const $parent = document.querySelector('.download-area');
     const $child = e.target.closest('.files');
@@ -222,7 +224,7 @@ const $fileNameDiv = document.getElementById('fileName');
 		fileNameEle.textContent = fileNm;
 		$addFile.appendChild(fileNameEle);	//fileName div에 자식 태그로 addFile 추가
 
-		//첨부파일이 이미지면 썸네일 제공
+		//첨부파일명에 해당 확장자명 포함이면 썸네일 제공
 		if(/\.(jpe?g|png|gif)$/i.test(fileNm)){
 			const fileImgEle = document.createElement('img');	// 이미지를 표시할 태그
 			console.log('contains image!');
@@ -239,8 +241,6 @@ const $fileNameDiv = document.getElementById('fileName');
 			console.log('not contains image!');
 		}
 
-
-		
 		$fileNameDiv.appendChild($addFile);
 
  	}

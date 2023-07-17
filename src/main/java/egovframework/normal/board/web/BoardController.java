@@ -182,8 +182,13 @@ public class BoardController {
 		// 파일 업로드 처리(디렉토리에 저장)
 				try {
 					for(int i = 0; i < uploadFile.size(); i++) {
+						// 원본 파일 객체 생성
 						File uplaodFile = new File(loot + "\\" + fileList.get(i).get("changeFile"));
+						
+						// 원본 파일 업로드
 						uploadFile.get(i).transferTo(uplaodFile);
+						
+						//썸네일 파일 객체 생성
 					}
 					System.out.println("다중 파일 업로드 성공!");
 				}catch(IllegalStateException | IOException e){
@@ -360,7 +365,7 @@ public class BoardController {
 	
 	// 파일 삭제 처리
 	@ResponseBody
-	@DeleteMapping("/deleteFile.do/{fileSq}")
+	@GetMapping("/deleteFile.do/{fileSq}")
 	public RestResponse<Object> deleteFile(@PathVariable("fileSq")Long fileSq, Model model ) throws Exception{
 		UploadFileVO uploadFile = new UploadFileVO();
 		uploadFile.setFileSq(fileSq);
