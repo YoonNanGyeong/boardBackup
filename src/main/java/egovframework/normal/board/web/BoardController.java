@@ -161,6 +161,7 @@ public class BoardController {
 			String originFile = uploadFile.get(i).getOriginalFilename();	// 업로드 파일명 
 			String ext = originFile.substring(originFile.lastIndexOf("."));
 			String changeFile = UUID.randomUUID().toString() + ext;		// 서버 저장용 파일명
+			String thumFile = "thum_"+UUID.randomUUID().toString() + ext;		// 썸네일 파일명
 			
 			Map<String, String> map = new HashMap<>();
 			map.put("originFile", originFile);
