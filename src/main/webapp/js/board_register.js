@@ -209,20 +209,34 @@ function removeAttachFileFromView(e){
 const $uploadFile = document.getElementById('uploadFile');
 const $fileNameDiv = document.getElementById('fileName');
  
- $uploadFile.addEventListener('change', function(){
+ $uploadFile.addEventListener('change', function(event){
  	$fileNameDiv.innerHTML = '';
  	for(let i = 0; i < $uploadFile.files.length; i++){
  		const fileNm = $uploadFile.files[i].name;	// 첨부한 파일명
 		const fileType = $uploadFile.files[i].type;	// 첨부한 파일 유형(image/png..)
+		
+		//첨부파일이 이미지면 썸네일 제공
+		if(/\.(jpe?g|png|gif)$/i.test(fileNm)){
+			const fileImgEle = document.createElement('img');	// 이미지를 표시할 태그
+			console.log('contains image!');
+			const reader = new FileReader();
+			
+			reader.onload = function(e){
+				fileImgEle.setAttribute("src", e.target.result);
+				fileImgEle.setAttribute("width", "40px");
+				fileImgEle.setAttribute("height", "40px");
+			}
+			reader.readAsDataURL(event.target.files[i]);
+			$fileNameDiv.appendChild(fileImgEle);
+		}else{
+			console.log('not contains image!');
+		}
+
 
 		const fileNameEle = document.createElement('p');	// 파일명을 표시할 태그
 		fileNameEle.textContent = fileNm;
 		$fileNameDiv.appendChild(fileNameEle);	//fileName div에 자식 태그로 fileNameEle 추가
 
-		if(fileType.inlcudes('image')){
-			const fileImgEle = document.createElement('img');	// 파일명을 표시할 태그
-			// fileImgEle.src = `<c:url value='/images/board/upload/${file.storeNm}'/>`;
-		}
 
  	}
 
