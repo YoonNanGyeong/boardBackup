@@ -51,8 +51,7 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 		LOGGER.debug(vo.toString());
 
 		Long id = boardDAO.insertBoard(vo);
-		System.out.println("id: " + id);
-	
+
 		return id;
 	}
 

@@ -86,6 +86,27 @@ public class BoardController {
 		return category;
 		
 	}
+	
+	// 이미지 리사이징 
+		public static BufferedImage resize(InputStream inputStream, int width, int height) throws IOException {
+		    return Thumbnails.of(inputStream).size(width,height).asBufferedImage();
+		}
+		
+		public static BufferedImage makeThumbnail(BufferedImage src , int w, int h,String fileName) throws IOException {
+	    	BufferedImage thumbImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);  
+			Graphics2D graphics = thumbImage.createGraphics();  
+	        graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);  
+	        graphics.drawImage(src, 0,0, w, h, null);  
+	    	
+	        ResampleOp resampleOp2 = new ResampleOp (w, h);
+	        resampleOp2.setUnsharpenMask(AdvancedResizeOp.UnsharpenMask.VerySharp);
+
+	        BufferedImage rescaled2 = resampleOp2.filter(thumbImage, null);
+
+	        
+	       return rescaled2;
+	    	
+	    }
 
 	// 글 목록
 	@RequestMapping(value = "/boardList.do")
@@ -130,7 +151,7 @@ public class BoardController {
 	// 등록
 	@PostMapping(value = "/addBoard.do")
 	public String addBoard(
-			@RequestParam(value = "uploadFile", required = false)List<MultipartFile>uploadFile, 
+			@RequestParam(value = "uploadFile" ,required = false)List<MultipartFile>uploadFile, 
 			@ModelAttribute("searchVO") BoardDefaultVO searchVO, BoardVO boardVO, 
 			BindingResult bindingResult, Model model, SessionStatus status,
 			HttpServletRequest request)
@@ -165,8 +186,9 @@ public class BoardController {
 		
 		UploadFileVO uploadFileVO = new UploadFileVO();
 		
-		
-		if (uploadFile != null && !uploadFile.isEmpty()) {
+		if (uploadFile != null && !uploadFile.get(0).isEmpty()) {
+			System.out.println("업로드 파일 있음!");
+			System.out.println("uploadFile = "+uploadFile);
 			// 업로드 파일 정보 저장(DB정보 저장)
 			for(int i = 0; i < uploadFile.size(); i++) {
 				String originFile = uploadFile.get(i).getOriginalFilename();	// 업로드 파일명 
@@ -207,6 +229,7 @@ public class BoardController {
 					
 					InputStream inputStream = new FileInputStream(uplaodFile);
 					String originFile = uploadFile.get(i).getOriginalFilename();	// 업로드 파일명 
+					String fileType = uploadFile.get(i).getContentType();	//파일타입
 					
 					Image img = null;
 					BufferedImage resizedImage = null;
@@ -216,40 +239,44 @@ public class BoardController {
 					
 					// 썸네일 파일 객체 생성
 					File thumFile = new File(loot2 + "\\" + fileList.get(i).get("thumFileNm"));
-					
-					if(originFile.contains("bmp")||originFile.contains("png")||originFile.contains("gif")) {
-						BufferedImage src = ImageIO.read(uplaodFile);
-						int imageWidth = src.getWidth(null);
-						int imageHeight = src.getHeight(null);
-						
-						double ratio =Math.max((double)wantWeight/ (double)imageWidth, (double)wantHeight/ (double)imageHeight);
-						ratio =Math.min( (double)wantWeight/ (double)wantHeight, 1);
-						
-						int w = (int)(imageWidth * ratio);
-						int h = (int)(imageHeight * ratio);
-						
-						resizedImage =makeThumbnail(src, w, h, fileList.get(i).get("changeFile"));					
-						ImageIO.write(resizedImage, "jpg", thumFile);	//리사이징 이미지 해당 경로로 업로드
-						System.out.println("png 이미지 리사이징");
-					}else {							
-						img = new ImageIcon(uplaodFile.toString()).getImage();	//jpeg 포맷
-						int imageWidth = img.getWidth(null);
-						int imageHeight = img.getHeight(null);
-						
-						double ratio =Math.max((double)wantWeight/ (double)imageWidth, (double)wantHeight/ (double)imageHeight);
-						ratio =Math.min( (double)wantWeight/ (double)wantHeight, 1);
-						
-						int w = (int)(imageWidth * ratio);
-						int h = (int)(imageHeight * ratio);
-						
-						resizedImage =resize(inputStream, w, h);			
-						ImageIO.write(resizedImage, "jpg", thumFile);	//리사이징 이미지 해당 경로로 업로드
-						System.out.println("jpg 이미지 리사이징");
+					if(fileType.contains("image")) {
+						if(originFile.contains("bmp")||originFile.contains("png")||originFile.contains("gif")) {
+							BufferedImage src = ImageIO.read(uplaodFile);
+							int imageWidth = src.getWidth(null);
+							int imageHeight = src.getHeight(null);
+							
+							double ratio =Math.max((double)wantWeight/ (double)imageWidth, (double)wantHeight/ (double)imageHeight);
+							ratio =Math.min( (double)wantWeight/ (double)wantHeight, 1);
+							
+							int w = (int)(imageWidth * ratio);
+							int h = (int)(imageHeight * ratio);
+							
+							resizedImage =makeThumbnail(src, w, h, fileList.get(i).get("changeFile"));					
+							ImageIO.write(resizedImage, "jpg", thumFile);	//리사이징 이미지 해당 경로로 업로드
+							System.out.println("png 이미지 리사이징");
+						}else{							
+							img = new ImageIcon(uplaodFile.toString()).getImage();	//jpeg 포맷
+							int imageWidth = img.getWidth(null);
+							int imageHeight = img.getHeight(null);
+							
+							double ratio =Math.max((double)wantWeight/ (double)imageWidth, (double)wantHeight/ (double)imageHeight);
+							ratio =Math.min( (double)wantWeight/ (double)wantHeight, 1);
+							
+							int w = (int)(imageWidth * ratio);
+							int h = (int)(imageHeight * ratio);
+							
+							resizedImage =resize(inputStream, w, h);			
+							ImageIO.write(resizedImage, "jpg", thumFile);	//리사이징 이미지 해당 경로로 업로드
+							System.out.println("jpg 이미지 리사이징");
+						}
+						System.out.println("이미지 리사이징 완료!");
+					}else {
+				
+						uploadFile.get(i).transferTo(thumFile);
 					}
-					System.out.println("이미지 리사이징 완료!");   
 					
+					System.out.println("다중 파일 업로드 성공!");
 				}
-				System.out.println("다중 파일 업로드 성공!");
 			}catch(IllegalStateException | IOException e){
 				System.out.println("다중 파일 업로드 실패...");
 				// 업로드 실패 시 파일 삭제
@@ -266,26 +293,7 @@ public class BoardController {
 		return "redirect:{boardNo}/detailBoard.do";
 	}
 	
-	// 이미지 리사이징 
-	public static BufferedImage resize(InputStream inputStream, int width, int height) throws IOException {
-	    return Thumbnails.of(inputStream).size(width,height).asBufferedImage();
-	}
 	
-	 public static BufferedImage makeThumbnail(BufferedImage src , int w, int h,String fileName) throws IOException {
-	    	BufferedImage thumbImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);  
-			Graphics2D graphics = thumbImage.createGraphics();  
-	        graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);  
-	        graphics.drawImage(src, 0,0, w, h, null);  
-	    	
-	        ResampleOp resampleOp2 = new ResampleOp (w, h);
-	        resampleOp2.setUnsharpenMask(AdvancedResizeOp.UnsharpenMask.VerySharp);
-
-	        BufferedImage rescaled2 = resampleOp2.filter(thumbImage, null);
-
-	        
-	       return rescaled2;
-	    	
-	    }
 	
 	// 게시글 조회
 	public BoardVO selectBoard( BoardVO boardVO, @ModelAttribute("searchVO") BoardDefaultVO searchVO) throws Exception {
@@ -295,6 +303,7 @@ public class BoardController {
 	// 상세 조회 화면
 	@GetMapping("{selectedId}/detailBoard.do")
 	public String detailBoardView(@PathVariable("selectedId") Long boardSq, @ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model)  throws Exception {
+		System.out.println("상세조회 화면 !");
 		BoardVO boardVO = new BoardVO();
 		boardVO.setBoardSq(boardSq);
 		
@@ -378,8 +387,7 @@ public class BoardController {
 		UploadFileVO uploadFileVO = new UploadFileVO();
 		uploadFileVO.setBoardNo(boardNo);
 		
-	
-		
+	if(uploadFile != null && !uploadFile.get(0).isEmpty()) {
 		for(int i = 0; i < uploadFile.size(); i++) {
 			String originFile = uploadFile.get(i).getOriginalFilename();	// 업로드 파일명 
 			String ext = originFile.substring(originFile.lastIndexOf("."));
@@ -403,7 +411,7 @@ public class BoardController {
 			
 			uploadFileService.insertFile(uploadFileVO); //첨부파일 정보 추가
 			
-
+			
 		}
 		
 		
@@ -419,6 +427,7 @@ public class BoardController {
 				
 				InputStream inputStream = new FileInputStream(uplaodFile);
 				String originFile = uploadFile.get(i).getOriginalFilename();	// 업로드 파일명 
+				String fileType = uploadFile.get(i).getContentType();	//파일타입
 				
 				Image img = null;
 				BufferedImage resizedImage = null;
@@ -429,36 +438,40 @@ public class BoardController {
 				// 썸네일 파일 객체 생성
 				File thumFile = new File(loot2 + "\\" + fileList.get(i).get("thumFileNm"));
 				
-				if(originFile.contains("bmp")||originFile.contains("png")||originFile.contains("gif")) {
-					BufferedImage src = ImageIO.read(uplaodFile);
-					int imageWidth = src.getWidth(null);
-					int imageHeight = src.getHeight(null);
-					
-					double ratio =Math.max((double)wantWeight/ (double)imageWidth, (double)wantHeight/ (double)imageHeight);
-					ratio =Math.min( (double)wantWeight/ (double)wantHeight, 1);
-					
-					int w = (int)(imageWidth * ratio);
-					int h = (int)(imageHeight * ratio);
-					
-					resizedImage =makeThumbnail(src, w, h, fileList.get(i).get("changeFile"));					
-					ImageIO.write(resizedImage, "jpg", thumFile);	//리사이징 이미지 해당 경로로 업로드
-					System.out.println("png 이미지 리사이징");
-				}else {							
-					img = new ImageIcon(uplaodFile.toString()).getImage();	//jpeg 포맷
-					int imageWidth = img.getWidth(null);
-					int imageHeight = img.getHeight(null);
-					
-					double ratio =Math.max((double)wantWeight/ (double)imageWidth, (double)wantHeight/ (double)imageHeight);
-					ratio =Math.min( (double)wantWeight/ (double)wantHeight, 1);
-					
-					int w = (int)(imageWidth * ratio);
-					int h = (int)(imageHeight * ratio);
-					
-					resizedImage =resize(inputStream, w, h);			
-					ImageIO.write(resizedImage, "jpg", thumFile);	//리사이징 이미지 해당 경로로 업로드
-					System.out.println("jpg 이미지 리사이징");
+				if(fileType.contains("image")) {
+					if(originFile.contains("bmp")||originFile.contains("png")||originFile.contains("gif")) {
+						BufferedImage src = ImageIO.read(uplaodFile);
+						int imageWidth = src.getWidth(null);
+						int imageHeight = src.getHeight(null);
+						
+						double ratio =Math.max((double)wantWeight/ (double)imageWidth, (double)wantHeight/ (double)imageHeight);
+						ratio =Math.min( (double)wantWeight/ (double)wantHeight, 1);
+						
+						int w = (int)(imageWidth * ratio);
+						int h = (int)(imageHeight * ratio);
+						
+						resizedImage =makeThumbnail(src, w, h, fileList.get(i).get("changeFile"));					
+						ImageIO.write(resizedImage, "jpg", thumFile);	//리사이징 이미지 해당 경로로 업로드
+						System.out.println("png 이미지 리사이징");
+					}else {							
+						img = new ImageIcon(uplaodFile.toString()).getImage();	//jpeg 포맷
+						int imageWidth = img.getWidth(null);
+						int imageHeight = img.getHeight(null);
+						
+						double ratio =Math.max((double)wantWeight/ (double)imageWidth, (double)wantHeight/ (double)imageHeight);
+						ratio =Math.min( (double)wantWeight/ (double)wantHeight, 1);
+						
+						int w = (int)(imageWidth * ratio);
+						int h = (int)(imageHeight * ratio);
+						
+						resizedImage =resize(inputStream, w, h);			
+						ImageIO.write(resizedImage, "jpg", thumFile);	//리사이징 이미지 해당 경로로 업로드
+						System.out.println("jpg 이미지 리사이징");
+					}
+					System.out.println("이미지 리사이징 완료!");   
+				}else {
+					uploadFile.get(i).transferTo(thumFile);
 				}
-				System.out.println("이미지 리사이징 완료!");   
 				
 			}
 			
@@ -475,6 +488,8 @@ public class BoardController {
 			}
 			e.printStackTrace();
 		}
+	}
+		
 		
 
 		status.setComplete();
