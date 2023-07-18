@@ -178,28 +178,37 @@ const fn_validationOfContent = e => {
 
  	
 // 파일 삭제 처리
-const $delBtn =  document.querySelector('.fa-solid.fa-trash-can');
+const $delBtn =  document.querySelectorAll('.fa-solid.fa-trash-can');
 const fileSq = document.getElementById("fileSq");
-$delBtn?.addEventListener('click', e => {
-    if(e.target.tagName != 'I') return;
-    if(!confirm('삭제하시겠습니까?')) return;
-    
-    const url = `/deleteFile.do/${fileSq.value}`;
-	console.log("fileSq = "+fileSq.value);
-    
-    ajax
-        .get(url)
-        .then(res => res.json())
-        .then(res => {
-            if(res.header.rtcd == '00'){
-                //첨부파일 정보 화면에서 제거
-                removeAttachFileFromView(e);
-            }else{
-                console.log(res.rtmsg);
-            }
-        })
-        .catch(console.error);
-	});
+
+for(const ele of $delBtn){
+	ele.addEventListener('click', e => {
+		const target = e.target;
+		const $fileSq = target.parentNode.previousSibling;
+		
+		if(e.target.tagName != 'I') return;
+		if(!confirm('삭제하시겠습니까?')) return;
+		
+		const url = `/deleteFile.do/${$fileSq.value}`;
+		console.log("fileSq = "+ $fileSq.getAttribute('value'));
+		console.log("target부모 태그: "+target.parentNode.className);
+		
+		ajax
+			.get(url)
+			.then(res => res.json())
+			.then(res => {
+				if(res.header.rtcd == '00'){
+					//첨부파일 정보 화면에서 제거
+					removeAttachFileFromView(e);
+				}else{
+					console.log(res.rtmsg);
+				}
+			})
+			.catch(console.error);
+	}, false);
+	
+}
+
 
 //첨부파일 정보 화면에서 제거
 function removeAttachFileFromView(e){
