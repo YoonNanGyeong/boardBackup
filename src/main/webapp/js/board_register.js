@@ -184,14 +184,14 @@ const fileSq = document.getElementById("fileSq");
 for(const ele of $delBtn){
 	ele.addEventListener('click', e => {
 		const target = e.target;
-		const $fileSq = target.parentNode.previousSibling;
+		const $fileSq = target.parentNode.previousElementSibling;
 		
 		if(e.target.tagName != 'I') return;
 		if(!confirm('삭제하시겠습니까?')) return;
 		
 		const url = `/deleteFile.do/${$fileSq.value}`;
-		console.log("fileSq = "+ $fileSq.getAttribute('value'));
-		console.log("target부모 태그: "+target.parentNode.className);
+		// console.log("target부모 태그: "+target.parentNode.className);
+		// console.log("fileSq = "+ $fileSq.value);
 		
 		ajax
 			.get(url)
