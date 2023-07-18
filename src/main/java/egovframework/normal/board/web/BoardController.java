@@ -1,7 +1,13 @@
 package egovframework.normal.board.web;
 
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,16 +23,18 @@ import egovframework.normal.board.service.CodeService;
 import egovframework.normal.board.service.UploadFileVO;
 import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
+import net.coobird.thumbnailator.Thumbnails;
 
 import javax.annotation.Resource;
+import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.ImageIcon;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,6 +44,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.mortennobel.imagescaling.ResampleOp;
+import com.mortennobel.imagescaling.AdvancedResizeOp;
 
 
 @Controller
@@ -119,7 +130,7 @@ public class BoardController {
 	// 등록
 	@PostMapping(value = "/addBoard.do")
 	public String addBoard(
-			@RequestParam("uploadFile")List<MultipartFile>uploadFile, 
+			@RequestParam(value = "uploadFile", required = false)List<MultipartFile>uploadFile, 
 			@ModelAttribute("searchVO") BoardDefaultVO searchVO, BoardVO boardVO, 
 			BindingResult bindingResult, Model model, SessionStatus status,
 			HttpServletRequest request)
@@ -155,65 +166,127 @@ public class BoardController {
 		UploadFileVO uploadFileVO = new UploadFileVO();
 		
 		
-		
-		// 업로드 파일 정보 저장(DB정보 저장)
-		for(int i = 0; i < uploadFile.size(); i++) {
-			String originFile = uploadFile.get(i).getOriginalFilename();	// 업로드 파일명 
-			String ext = originFile.substring(originFile.lastIndexOf("."));
-			String changeFile = UUID.randomUUID().toString() + ext;		// 서버 저장용 파일명
-			String thumFile = "thum_"+UUID.randomUUID().toString() + ext;		// 썸네일 파일명
+		if (uploadFile != null && !uploadFile.isEmpty()) {
+			// 업로드 파일 정보 저장(DB정보 저장)
+			for(int i = 0; i < uploadFile.size(); i++) {
+				String originFile = uploadFile.get(i).getOriginalFilename();	// 업로드 파일명 
+				String ext = originFile.substring(originFile.lastIndexOf("."));
+				String changeFile = UUID.randomUUID().toString() + ext;		// 서버 저장용 파일명
+				String thumFileNm = "thum_" + changeFile;		// 저용량 파일명
+				
+				Map<String, String> map = new HashMap<>();
+				map.put("originFile", originFile);
+				map.put("changeFile", changeFile);
+				map.put("thumFileNm", thumFileNm);
+				fileList.add(map);
+				
+				
+				String fileSize = String.valueOf(uploadFile.get(i).getSize());	//파일크기
+				String fileType = uploadFile.get(i).getContentType();	//파일타입
+				
+				
+				uploadFileVO.setUploadNm(originFile);
+				uploadFileVO.setStoreNm(changeFile);
+				uploadFileVO.setFileSize(fileSize);
+				uploadFileVO.setFileType(fileType);
+				uploadFileVO.setBoardNo(boardNo);
+				uploadFileService.insertFile(uploadFileVO);
+				
+			}
 			
-			Map<String, String> map = new HashMap<>();
-			map.put("originFile", originFile);
-			map.put("changeFile", changeFile);
-			fileList.add(map);
-			
-			String fileSize = String.valueOf(uploadFile.get(i).getSize());	//파일크기
-			String fileType = uploadFile.get(i).getContentType();	//파일타입
-			
-			uploadFileVO.setUploadNm(originFile);
-			uploadFileVO.setStoreNm(changeFile);
-			uploadFileVO.setFileSize(fileSize);
-			uploadFileVO.setFileType(fileType);
-			uploadFileVO.setBoardNo(boardNo);
-			uploadFileService.insertFile(uploadFileVO);
-			
-			List<?> files = uploadFileService.selectFileList(uploadFileVO);
-			model.addAttribute("addFileList",files);
+			// 파일 업로드 처리(디렉토리에 저장)
+			try {
+				for(int i = 0; i < uploadFile.size(); i++) {
 					
+					// 원본 파일 객체 생성
+					File uplaodFile = new File(loot + "\\" + fileList.get(i).get("changeFile"));
+					
+					// 원본 파일 업로드
+					uploadFile.get(i).transferTo(uplaodFile);
+					
+					
+					InputStream inputStream = new FileInputStream(uplaodFile);
+					String originFile = uploadFile.get(i).getOriginalFilename();	// 업로드 파일명 
+					
+					Image img = null;
+					BufferedImage resizedImage = null;
+					int wantWeight = 1000;
+					int wantHeight = 1000;
+					
+					
+					// 썸네일 파일 객체 생성
+					File thumFile = new File(loot2 + "\\" + fileList.get(i).get("thumFileNm"));
+					
+					if(originFile.contains("bmp")||originFile.contains("png")||originFile.contains("gif")) {
+						BufferedImage src = ImageIO.read(uplaodFile);
+						int imageWidth = src.getWidth(null);
+						int imageHeight = src.getHeight(null);
+						
+						double ratio =Math.max((double)wantWeight/ (double)imageWidth, (double)wantHeight/ (double)imageHeight);
+						ratio =Math.min( (double)wantWeight/ (double)wantHeight, 1);
+						
+						int w = (int)(imageWidth * ratio);
+						int h = (int)(imageHeight * ratio);
+						
+						resizedImage =makeThumbnail(src, w, h, fileList.get(i).get("changeFile"));					
+						ImageIO.write(resizedImage, "jpg", thumFile);	//리사이징 이미지 해당 경로로 업로드
+						System.out.println("png 이미지 리사이징");
+					}else {							
+						img = new ImageIcon(uplaodFile.toString()).getImage();	//jpeg 포맷
+						int imageWidth = img.getWidth(null);
+						int imageHeight = img.getHeight(null);
+						
+						double ratio =Math.max((double)wantWeight/ (double)imageWidth, (double)wantHeight/ (double)imageHeight);
+						ratio =Math.min( (double)wantWeight/ (double)wantHeight, 1);
+						
+						int w = (int)(imageWidth * ratio);
+						int h = (int)(imageHeight * ratio);
+						
+						resizedImage =resize(inputStream, w, h);			
+						ImageIO.write(resizedImage, "jpg", thumFile);	//리사이징 이미지 해당 경로로 업로드
+						System.out.println("jpg 이미지 리사이징");
+					}
+					System.out.println("이미지 리사이징 완료!");   
+					
+				}
+				System.out.println("다중 파일 업로드 성공!");
+			}catch(IllegalStateException | IOException e){
+				System.out.println("다중 파일 업로드 실패...");
+				// 업로드 실패 시 파일 삭제
+				for(int i = 0; i < uploadFile.size(); i++) {
+					new File(loot + "\\" + fileList.get(i).get("changeFile")).delete();	
+					new File(loot2 + "\\" + fileList.get(i).get("thumFileNm")).delete();	
+				}
+				e.printStackTrace();
+			}
 		}
 		
-		// 파일 업로드 처리(디렉토리에 저장)
-				try {
-					for(int i = 0; i < uploadFile.size(); i++) {
-						// 원본 파일 객체 생성
-						File uplaodFile = new File(loot + "\\" + fileList.get(i).get("changeFile"));
-						
-						// 원본 파일 업로드
-						uploadFile.get(i).transferTo(uplaodFile);
-						
-						//썸네일 파일 객체 생성
-						File thumFile = new File(loot2 + "\\" + "");
-					}
-					System.out.println("다중 파일 업로드 성공!");
-				}catch(IllegalStateException | IOException e){
-					System.out.println("다중 파일 업로드 실패...");
-					// 업로드 실패 시 파일 삭제
-					for(int i = 0; i < uploadFile.size(); i++) {
-						new File(loot + "\\" + fileList.get(i).get("changeFile")).delete();		
-					}
-					e.printStackTrace();
-				}
-	
-//		System.out.println("fileList = " + fileList);	// 업로드 파일 확인
-		
-
 
 		status.setComplete();
 		return "redirect:{boardNo}/detailBoard.do";
 	}
 	
+	// 이미지 리사이징 
+	public static BufferedImage resize(InputStream inputStream, int width, int height) throws IOException {
+	    return Thumbnails.of(inputStream).size(width,height).asBufferedImage();
+	}
+	
+	 public static BufferedImage makeThumbnail(BufferedImage src , int w, int h,String fileName) throws IOException {
+	    	BufferedImage thumbImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);  
+			Graphics2D graphics = thumbImage.createGraphics();  
+	        graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);  
+	        graphics.drawImage(src, 0,0, w, h, null);  
+	    	
+	        ResampleOp resampleOp2 = new ResampleOp (w, h);
+	        resampleOp2.setUnsharpenMask(AdvancedResizeOp.UnsharpenMask.VerySharp);
 
+	        BufferedImage rescaled2 = resampleOp2.filter(thumbImage, null);
+
+	        
+	       return rescaled2;
+	    	
+	    }
+	
 	// 게시글 조회
 	public BoardVO selectBoard( BoardVO boardVO, @ModelAttribute("searchVO") BoardDefaultVO searchVO) throws Exception {
 		return boardService.selectBoard(boardVO);
@@ -272,7 +345,7 @@ public class BoardController {
 	@PostMapping("/updateBoard.do")
 	public String updateBoard(@ModelAttribute("searchVO") BoardDefaultVO searchVO, 
 			BoardVO boardVO, BindingResult bindingResult, Model model, SessionStatus status,
-			@RequestParam("uploadFile")List<MultipartFile>uploadFile,
+			@RequestParam(value = "uploadFile", required = false)List<MultipartFile>uploadFile,
 			HttpServletRequest request)
 			throws Exception {
 		
@@ -292,10 +365,13 @@ public class BoardController {
 		ServletContext context = request.getSession().getServletContext();
 		
 		String loot = context.getRealPath("/images/board/upload");	// 저장경로
+		String loot2 = context.getRealPath("/images/board/upload/thm");	// 썸네일 저장경로
 		
 		File fileCheck = new File(loot);
+		File fileCheck2 = new File(loot2);
 		
 		if(!fileCheck.exists()) fileCheck.mkdirs();
+		if(!fileCheck2.exists()) fileCheck2.mkdirs();
 		
 		List<Map<String, String>> fileList = new ArrayList<>();
 		
@@ -308,10 +384,12 @@ public class BoardController {
 			String originFile = uploadFile.get(i).getOriginalFilename();	// 업로드 파일명 
 			String ext = originFile.substring(originFile.lastIndexOf("."));
 			String changeFile = UUID.randomUUID().toString() + ext;		// 서버 저장용 파일명
+			String thumFileNm =  "thum_" + changeFile;		// 저용량 파일명
 			
 			Map<String, String> map = new HashMap<>();
 			map.put("originFile", originFile);
 			map.put("changeFile", changeFile);
+			map.put("thumFileNm", thumFileNm);
 			fileList.add(map);
 			
 			String fileSize = String.valueOf(uploadFile.get(i).getSize());	//파일크기
@@ -332,20 +410,71 @@ public class BoardController {
 		// 파일 업로드 처리(디렉토리에 저장)
 		try {
 			for(int i = 0; i < uploadFile.size(); i++) {
+				// 원본 파일 객체 생성
 				File uplaodFile = new File(loot + "\\" + fileList.get(i).get("changeFile"));
+				
+				// 원본 파일 업로드
 				uploadFile.get(i).transferTo(uplaodFile);
+				
+				
+				InputStream inputStream = new FileInputStream(uplaodFile);
+				String originFile = uploadFile.get(i).getOriginalFilename();	// 업로드 파일명 
+				
+				Image img = null;
+				BufferedImage resizedImage = null;
+				int wantWeight = 1000;
+				int wantHeight = 1000;
+				
+				
+				// 썸네일 파일 객체 생성
+				File thumFile = new File(loot2 + "\\" + fileList.get(i).get("thumFileNm"));
+				
+				if(originFile.contains("bmp")||originFile.contains("png")||originFile.contains("gif")) {
+					BufferedImage src = ImageIO.read(uplaodFile);
+					int imageWidth = src.getWidth(null);
+					int imageHeight = src.getHeight(null);
+					
+					double ratio =Math.max((double)wantWeight/ (double)imageWidth, (double)wantHeight/ (double)imageHeight);
+					ratio =Math.min( (double)wantWeight/ (double)wantHeight, 1);
+					
+					int w = (int)(imageWidth * ratio);
+					int h = (int)(imageHeight * ratio);
+					
+					resizedImage =makeThumbnail(src, w, h, fileList.get(i).get("changeFile"));					
+					ImageIO.write(resizedImage, "jpg", thumFile);	//리사이징 이미지 해당 경로로 업로드
+					System.out.println("png 이미지 리사이징");
+				}else {							
+					img = new ImageIcon(uplaodFile.toString()).getImage();	//jpeg 포맷
+					int imageWidth = img.getWidth(null);
+					int imageHeight = img.getHeight(null);
+					
+					double ratio =Math.max((double)wantWeight/ (double)imageWidth, (double)wantHeight/ (double)imageHeight);
+					ratio =Math.min( (double)wantWeight/ (double)wantHeight, 1);
+					
+					int w = (int)(imageWidth * ratio);
+					int h = (int)(imageHeight * ratio);
+					
+					resizedImage =resize(inputStream, w, h);			
+					ImageIO.write(resizedImage, "jpg", thumFile);	//리사이징 이미지 해당 경로로 업로드
+					System.out.println("jpg 이미지 리사이징");
+				}
+				System.out.println("이미지 리사이징 완료!");   
+				
 			}
+			
 			System.out.println("다중 파일 업로드 성공!");
+			
 		}catch(IllegalStateException | IOException e){
+			
 			System.out.println("다중 파일 업로드 실패...");
+			
 			// 업로드 실패 시 파일 삭제
 			for(int i = 0; i < uploadFile.size(); i++) {
-				new File(loot + "\\" + fileList.get(i).get("changeFile")).delete();		
+				new File(loot + "\\" + fileList.get(i).get("changeFile")).delete();	
+				new File(loot2 + "\\" + fileList.get(i).get("thumFileNm")).delete();	
 			}
 			e.printStackTrace();
 		}
-		
-		
 		
 
 		status.setComplete();

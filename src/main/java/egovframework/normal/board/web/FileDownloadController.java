@@ -48,7 +48,6 @@ public class FileDownloadController {
 		String loot = context.getRealPath("/images/board/upload/");
         
         realFilename = loot + filename;
-        System.out.println("realFileName= "+realFilename);
  
         File file = new File(realFilename);
         if (!file.exists()) {
