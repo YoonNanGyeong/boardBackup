@@ -116,7 +116,8 @@
 		                		  	<i class="fa-solid fa-download" style="color: #0070D2;"></i>
 	                		  	  </label>
 									<c:forEach var="file" items="${fileList}" varStatus="status">
-										<input id="fileSq" name="fileSq" value = "${file.fileSq}" style="display:none;"/>
+										<input id="fileSq" name="fileSq" value = "${file.fileSq}" style="display:none;" />
+										<input type="hidden" name="_method" value="DELETE"/>
 			              		  		<div class="files">
 						                         <a href="/fileDownload.do?storeNm=${file.storeNm}">
 						                        	<input type="text" id="storeNm" value="${file.storeNm}" name="storeNm" readonly="readonly" alt="첨부파일명 링크" style="display: none;"/>
