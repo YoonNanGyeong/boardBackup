@@ -179,7 +179,6 @@ const fn_validationOfContent = e => {
  	
 // 파일 삭제 처리
 const $delBtn =  document.querySelectorAll('.fa-solid.fa-trash-can');
-const fileSq = document.getElementById("fileSq");
 
 for(const ele of $delBtn){
 	ele.addEventListener('click', e => {
@@ -194,7 +193,7 @@ for(const ele of $delBtn){
 		// console.log("fileSq = "+ $fileSq.value);
 		
 		ajax
-			.get(url)
+			.delete(url)
 			.then(res => res.json())
 			.then(res => {
 				if(res.header.rtcd == '00'){

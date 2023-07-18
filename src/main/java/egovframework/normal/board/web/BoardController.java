@@ -35,6 +35,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -517,8 +518,10 @@ public class BoardController {
 	
 	// 파일 단건 삭제 처리
 	@ResponseBody
-	@GetMapping("/deleteFile.do/{fileSq}")
+	@DeleteMapping("/deleteFile.do/{fileSq}")
 	public RestResponse<Object> deleteFile(@PathVariable("fileSq")Long fileSq, Model model ) throws Exception{
+		System.out.println("fileSq = " + fileSq);
+		
 		UploadFileVO uploadFile = new UploadFileVO();
 		uploadFile.setFileSq(fileSq);
 		int cnt = uploadFileService.deleteFile(uploadFile);	//첨부파일 정보 삭제처리
