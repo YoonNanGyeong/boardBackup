@@ -508,11 +508,14 @@ public class BoardController {
 		// 게시글 삭제
 		boardService.deleteBoard(boardVO);
 		
+		// 첨부파일 전체 삭제 
+		uploadFileService.deleteAllFile(uploadFile);
+		
 		status.setComplete();
 		return "redirect:/boardList.do";
 	}
 	
-	// 파일 삭제 처리
+	// 파일 단건 삭제 처리
 	@ResponseBody
 	@GetMapping("/deleteFile.do/{fileSq}")
 	public RestResponse<Object> deleteFile(@PathVariable("fileSq")Long fileSq, Model model ) throws Exception{

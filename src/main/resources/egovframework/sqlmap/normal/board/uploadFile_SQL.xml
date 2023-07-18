@@ -61,12 +61,21 @@
     </select>
     
 
-    <!-- 	파일 삭제 처리  -->
+    <!-- 	파일 단건 삭제 처리  -->
     <delete id="uploadFileDAO.deleteFile">
 		<![CDATA[
 			UPDATE test_uploadfile_tb
 			SET use_yn = 'N'
 			WHERE file_sq=#fileSq#
+		]]>
+	</delete>
+	
+	<!-- 	파일 전체 삭제 처리  -->
+    <delete id="uploadFileDAO.deleteAllFile">
+		<![CDATA[
+			UPDATE test_uploadfile_tb
+			SET use_yn = 'N'
+			WHERE board_no=#boardNo#
 		]]>
 	</delete>
 	

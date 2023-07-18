@@ -177,7 +177,7 @@ const fn_validationOfContent = e => {
  
 
  	
- // 파일 삭제 처리
+// 파일 삭제 처리
 const $delBtn =  document.querySelector('.fa-solid.fa-trash-can');
 const fileSq = document.getElementById("fileSq");
 $delBtn?.addEventListener('click', e => {
@@ -200,7 +200,8 @@ $delBtn?.addEventListener('click', e => {
         })
         .catch(console.error);
 	});
-	
+
+//첨부파일 정보 화면에서 제거
 function removeAttachFileFromView(e){
     const $parent = document.querySelector('.download-area');
     const $child = e.target.closest('.files');
