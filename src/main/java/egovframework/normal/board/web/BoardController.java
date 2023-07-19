@@ -318,18 +318,47 @@ public class BoardController {
 		model.addAttribute("fileList",fileList);
 		
 		model.addAttribute("fileSize",fileList.size());
-		   
+
+		return "board/board_detail";
+	}
+	
+	//이전, 다음글 상세조회 
+	@PostMapping("/detailBoard.do")
+	public String detailPrevNext(
+					@RequestParam(value="prevNo",required=false)Long prevNo,
+					@RequestParam(value="nextNo",required=false)Long nextNo,
+					@ModelAttribute("searchVO") BoardDefaultVO searchVO, BoardVO boardVO, Model model)  throws Exception {
+		System.out.println("상세조회 이전,다음 화면 !");
+		
+		// 조회한 객체 
+		BoardVO vo = selectBoard(boardVO, searchVO);
+		System.out.println("vo = "+vo);
+		
+		// 첨부파일 조회
+		UploadFileVO uploadFileVO = new UploadFileVO();
+		uploadFileVO.setBoardNo(boardVO.getBoardSq());
+		
+		List<?> fileList = uploadFileService.selectFileList(uploadFileVO);
+		model.addAttribute("fileList",fileList);
+		model.addAttribute("fileSize",fileList.size());
+		
+		
 		// 이전글 다음글 행번호를 가지고 있는 객체
-//		BoardVO nextPrev = boardService.boardPrevNext(vo);
-//		nextPrev.setBoardCd(vo.getBoardCd());
-//		model.addAttribute("nextPrev",nextPrev);
+		BoardVO nextPrev = boardService.boardPrevNext(vo);
+		System.out.println("nextPrev = "+nextPrev);
+		
+		nextPrev.setBoardCd(vo.getBoardCd());
+		model.addAttribute("prevNo", nextPrev.getPrevNo());
+		model.addAttribute("nextNo", nextPrev.getNextNo());
+		
+		System.out.println("이전 다음 검색조건: " + nextPrev.getPrevNextCondition());
 		
 		// 행번호로 이전 다음글 조회
-//		BoardVO nextPrevVO = boardService.selectPrevNext(nextPrev);
-//		model.addAttribute("nextPrevVO",nextPrevVO);
-
+		BoardVO nextPrevVO = boardService.selectPrevNext(nextPrev);
+		model.addAttribute("boardVO", nextPrevVO);
+		model.addAttribute("selectedId", nextPrevVO.getBoardSq());
 		
-		return "board/board_detail";
+		return "redirect:{selectedId}/detailBoard.do";
 	}
 	
 	// 수정화면

@@ -44,8 +44,8 @@
 
 <body>
 <form:form modelAttribute="searchVO" id="detailForm" name="detailForm" method="post">
-        <input type="hidden" name="selectedId" />
-        <input type="hidden" name="boardSq" value="${boardVO.boardSq}" />
+ 		<input type="hidden" id="selectedId" name="selectedId" />
+        <input type="hidden" id="boardSq" name="boardSq" value="${boardVO.boardSq}" />
    		 <!-- 상단바 -->
         <div class="nv-l"></div>
         <nav class="nv">
@@ -59,8 +59,8 @@
             <div class="hd-l"></div>
             <header class="hd">
             	<div class = "prev-next">
-            		<button id="prev" name="prev"  type="button" value="prev">이전</button>
-            		<button id="next" name="next" type="button" value="next">다음</button>
+            		<button id="prevNextCondition" name="prevNextCondition"  type="button" value="prev">이전</button>
+            		<button id="prevNextCondition" name="prevNextCondition" type="button" value="next">다음</button>
             	</div>
                 <!-- list title -->
                 <div id="title">
@@ -148,4 +148,5 @@
         
     </form:form>
 </body>
+<script language="javaScript" src="/js/board_detail.js?after"></script>
 </html>

@@ -5,7 +5,8 @@
 
 	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
 	<typeAlias  alias="searchVO" type="egovframework.normal.board.service.BoardDefaultVO"/>
-
+	<typeAlias  alias="boardVO" type="egovframework.normal.board.service.BoardVO"/>
+	
 	<resultMap id="board" class="egovframework.normal.board.service.BoardVO" >
 		<result property="boardSq" column="board_sq"/>
 		<result property="boardCd" column="board_cd"/>
@@ -16,8 +17,6 @@
 		<result property="useYn" column="use_yn"/>
 		<result property="createDt" column="create_dt"/>
 		<result property="updateDt" column="update_dt"/>
-<!-- 		<result property="nextNo" column="next_no"/> -->
-<!-- 		<result property="prevNo" column="prev_no"/> -->
 	</resultMap>
 
 
@@ -137,7 +136,7 @@
 			</isEqual>
 	</select>
 	
-	<select id="boardDAO.boardPrevNext"  resultMap="board"  remapResults="true">
+	<select id="boardDAO.boardPrevNext"  parameterClass="boardVO" resultClass="boardVO">
 	<![CDATA[
  		SELECT  t2.next_no, t2.prev_no 
  		  FROM (SELECT rownum, lag(rownum)over(ORDER BY rownum) AS prev_no, lead(rownum)over(ORDER BY rownum) AS next_no, board_sq 
@@ -150,7 +149,7 @@
  	]]> 
 	</select>
 
-	<select id="boardDAO.selectPrevNext" resultMap="board"  remapResults="true">
+	<select id="boardDAO.selectPrevNext" parameterClass="boardVO" resultClass="boardVO">
 	<![CDATA[
  		SELECT t2.board_sq, t2.board_cd, t2.title, t2.content, t2.view_cnt, t2.user_nm,  
  		  		   t2.use_yn, t2.update_dt , t2.create_dt 	 
@@ -163,14 +162,14 @@
  	  ]]> 
  	  
  	  <isParameterPresent prepend="WHERE">
-	 	  <isNotNull property="next">
-			   <isEqual property="next" compareValue="next">
+	 	  <isNotNull property="prevNextCondition">
+			   <isEqual property="prevNextCondition" compareValue="next">
 			   		 next_no = #nextNo#
 			   </isEqual>
 	 	  </isNotNull>
 	 	  
-	 	  <isNotNull property="prev">
-			   <isEqual property="prev" compareValue="prev">
+	 	  <isNotNull property="prevNextCondition">
+			   <isEqual property="prevNextCondition" compareValue="prev">
 			   		 prev_no = #prevNo#
 			   </isEqual>
 	 	  </isNotNull>

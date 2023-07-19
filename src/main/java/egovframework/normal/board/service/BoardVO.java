@@ -29,8 +29,17 @@ public class BoardVO extends BoardDefaultVO {
 	private long nextNo;
 	private long prevNo;
 	
+	// 이전 다음글 검색 조건
+	private String prevNextCondition;
+	
+	
 
-
+	public String getPrevNextCondition() {
+		return prevNextCondition;
+	}
+	public void setPrevNextCondition(String prevNextCondition) {
+		this.prevNextCondition = prevNextCondition;
+	}
 	public long getNextNo() {
 		return nextNo;
 	}
