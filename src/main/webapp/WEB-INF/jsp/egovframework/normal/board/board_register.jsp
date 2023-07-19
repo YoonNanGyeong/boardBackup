@@ -10,6 +10,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <!-- fontawesome 아이콘 -->
     <script src="https://kit.fontawesome.com/dcfc9e7feb.js" ></script>
+	<!-- jquery cdn-->
+	<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     
     <c:set var="registerFlag" value="${empty boardVO.boardCd ? 'create' : 'modify'}"/>
     <title>게시글
@@ -117,7 +119,6 @@
 	                		  	  </label>
 									<c:forEach var="file" items="${fileList}" varStatus="status">
 										<input id="fileSq" name="fileSq" value = "${file.fileSq}" style="display:none;" />
-										<input type="hidden" name="_method" value="DELETE"/>
 			              		  		<div class="files">
 						                         <a href="/fileDownload.do?storeNm=${file.storeNm}">
 						                        	<input type="text" id="storeNm" value="${file.storeNm}" name="storeNm" readonly="readonly" alt="첨부파일명 링크" style="display: none;"/>
@@ -183,6 +184,7 @@
 </form:form>
 </body>
 
-<script type="module" language="javaScript" src="/js/board_register.js?after"></script>
+<script language="javaScript" src="/js/board_register.js?after"></script>
+<script type = "module" language="javaScript" src="/js/deleteFile.js?after"></script>
 
 </html>

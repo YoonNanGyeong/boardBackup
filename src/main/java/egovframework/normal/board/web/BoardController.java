@@ -35,14 +35,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -500,8 +498,7 @@ public class BoardController {
 
 	// 게시글 삭제 처리
 	@PostMapping("/deleteBoard.do")
-	public String deleteBoard(BoardVO boardVO, @ModelAttribute("searchVO") BoardDefaultVO searchVO, SessionStatus status
-			, HttpServletRequest request) throws Exception {
+	public String deleteBoard(BoardVO boardVO, @ModelAttribute("searchVO") BoardDefaultVO searchVO, SessionStatus status) throws Exception {
 		UploadFileVO uploadFile = new UploadFileVO();
 		Long boardNo = boardVO.getBoardSq();
 		uploadFile.setBoardNo(boardNo);
@@ -515,28 +512,7 @@ public class BoardController {
 		status.setComplete();
 		return "redirect:/boardList.do";
 	}
-	
-	// 파일 단건 삭제 처리
-	@ResponseBody
-	@DeleteMapping("/deleteFile.do/{fileSq}")
-	public RestResponse<Object> deleteFile(@PathVariable("fileSq")Long fileSq, Model model ) throws Exception{
-		System.out.println("fileSq = " + fileSq);
-		
-		UploadFileVO uploadFile = new UploadFileVO();
-		uploadFile.setFileSq(fileSq);
-		int cnt = uploadFileService.deleteFile(uploadFile);	//첨부파일 정보 삭제처리
-		
-		model.addAttribute("fileSq",fileSq);
-		
-		RestResponse<Object> result = null;
-		
-	    if(cnt == 1){
-	      result = RestResponse.createRestResponse("00", "성공", null);
-	    }else{
-	      result = RestResponse.createRestResponse("99", "fail", null);
-	    }
-	    return result;
-	}
+
 	
 	
 		
