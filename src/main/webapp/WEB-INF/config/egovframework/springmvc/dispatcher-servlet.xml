@@ -12,6 +12,8 @@
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
     </context:component-scan>
+    
+    <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
 
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
         <property name="webBindingInitializer">
@@ -49,11 +51,6 @@
 	    p:viewClass="org.springframework.web.servlet.view.JstlView"
 	    p:prefix="/WEB-INF/jsp/egovframework/normal/" p:suffix=".jsp"/>
 	    
-	<!-- BeanNameViewResolver 설정-->
-<!--     <bean id="viewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver"/> -->
-    
-    <!-- MappingJackson2JsonView 설정 -->
-<!--     <bean id="jsonTemplate" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/> -->
 
     <!-- For Pagination Tag -->
     <bean id="imageRenderer" class="egovframework.normal.cmmn.web.ImgPaginationRenderer"/>

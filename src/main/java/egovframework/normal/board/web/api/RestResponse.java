@@ -58,6 +58,7 @@ public class RestResponse<T> {
 	
 
 	  public static <T> RestResponse<T> createRestResponse(String rtcd,String rtmsg, T data){
+		  	System.out.println("rtcd: " + rtcd + " rtmsg: " + rtmsg);
 		    return new RestResponse<>(new Header(rtcd,rtmsg),data);
 		  }
 	
