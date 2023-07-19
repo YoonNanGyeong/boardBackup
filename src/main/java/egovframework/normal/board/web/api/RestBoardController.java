@@ -20,15 +20,14 @@ public class RestBoardController {
 	private UploadFileService uploadFileService;
 	
 	// 파일 단건 삭제 처리
-		@ResponseBody
 		@GetMapping("{fileSq}/deleteFile.do")
+		@ResponseBody
 		public RestResponse<Object> deleteFile(@PathVariable("fileSq")Long fileSq, Model model ) throws Exception{
 			System.out.println("fileSq = " + fileSq);
 			
 			UploadFileVO uploadFile = new UploadFileVO();
 			uploadFile.setFileSq(fileSq);
 			int cnt = uploadFileService.deleteFile(uploadFile);	//첨부파일 정보 삭제처리
-			System.out.println("삭제처리 성공 횟수="+cnt);
 			
 			model.addAttribute("fileSq",fileSq);
 			
@@ -39,6 +38,7 @@ public class RestBoardController {
 		    }else{
 		      result = RestResponse.createRestResponse("99", "fail", null);
 		    }
+		    System.out.println("result = "+result);
 		    return result;
 		}
 		

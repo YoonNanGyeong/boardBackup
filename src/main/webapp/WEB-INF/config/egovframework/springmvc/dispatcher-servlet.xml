@@ -12,12 +12,17 @@
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
     </context:component-scan>
-    
-    <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
 
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
         <property name="webBindingInitializer">
             <bean class="egovframework.normal.cmmn.web.BindingInitializer"/>
+        </property>
+        
+        <!-- jackson messageConverter 사용 -->
+         <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
+            </list>
         </property>
     </bean>
 
@@ -45,6 +50,11 @@
                 <prop key="org.springframework.security.AccessDeniedException">cmmn/egovError</prop>
             </props>
         </property>
+    </bean>
+    
+      <!-- Jackson View로 리턴하여 json으로 해당 xml에 대한 변환 과정이 필요함 -->
+    <bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+        <property name="contentType" value="application/json;charset=UTF-8"/>
     </bean>
 
     <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver" p:order="1"
