@@ -162,12 +162,17 @@
  					ORDER BY rownum)t2 
  	    WHERE 
  	  ]]> 
-	   <isEqual property="next" compareValue="next">
-	   		 next_no = #nextNo#
-	   </isEqual>
-	   <isEqual property="prev" compareValue="prev">
-	   		 prev_no = #prevNo#
-	   </isEqual>
+ 	  <isNotNull property="next">
+		   <isEqual property="next" compareValue="next">
+		   		 next_no = #nextNo#
+		   </isEqual>
+ 	  </isNotNull>
+ 	  
+ 	  <isNotNull property="prev">
+		   <isEqual property="prev" compareValue="prev">
+		   		 prev_no = #prevNo#
+		   </isEqual>
+ 	  </isNotNull>
 	</select>  
 	
 
