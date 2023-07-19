@@ -10,8 +10,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <!-- fontawesome 아이콘 -->
     <script src="https://kit.fontawesome.com/dcfc9e7feb.js" ></script>
-	<!-- jquery cdn-->
-	<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     
     <c:set var="registerFlag" value="${empty boardVO.boardCd ? 'create' : 'modify'}"/>
     <title>게시글

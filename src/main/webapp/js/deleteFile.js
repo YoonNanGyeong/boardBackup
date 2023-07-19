@@ -2,6 +2,7 @@ import { ajax } from '/js/ajax.js';
 
 // 파일 삭제 처리
 const $delBtn =  document.querySelectorAll('.fa-solid.fa-trash-can');
+const $files = document.querySelectorAll('.files');
 
 for(const ele of $delBtn){
 	ele.addEventListener('click', e => {
@@ -20,6 +21,9 @@ for(const ele of $delBtn){
 					console.log("파일 삭제 성공!")
 					//첨부파일 정보 화면에서 제거
 					removeAttachFileFromView(e);
+					for(const ele of $files){
+						
+					}
 				}else{
 					console.log(res.rtmsg);
 				}
