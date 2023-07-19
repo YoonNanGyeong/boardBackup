@@ -59,7 +59,7 @@ public interface BoardService {
 	 * @return 이전, 다음글 행번호
 	 * @throws Exception
 	 */
-	BoardVO boardPrevNext(BoardVO vo) throws Exception;
+	List<?> boardPrevNext(BoardVO vo) throws Exception;
 	
 	/**
 	 * 이전, 다음글 번호로 글 조회
@@ -67,7 +67,7 @@ public interface BoardService {
 	 * @return 조회한 글
 	 * @throws Exception
 	 */
-	BoardVO selectPrevNext(BoardVO vo) throws Exception;
+	List<?> selectPrevNext(BoardVO vo) throws Exception;
 
 	/**
 	 * 글 목록을 조회한다.

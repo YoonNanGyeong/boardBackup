@@ -131,7 +131,7 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	 * 조회한 글 이전 다음글 번호
 	 */
 	@Override
-	public BoardVO boardPrevNext(BoardVO vo) throws Exception {
+	public List<?> boardPrevNext(BoardVO vo) throws Exception {
 		return boardDAO.boardPrevNext(vo);
 	}
 
@@ -141,7 +141,7 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	 * 이전, 다음글 번호로 글 조회
 	 */
 	@Override
-	public BoardVO selectPrevNext(BoardVO vo) throws Exception {
+	public List<?> selectPrevNext(BoardVO vo) throws Exception {
 		return boardDAO.selectPrevNext(vo);
 	}
 

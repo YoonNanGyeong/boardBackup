@@ -344,19 +344,30 @@ public class BoardController {
 		
 		
 		// 이전글 다음글 행번호를 가지고 있는 객체
-		BoardVO nextPrev = boardService.boardPrevNext(vo);
+		List<?> nextPrev = boardService.boardPrevNext(vo);
 		System.out.println("nextPrev = "+nextPrev);
 		
-		nextPrev.setBoardCd(vo.getBoardCd());
-		model.addAttribute("prevNo", nextPrev.getPrevNo());
-		model.addAttribute("nextNo", nextPrev.getNextNo());
+//		nextPrev.setBoardCd(vo.getBoardCd());
 		
-		System.out.println("이전 다음 검색조건: " + nextPrev.getPrevNextCondition());
 		
-		// 행번호로 이전 다음글 조회
-		BoardVO nextPrevVO = boardService.selectPrevNext(nextPrev);
-		model.addAttribute("boardVO", nextPrevVO);
-		model.addAttribute("selectedId", nextPrevVO.getBoardSq());
+		for (Object item : nextPrev) {
+			BoardVO result = (BoardVO) item;
+			System.out.println("item = "+item);
+			
+			model.addAttribute("prevNo", result.getPrevNo());
+			model.addAttribute("nextNo", result.getNextNo());
+			System.out.println("이전 다음 검색조건: " + result.getPrevNextCondition());
+			
+			// 행번호로 이전 다음글 조회
+			BoardVO nextPrevVO = (BoardVO) boardService.selectPrevNext(result);
+			model.addAttribute("boardVO", nextPrevVO);
+			System.out.println("nextPrevVO: " + nextPrevVO);
+			
+			model.addAttribute("selectedId", nextPrevVO.getBoardSq());
+			System.out.println("selectedId: " +nextPrevVO.getBoardSq());
+		}
+		
+		
 		
 		return "redirect:{selectedId}/detailBoard.do";
 	}
