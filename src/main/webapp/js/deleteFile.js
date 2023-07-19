@@ -24,7 +24,7 @@ for(const ele of $delBtn){
 					console.log(res.rtmsg);
 				}
 			})
-			.catch(console.log("error발생 :("));
+			.catch(console.error);
 	}, false);
 
 }

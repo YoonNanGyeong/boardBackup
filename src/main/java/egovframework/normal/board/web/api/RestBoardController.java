@@ -23,7 +23,7 @@ public class RestBoardController {
 		@GetMapping("{fileSq}/deleteFile.do")
 		@ResponseBody
 		public RestResponse<Object> deleteFile(@PathVariable("fileSq")Long fileSq, Model model ) throws Exception{
-			System.out.println("fileSq = " + fileSq);
+//			System.out.println("fileSq = " + fileSq);
 			
 			UploadFileVO uploadFile = new UploadFileVO();
 			uploadFile.setFileSq(fileSq);
@@ -38,7 +38,7 @@ public class RestBoardController {
 		    }else{
 		      result = RestResponse.createRestResponse("99", "fail", null);
 		    }
-		    System.out.println("result = "+result);
+		    
 		    return result;
 		}
 		
