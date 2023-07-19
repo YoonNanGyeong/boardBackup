@@ -149,7 +149,7 @@
  	]]> 
 	</select>
 
-	<select id="boardDAO.selectPrevNext" parameterClass="boardVO" resultClass="boardVO">
+	<select id="boardDAO.selectPrevNext" parameterClass="boardVO" resultClass="egovMap">
 	<![CDATA[
  		SELECT t2.board_sq, t2.board_cd, t2.title, t2.content, t2.view_cnt, t2.user_nm,  
  		  		   t2.use_yn, t2.update_dt , t2.create_dt 	 

@@ -344,28 +344,50 @@ public class BoardController {
 		
 		
 		// 이전글 다음글 행번호를 가지고 있는 객체
-		List<?> nextPrev = boardService.boardPrevNext(vo);
-		System.out.println("nextPrev = "+nextPrev);
+//		List<?> nextPrev = boardService.boardPrevNext(vo);
+//		System.out.println("nextPrev = "+nextPrev);
+		
+//		for (Object item : nextPrev) {
+//			BoardVO result = (BoardVO) item;
+//			System.out.println("item = "+item);
+//			
+//			model.addAttribute("prevNo", result.getPrevNo());
+//			model.addAttribute("nextNo", result.getNextNo());
+//			System.out.println("이전 다음 검색조건: " + result.getPrevNextCondition());
+//			
+//			// 행번호로 이전 다음글 조회
+//			BoardVO nextPrevVO = (BoardVO) boardService.selectPrevNext(result);
+//			model.addAttribute("boardVO", nextPrevVO);
+//			System.out.println("nextPrevVO: " + nextPrevVO);
+//			
+//			model.addAttribute("selectedId", nextPrevVO.getBoardSq());
+//			System.out.println("selectedId: " +nextPrevVO.getBoardSq());
+//		}
+		
+		List<Map<String, Object>> nextPrev = (List<Map<String, Object>>) boardService.boardPrevNext(vo);
+		Map<String, Object> resultMap = nextPrev.get(0); // 첫 번째 맵 추출
+
+		System.out.println("resultMap = "+resultMap); 
+
 		
 //		nextPrev.setBoardCd(vo.getBoardCd());
+		model.addAttribute("prevNo", resultMap.get("prevNo"));
+		model.addAttribute("nextNo", resultMap.get("nextNo"));
+		System.out.println("prevNo: " + resultMap.get("prevNo"));
+		System.out.println("nextNo: " + resultMap.get("nextNo"));
 		
+		// 행번호로 이전 다음글 조회
+		List<?> result = boardService.boardPrevNext(vo);
+		BoardVO resultVO = (BoardVO) result.get(0);
 		
-		for (Object item : nextPrev) {
-			BoardVO result = (BoardVO) item;
-			System.out.println("item = "+item);
-			
-			model.addAttribute("prevNo", result.getPrevNo());
-			model.addAttribute("nextNo", result.getNextNo());
-			System.out.println("이전 다음 검색조건: " + result.getPrevNextCondition());
-			
-			// 행번호로 이전 다음글 조회
-			BoardVO nextPrevVO = (BoardVO) boardService.selectPrevNext(result);
-			model.addAttribute("boardVO", nextPrevVO);
-			System.out.println("nextPrevVO: " + nextPrevVO);
-			
-			model.addAttribute("selectedId", nextPrevVO.getBoardSq());
-			System.out.println("selectedId: " +nextPrevVO.getBoardSq());
-		}
+		List<?> nextPrevVO = boardService.selectPrevNext(resultVO);
+		model.addAttribute("boardVO", nextPrevVO);
+		System.out.println("nextPrevVO: " + nextPrevVO);
+		
+		Map<String, Object> resultMap2 = (Map<String, Object>) nextPrevVO.get(0);
+		model.addAttribute("selectedId", resultMap2.get("boardSq"));
+		System.out.println("selectedId: " +resultMap2.get("boardSq"));
+		
 		
 		
 		
