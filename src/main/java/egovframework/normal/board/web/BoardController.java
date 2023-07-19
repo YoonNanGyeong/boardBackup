@@ -332,7 +332,8 @@ public class BoardController {
 		
 		// 조회한 객체 
 		BoardVO vo = selectBoard(boardVO, searchVO);
-		System.out.println("vo = "+vo);
+		
+		System.out.println("boardVO prevNextCondition = "+boardVO.getPrevNextCondition());
 		
 		// 첨부파일 조회
 		UploadFileVO uploadFileVO = new UploadFileVO();
@@ -368,13 +369,20 @@ public class BoardController {
 		Map<String, Object> resultMap = nextPrev.get(0); // 첫 번째 맵 추출
 
 		System.out.println("resultMap = "+resultMap); 
-
 		
 //		nextPrev.setBoardCd(vo.getBoardCd());
-		model.addAttribute("prevNo", resultMap.get("prevNo"));
+		Long resultPrev = (Long)resultMap.get("prevNo");
+		Long resultNext = (Long)resultMap.get("nextNo");
+		
+		model.addAttribute("prevNo", resultPrev);
 		model.addAttribute("nextNo", resultMap.get("nextNo"));
-		System.out.println("prevNo: " + resultMap.get("prevNo"));
+		
+		System.out.println("prevNo: " + resultPrev);
 		System.out.println("nextNo: " + resultMap.get("nextNo"));
+		
+		vo.setPrevNo(resultPrev);
+		vo.setNextNo(resultNext);
+		
 		
 		// 행번호로 이전 다음글 조회
 		List<?> result = boardService.boardPrevNext(vo);
