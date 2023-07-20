@@ -70,9 +70,6 @@ public class RestBoardController {
 			System.out.println("resultMap = "+resultMap);
 			
 			// object 타입 -> long 타입 
-//			Long longPrevNo = Long.valueOf(String.valueOf(resultMap.get("prevNo")));
-//			Long longNextNo = Long.valueOf(String.valueOf(resultMap.get("nextNo")));
-			
 			Long longPrevNo = 
 					(resultMap.get("prevNo") != null) ? Long.valueOf(resultMap.get("prevNo").toString()) : 0L;
 			Long longNextNo = 
