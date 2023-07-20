@@ -59,8 +59,9 @@
             <div class="hd-l"></div>
             <header class="hd">
             	<div class = "prev-next">
-            		<button id="prevNextCondition" name="prevNextCondition"  type="button" value="prev">이전</button>
-            		<button id="prevNextCondition" name="prevNextCondition" type="button" value="next">다음</button>
+                    <input type="text" id="prevNextCondition" name="prevNextCondition" value="" style="display: none;"/>
+            		<button class="prevNext-btn" id="prevNextBtn" name="prevNextBtn"  type="button" value="prev">이전</button>
+            		<button class="prevNext-btn" id="prevNextBtn" name="prevNextBtn" type="button" value="next">다음</button>
             	</div>
                 <!-- list title -->
                 <div id="title">

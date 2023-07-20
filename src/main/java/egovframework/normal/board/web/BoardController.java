@@ -332,8 +332,12 @@ public class BoardController {
 		
 		// 조회한 객체 
 		BoardVO vo = selectBoard(boardVO, searchVO);
+		Long boardSq = vo.getBoardSq();
+		model.addAttribute("selectedId",boardSq);
 		
-		System.out.println("boardVO prevNextCondition = "+boardVO.getPrevNextCondition());
+		// 이전 다음글 조건 확인
+		System.out.println("prevNextCondition = "+boardVO.getPrevNextCondition());
+		vo.setPrevNextCondition(boardVO.getPrevNextCondition());
 		
 		// 첨부파일 조회
 		UploadFileVO uploadFileVO = new UploadFileVO();
@@ -343,36 +347,31 @@ public class BoardController {
 		model.addAttribute("fileList",fileList);
 		model.addAttribute("fileSize",fileList.size());
 		
+		// 이전, 다음행 번호 key, value값으로 가져오기
 		List<Map<String, Object>> nextPrev = (List<Map<String, Object>>) boardService.boardPrevNext(vo);
 		Map<String, Object> resultMap = nextPrev.get(0); 
 
-		System.out.println("resultMap = "+resultMap); 
+		System.out.println("resultMap = "+resultMap); //해당 글 이전, 다음 글 번호
+		System.out.println("resultPrev: " + resultMap.get("prevNo"));
+		System.out.println("resultNext: " + resultMap.get("nextNo"));
 		
-//		nextPrev.setBoardCd(vo.getBoardCd());
-		Long resultPrev = (Long)resultMap.get("prevNo");
-		Long resultNext = (Long)resultMap.get("nextNo");
-		
-		model.addAttribute("prevNo", resultPrev);
+		model.addAttribute("prevNo", resultMap.get("prevNo"));
 		model.addAttribute("nextNo", resultMap.get("nextNo"));
 		
-		System.out.println("prevNo: " + resultPrev);
-		System.out.println("nextNo: " + resultMap.get("nextNo"));
+		// object 타입 -> long 타입 
+		Long longPrevNo = Long.valueOf(String.valueOf(resultMap.get("prevNo")));
+		Long longNextNo = Long.valueOf(String.valueOf(resultMap.get("nextNo")));
 		
-		vo.setPrevNo(resultPrev);
-		vo.setNextNo(resultNext);
+		vo.setPrevNo(longPrevNo);
+		vo.setNextNo(longNextNo);
 	
 		
 		// 행번호로 글 조회
-//		List<?> nextPrevVO = boardService.selectPrevNext(resultVO);
-//		model.addAttribute("boardVO", nextPrevVO);
-//		System.out.println("nextPrevVO: " + nextPrevVO);
-//		
-//		Map<String, Object> resultMap2 = (Map<String, Object>) nextPrevVO.get(0);
-//		model.addAttribute("selectedId", resultMap2.get("boardSq"));
-//		System.out.println("selectedId: " +resultMap2.get("boardSq"));
-		
-		
-		
+		List<?> nextPrevVO = boardService.selectPrevNext(vo);
+		BoardVO resultVO = (BoardVO) nextPrevVO.get(0);	// 조회한 글 결과
+		model.addAttribute("resultVO", resultVO);
+		System.out.println("resultVO: " + resultVO);		
+
 		
 		return "redirect:{selectedId}/detailBoard.do";
 	}
