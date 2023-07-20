@@ -14,23 +14,23 @@
     <script src="https://kit.fontawesome.com/dcfc9e7feb.js" ></script>
     <script type="text/javaScript" language="javascript" defer="defer">
         /* 상세조회 화면 function */
-        function fn_egov_select(id) {
+        function fn_select(id) {
     		location.href = id + "/detailBoard.do";
         }  
         
         /* 글 등록 화면 function */
-        function fn_egov_addView() {
+        function fn_addView() {
            	location.href = "/addBoardView.do";
         } 
         
         /* 글 목록 화면 function */
-        function fn_egov_selectList() {
+        function fn_selectList() {
         	document.listForm.action = "<c:url value='/boardList.do'/>";
            	document.listForm.submit();
         }
          
         /* pagination 페이지 링크 function */
-         function fn_egov_link_page(pageNo){
+         function fn_link_page(pageNo){
         	document.listForm.pageIndex.value = pageNo;
         	document.listForm.action = "<c:url value='/boardList.do'/>";
            	document.listForm.submit();
@@ -49,7 +49,7 @@
         <nav class="nv" > 
        		<h4> TEST BOARD</h4>
         </nav>
-        <div class="nv-r" onclick="javascript:fn_egov_link_page(1); return false;"></div>
+        <div class="nv-r" onclick="javascript:fn_link_page(1); return false;"></div>
         
         <div class="hd-l"></div>
         <header class="hd">
@@ -90,7 +90,7 @@
 	                	<label for="searchKeyword" style = "font-size: 0;">검색창</label>
 	                     <form:input path="searchKeyword" placeholder="검색" maxlength='20' alt="검색어 입력창"/>
 	                    <!-- 검색 아이콘 -->
-	                     <a href="javascript:fn_egov_selectList();" title="검색버튼">
+	                     <a href="javascript:fn_selectList();" title="검색버튼">
 	                     	<i class="fa-solid fa-magnifying-glass">
 	                   			<p style = "font-size : 0;">검색 버튼</p>
                      		</i>
@@ -131,7 +131,7 @@
 	            				<c:set var = "key" value = "${result.boardCd}"/>
 	            				<c:out value = "${category[key]}"/>
             				</td>
-            				<td scope = "col"><a href="javascript:fn_egov_select('${result.boardSq}')" title="제목링크로 게시글 상세보기"><c:out value="${result.title}"/></a></td>
+            				<td scope = "col"><a href="javascript:fn_select('${result.boardSq}')" title="제목링크로 게시글 상세보기"><c:out value="${result.title}"/></a></td>
             				<td scope = "col"><c:out value="${result.viewCnt}"/>&nbsp;</td>
             				<td scope = "col"><c:out value="${result.userNm}"/>&nbsp;</td>
             				<td scope = "col"><c:out value="${result.updateDt}"/>&nbsp;</td>
@@ -147,11 +147,11 @@
         	<footer class="ft">
 		       	<div class="pagingArea">
 		               <div id="paging">
-		                   <ui:pagination paginationInfo = "${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
+		                   <ui:pagination paginationInfo = "${paginationInfo}" type="image" jsFunction="fn_link_page" />
         					<form:hidden path="pageIndex" />		
 		               </div>
 		               <div id="sysbtn">
-	       	              <a href="javascript:fn_egov_addView();" id="writeBtn">
+	       	              <a href="javascript:fn_addView();" id="writeBtn">
 	       	              	글 작성
 	       	              </a>
 		               </div>

@@ -36,7 +36,6 @@ public class RestBoardController {
 		@GetMapping("{fileSq}/deleteFile.do")
 		@ResponseBody
 		public RestResponse<Object> deleteFile(@PathVariable("fileSq")Long fileSq, Model model ) throws Exception{
-//			System.out.println("fileSq = " + fileSq);
 			
 			UploadFileVO uploadFile = new UploadFileVO();
 			uploadFile.setFileSq(fileSq);
@@ -63,26 +62,12 @@ public class RestBoardController {
 						@RequestBody BoardVO boardVO,
 						@ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model)  throws Exception {
 			System.out.println("상세조회 이전,다음 화면 !");
-		
-			
-			String condition = boardVO.getPrevNextCondition();
-			// 이전 다음글 조건 확인
-			System.out.println("prevNextCondition = "+condition);
 			
 			
 			// 이전, 다음행 번호 key, value값으로 가져오기
 			List<Map<String, Object>> nextPrev = (List<Map<String, Object>>) boardService.boardPrevNext(boardVO);
-			Map<String, Object> resultMap = nextPrev.get(0); 
-
-			System.out.println("resultMap = "+resultMap); //해당 글 이전, 다음 글 번호
-			System.out.println("resultPrev: " + resultMap.get("prevNo"));
-			System.out.println("resultNext: " + resultMap.get("nextNo"));
+			Map<String, Object> resultMap = nextPrev.get(0);  //해당 글 이전, 다음 행번호
 			
-			if(condition.contains("prev")) {			
-				model.addAttribute("prevNo", resultMap.get("prevNo"));
-			}else if(condition.contains("next")) {			
-				model.addAttribute("nextNo", resultMap.get("nextNo"));
-			}
 			
 			// object 타입 -> long 타입 
 			Long longPrevNo = Long.valueOf(String.valueOf(resultMap.get("prevNo")));

@@ -15,20 +15,20 @@
     <script type="text/javaScript" language="javascript" defer="defer">
     
     // 글 수정 화면
-    function fn_egov_modifyView(id) {
+    function fn_modifyView(id) {
 		document.detailForm.selectedId.value = id;
 		document.detailForm.action = "<c:url value='/updateBoardView.do'/>";
 		document.detailForm.submit();
 	} 
 
     /* 글 목록 화면 function */
-    function fn_egov_selectList() {
+    function fn_selectList() {
     	document.detailForm.action = "<c:url value='/boardList.do'/>";
        	document.detailForm.submit();
     }
     
     /* 글 삭제 function */
-    function fn_egov_delete() {
+    function fn_delete() {
     	if(!confirm("삭제 하시겠습니까?")){
     		document.detailForm.action = "<c:url value='/detailBoard.do'/>";
     	}else{    		
@@ -51,7 +51,7 @@
    		 <!-- 상단바 -->
         <div class="nv-l"></div>
         <nav class="nv">
-        <a href="javascript:fn_egov_selectList();" title="홈(게시글 목록)">
+        <a href="javascript:fn_selectList();" title="홈(게시글 목록)">
             <h4>TEST BOARD</h4>
         </a>
         </nav>
@@ -131,15 +131,15 @@
         <footer class="ft">
          <div class="btns">
              <!-- 목록 버튼 -->
-             <a href="javascript:fn_egov_selectList();">
+             <a href="javascript:fn_selectList();">
              <button id="listBtn" type= "button">목록</button>
              </a>
              <!-- 수정 버튼 -->
-             <a href="javascript:fn_egov_modifyView('${boardVO.boardSq}');">
+             <a href="javascript:fn_modifyView('${boardVO.boardSq}');">
              <button id="editBtn"  type= "button">수정 </button>
              </a>
              <!-- 삭제 버튼 -->
-             <a href="javascript:fn_egov_delete();">
+             <a href="javascript:fn_delete();">
              <button id="deleteBtn"   type= "button">삭제</button>
 			</a>
          </div>   

@@ -19,13 +19,13 @@
     <link type="text/css" rel="stylesheet" href="<c:url value='/css/register.css?after'/>"/>
     <script type="text/javascript" language="javaScript" defer = "defer">    
 		/* 글 목록 화면 function */
-	    function fn_egov_selectList() {
+	    function fn_selectList() {
 	       	document.detailForm.action = "<c:url value='/boardList.do'/>";
 	       	document.detailForm.submit();
 	    }
 	    
 	    /* 글 삭제 function */
-	    function fn_egov_delete() {
+	    function fn_delete() {
 	    	if(!confirm("삭제하시겠습니까?")){
 	    		document.detailForm.action = "<c:url value='/detailBoard.do'/>";
 	    	}else{    		
@@ -44,7 +44,7 @@
     <!-- 상단바 -->
         <div class="nv-l"></div>
         <nav class="nv">
-	        <a href="javascript:fn_egov_selectList();" title="홈(게시글 목록)">
+	        <a href="javascript:fn_selectList();" title="홈(게시글 목록)">
 	            <h4>TEST BOARD</h4>
 	        </a>
         </nav>
@@ -155,7 +155,7 @@
 		         	</button>
 	         	</a>
 	         	
-	         	<a  href="javascript:fn_egov_selectList();">
+	         	<a  href="javascript:fn_selectList();">
 		         	<button id="listBtn" type="button">
 		         			<!-- 목록 -->
 			   			  <spring:message code="button.list" />
@@ -164,7 +164,7 @@
          	
 	             <!-- 삭제 -->
 	             <c:if test="${registerFlag == 'modify'}">
-	              <a href="javascript:fn_egov_delete();">
+	              <a href="javascript:fn_delete();">
 		         	<button id="delPrevBtn" type="button">         	
 			              <spring:message code="button.delete" />           
 		         	</button>

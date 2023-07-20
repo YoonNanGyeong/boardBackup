@@ -482,7 +482,6 @@ public class BoardController {
 		}
 	}
 		
-		
 
 		status.setComplete();
 		return "redirect:{boardNo}/detailBoard.do";
