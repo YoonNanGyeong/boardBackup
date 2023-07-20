@@ -130,18 +130,23 @@
         <div class="ft-l"></div>
         <footer class="ft">
          <div class="btns">
-             <!-- 목록 버튼 -->
-             <a href="javascript:fn_selectList();">
-             <button id="listBtn" type= "button">목록</button>
-             </a>
-             <!-- 수정 버튼 -->
-             <a href="javascript:fn_modifyView('${boardVO.boardSq}');">
-             <button id="editBtn"  type= "button">수정 </button>
-             </a>
-             <!-- 삭제 버튼 -->
-             <a href="javascript:fn_delete();">
-             <button id="deleteBtn"   type= "button">삭제</button>
-			</a>
+             <div class="left-btn">
+                 <!-- 목록 버튼 -->
+                 <a href="javascript:fn_selectList();">
+                 <button id="listBtn" type= "button">목록</button>
+                 </a>
+             </div>    
+
+             <div class="right-btn">
+                 <!-- 수정 버튼 -->
+                 <a href="javascript:fn_modifyView('${boardVO.boardSq}');">
+                 <button id="editBtn"  type= "button">수정 </button>
+                 </a>
+                 <!-- 삭제 버튼 -->
+                 <a href="javascript:fn_delete();">
+                 <button id="deleteBtn"   type= "button">삭제</button>
+                </a>
+             </div>             
          </div>   
         </footer>
         <div class="ft-r"></div>

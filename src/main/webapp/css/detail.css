@@ -225,10 +225,10 @@ header {
 
 .ft .btns{
 	display: flex;
-	justify-content: flex-end;
-    margin-right: 30px;
-    margin-bottom: 30px;
+	justify-content: space-between;
+    margin: 0 30px;
 }
+
 
 /*  수정 버튼 */
 #editBtn {
