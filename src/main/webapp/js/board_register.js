@@ -105,43 +105,35 @@ const fn_validationOfTitle = e => {
 // 내용 검증
 const fn_validationOfContent = e => {
 	//필드입력값 
-	let $contentValue = document.getElementById("content").value;
-	//필드입력값 길이
-	let lenOfContent = $contentValue.length;
-
+	let $contentValue = e.target.value;
 						
-	if(e.key != 'Enter'){
-		return;
+
+	if($contentValue == ''){
+		$errContent.classList.remove('hidden');
+		$errContent.textContent = '*내용을 입력해주세요';
+		$content.focus();
+		$contentValue = ' ';
+		
+		resultOfContent = false;
+	}else{
+		$errContent.classList.add('hidden');
+		$content.focus();
+		
+		resultOfContent = true;
 	}
+	return;
 	
-	
-	if(e.key == 'Enter'){	
-	 	if(lenOfContent == 0){
-	 		$errContent.classList.remove('hidden');
-	 		$errContent.textContent = '*내용을 입력해주세요';
-	 		$content.focus();
-	 		$contentValue = ' ';
-	 		
-	 		resultOfContent = false;
-	 	}else{
-	 		$errContent.classList.add('hidden');
-	 		$content.focus();
-	 		
-	 		resultOfContent = true;
-	 	}
-	 	return;
-	}
 
 	
 }
 
 // 키보드 입력 이벤트
 	// 닉네임 
-	$user.addEventListener('keydown', fn_validationOfUser, false);
+	$user.addEventListener('change', fn_validationOfUser, false);
 	// 제목 
-	$title.addEventListener('keydown', fn_validationOfTitle, false);
+	$title.addEventListener('change', fn_validationOfTitle, false);
 	// 내용
-	$content.addEventListener('keydown', fn_validationOfContent, false);
+	$content.addEventListener('change', fn_validationOfContent, false);
 	
  /* 글 등록 function */
  $addBtn.addEventListener('click', e => {
