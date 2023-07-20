@@ -158,7 +158,7 @@ $addBtn.addEventListener('click', e => {
 			}
 
 			if (regExp.test($user.value.trim())) {
-				valiParse.push(`작성자명은 특수문자를 입력할 수 없습니다!`);
+				valiParse.push("작성자명은 특수문자를 입력할 수 없습니다!");
 			}
 
 			for (let i = 0; i < valiParse.length; i++) {
