@@ -22,10 +22,11 @@ let resultOfUser = false;
 let resultOfTitle = false;
 let resultOfContent = false;
 
+// 특수문자 체크 정규식
+const regExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g;
+
 // 닉네임 검증
 const fn_validationOfUser = e => {
-	// 특수문자 체크 정규식
-	const regExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g;
 
 	// 입력 필드 값
 	let $userValue = e.target.value;
@@ -102,7 +103,7 @@ const fn_validationOfContent = e => {
 
 }
 
-// 키보드 입력 이벤트
+// 이벤트 리스너 등록
 // 닉네임 
 $user.addEventListener('change', fn_validationOfUser, false);
 // 제목 
@@ -135,7 +136,40 @@ $addBtn.addEventListener('click', e => {
 				frm.submit();
 			}
 		} else {
-			alert('입력되지 않은 항목이 있습니다. :(');
+			let valiTxt = [];
+			let valiParse = [];
+
+			if ($title.value.trim() == '' || $content.value.trim() == '' || $user.value.trim() == '') {
+				if ($title.value.trim() == '') {
+					valiTxt.push("제목");
+				}
+
+				if ($content.value.trim() == '') {
+					valiTxt.push("내용");
+				}
+
+				if ($user.value.trim() == '') {
+					valiTxt.push("작성자명");
+				}
+
+
+				for (let i = 0; i < valiTxt.length; i++) {
+					valiParse.push(`${valiTxt[i]}을 입력해주세요!`);
+				}
+
+			}
+			if (regExp.test($user.value.trim())) {
+				valiTxt.push("특수문자");
+				for (let i = 0; i < valiTxt.length; i++) {
+					valiParse.push(`작성자명은 ${valiTxt[i]}를 입력할 수 없습니다!`);
+				}
+			}
+			for (let i = 0; i < valiParse.length; i++) {
+				alert(valiParse[i]);
+			}
+
+			console.log(valiTxt);
+			console.log(valiParse);
 		}
 
 	}
