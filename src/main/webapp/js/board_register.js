@@ -138,35 +138,33 @@ $addBtn.addEventListener('click', e => {
 		} else {
 			let valiTxt = [];
 			let valiParse = [];
-
-			if ($title.value.trim() == '' || $content.value.trim() == '' || $user.value.trim() == '') {
-				if ($title.value.trim() == '') {
-					valiTxt.push("제목");
-				}
-
-				if ($content.value.trim() == '') {
-					valiTxt.push("내용");
-				}
-
-				if ($user.value.trim() == '') {
-					valiTxt.push("작성자명");
-				}
+			let result = [];
 
 
-				for (let i = 0; i < valiTxt.length; i++) {
-					valiParse.push(`${valiTxt[i]}을 입력해주세요!`);
-				}
-
+			if ($title.value.trim() == '') {
+				valiTxt.push("제목");
 			}
+
+			if ($content.value.trim() == '') {
+				valiTxt.push("내용");
+			}
+
+			if ($user.value.trim() == '') {
+				valiTxt.push("작성자명");
+			}
+
+			for (let i = 0; i < valiTxt.length; i++) {
+				valiParse.push(`${valiTxt[i]}을 입력해주세요!`);
+			}
+
 			if (regExp.test($user.value.trim())) {
-				valiTxt.push("특수문자");
-				for (let i = 0; i < valiTxt.length; i++) {
-					valiParse.push(`작성자명은 ${valiTxt[i]}를 입력할 수 없습니다!`);
-				}
+				valiParse.push(`작성자명은 특수문자를 입력할 수 없습니다!`);
 			}
+
 			for (let i = 0; i < valiParse.length; i++) {
-				alert(valiParse[i]);
+				result.push(valiParse[i]);
 			}
+			alert(result);
 
 			console.log(valiTxt);
 			console.log(valiParse);
