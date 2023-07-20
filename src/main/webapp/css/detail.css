@@ -96,13 +96,13 @@ header {
     margin: 30px 0;
 }
 
-#title{
+.title{
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
 }
 
-#title a{
+.title a{
     color: #0070D2;
 }
 
@@ -115,7 +115,7 @@ header {
 	font-size: 0.8rem;
 }
 
-#title h4{
+.title h4{
 	color: #0070D2;
 }
 

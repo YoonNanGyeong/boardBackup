@@ -1,20 +1,33 @@
 package egovframework.normal.board.web.api;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import egovframework.normal.board.service.BoardDefaultVO;
+import egovframework.normal.board.service.BoardService;
+import egovframework.normal.board.service.BoardVO;
 import egovframework.normal.board.service.UploadFileService;
 import egovframework.normal.board.service.UploadFileVO;
 
 @Controller
 @RequestMapping("/api")
 public class RestBoardController {
+	
+	@Resource(name = "boardService")
+	private BoardService boardService;
 	
 	@Resource(name = "uploadFileService")
 	private UploadFileService uploadFileService;
@@ -36,11 +49,64 @@ public class RestBoardController {
 		    if(cnt == 1){
 		      result = RestResponse.createRestResponse("00", "성공", null);
 		    }else{
-		      result = RestResponse.createRestResponse("99", "fail", null);
+		      result = RestResponse.createRestResponse("99", "실패", null);
 		    }
 		    
 		    return result;
 		}
+		
+		
+		//이전, 다음글 상세조회 
+		@PostMapping("/detailBoard.do")
+		@ResponseBody
+		public RestResponse<Object> detailPrevNext(
+						@RequestBody BoardVO boardVO,
+						@ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model)  throws Exception {
+			System.out.println("상세조회 이전,다음 화면 !");
+		
+			
+			String condition = boardVO.getPrevNextCondition();
+			// 이전 다음글 조건 확인
+			System.out.println("prevNextCondition = "+condition);
+			
+			
+			// 이전, 다음행 번호 key, value값으로 가져오기
+			List<Map<String, Object>> nextPrev = (List<Map<String, Object>>) boardService.boardPrevNext(boardVO);
+			Map<String, Object> resultMap = nextPrev.get(0); 
+
+			System.out.println("resultMap = "+resultMap); //해당 글 이전, 다음 글 번호
+			System.out.println("resultPrev: " + resultMap.get("prevNo"));
+			System.out.println("resultNext: " + resultMap.get("nextNo"));
+			
+			if(condition.contains("prev")) {			
+				model.addAttribute("prevNo", resultMap.get("prevNo"));
+			}else if(condition.contains("next")) {			
+				model.addAttribute("nextNo", resultMap.get("nextNo"));
+			}
+			
+			// object 타입 -> long 타입 
+			Long longPrevNo = Long.valueOf(String.valueOf(resultMap.get("prevNo")));
+			Long longNextNo = Long.valueOf(String.valueOf(resultMap.get("nextNo")));
+			
+			boardVO.setPrevNo(longPrevNo);
+			boardVO.setNextNo(longNextNo);
+		
+			
+			// 행번호로 글 조회
+			List<Map<String, Object>> nextPrevVO = (List<Map<String, Object>>) boardService.selectPrevNext(boardVO);
+			Map<String, Object> resultVO = nextPrevVO.get(0); 
+			System.out.println("resultVO: " + resultVO);		
+			
+			RestResponse<Object> res = null;
+			
+			if(resultVO.size() > 0) {				
+				res = RestResponse.createRestResponse("00", "성공", null);
+			}else {
+				res = RestResponse.createRestResponse("99", "실패", null);
+			}
+
+			return res ;
+		} 
 		
 
 }

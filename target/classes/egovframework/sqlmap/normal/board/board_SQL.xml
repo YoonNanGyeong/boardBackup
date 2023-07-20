@@ -159,9 +159,9 @@
  						FROM TEST_BOARD_TB  
  					   WHERE use_yn = 'Y' AND board_cd = #boardCd#)t1 
  					ORDER BY rownum)t2 
- 			WHERE
  	  ]]> 
- 	 		
+ 	  
+ 	  	<dynamic prepend="WHERE"> 	  		
 		   <isEqual property="prevNextCondition" compareValue="next">
 		   		 next_no = #nextNo# + 1
 		   </isEqual>
@@ -169,6 +169,8 @@
 		   <isEqual property="prevNextCondition" compareValue="prev">
 		   		 prev_no = #prevNo# - 1
 		   </isEqual>
+ 	  	</dynamic>
+ 	 		
  	  
 
 	</select>  

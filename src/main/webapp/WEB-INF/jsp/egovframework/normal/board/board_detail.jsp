@@ -45,7 +45,9 @@
 <body>
 <form:form modelAttribute="searchVO" id="detailForm" name="detailForm" method="post">
  		<input type="hidden" id="selectedId" name="selectedId" />
+        <input type="hidden" id="boardCd" name="boardCd" value="${boardVO.boardCd}" />
         <input type="hidden" id="boardSq" name="boardSq" value="${boardVO.boardSq}" />
+        
    		 <!-- 상단바 -->
         <div class="nv-l"></div>
         <nav class="nv">
@@ -64,7 +66,7 @@
             		<button class="prevNext-btn" id="prevNextBtn" name="prevNextBtn" type="button" value="next">다음</button>
             	</div>
                 <!-- list title -->
-                <div id="title">
+                <div class="title">
                     <h4 style = "color: #0070D2;">
 						<c:set var = "key" value = "${boardVO.boardCd}"/>
 	            		<c:out value = "${category[key]}"/>
@@ -117,9 +119,6 @@
 				                         <a href="/fileDownload.do?storeNm=${file.storeNm}">
 				                        	<input type="text" id="storeNm" value="${file.storeNm}" name="storeNm" readonly="readonly" alt="첨부파일명 링크" style="display: none;"/>
 				                        	<input type="text" id="uploadNm" value="${file.uploadNm}" name="uploadNm" readonly="readonly" alt="첨부파일명 링크"/>
-<%-- 					                         <c:if test="${fn:contains(file.fileType,'image')}">	 --%>
-<%-- 					                          <img src="<c:url value='/images/board/upload/${file.storeNm}'/>" alt="image" style="width: 20px; heigth: 20px;"> --%>
-<%-- 					                         </c:if> --%>
 				                         </a>
 	               		  		</div>
 							</c:forEach>
@@ -149,5 +148,5 @@
         
     </form:form>
 </body>
-<script language="javaScript" src="/js/board_detail.js?after"></script>
+<script type="module" language="javaScript" src="/js/board_detail.js?after"></script>
 </html>
