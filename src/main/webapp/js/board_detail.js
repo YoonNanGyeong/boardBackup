@@ -5,7 +5,7 @@ for(const ele of $prevNextBtn){
 	ele.addEventListener('click', e => {
 		if(ele.value === 'prev'){
 			$condition.value = ele.value;
-		}else{
+		}else if(ele.value === 'next'){
 			$condition.value = ele.value;
 		}
 
