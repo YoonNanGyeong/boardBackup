@@ -26,7 +26,7 @@ for(const ele of $prevNextBtn){
 			.then(res => {
 				if(res.header.rtcd =='00'){
 					console.log(res.rtmsg);
-					location.href = "/"+$boardSq.value+"/detailBoard.do";
+					location.href = "/"+ res.data +"/detailBoard.do";
 				}else{
 					console.log(res.rtmsg);
 				}

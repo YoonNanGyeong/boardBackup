@@ -96,11 +96,12 @@ public class RestBoardController {
 			List<Map<String, Object>> nextPrevVO = (List<Map<String, Object>>) boardService.selectPrevNext(boardVO);
 			Map<String, Object> resultVO = nextPrevVO.get(0); 
 			System.out.println("resultVO: " + resultVO);		
+			Long boardSq = Long.valueOf(String.valueOf(resultVO.get("boardSq")));
 			
 			RestResponse<Object> res = null;
 			
 			if(resultVO.size() > 0) {				
-				res = RestResponse.createRestResponse("00", "성공", null);
+				res = RestResponse.createRestResponse("00", "성공", boardSq);
 			}else {
 				res = RestResponse.createRestResponse("99", "실패", null);
 			}
