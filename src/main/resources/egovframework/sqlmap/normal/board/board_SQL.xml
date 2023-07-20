@@ -159,22 +159,17 @@
  						FROM TEST_BOARD_TB  
  					   WHERE use_yn = 'Y' AND board_cd = #boardCd#)t1 
  					ORDER BY rownum)t2 
+ 			WHERE
  	  ]]> 
- 	  
- 	  <isParameterPresent prepend="WHERE">
-	 	  <isNotNull property="prevNextCondition">
-			   <isEqual property="prevNextCondition" compareValue="next">
-			   		 next_no = #nextNo#
-			   </isEqual>
-	 	  </isNotNull>
-	 	  
-	 	  <isNotNull property="prevNextCondition">
-			   <isEqual property="prevNextCondition" compareValue="prev">
-			   		 prev_no = #prevNo#
-			   </isEqual>
-	 	  </isNotNull>
- 	  </isParameterPresent>
- 	  
+ 	 
+	   <isEqual property="prevNextCondition" compareValue="next">
+	   		 next_no = #nextNo#
+	   </isEqual>
+
+	   <isEqual property="prevNextCondition" compareValue="prev">
+	   		 prev_no = #prevNo#
+	   </isEqual>
+
 	</select>  
 	
 
