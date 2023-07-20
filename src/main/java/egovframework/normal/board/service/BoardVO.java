@@ -28,12 +28,20 @@ public class BoardVO extends BoardDefaultVO {
 	// 이전, 다음글 번호
 	private long nextNo;
 	private long prevNo;
+	// 글 순번
+	private long rowNo;
 	
 	// 이전 다음글 검색 조건
 	private String prevNextCondition;
 	
 	
-
+	
+	public long getRowNo() {
+		return rowNo;
+	}
+	public void setRowNo(long rowNo) {
+		this.rowNo = rowNo;
+	}
 	public String getPrevNextCondition() {
 		return prevNextCondition;
 	}

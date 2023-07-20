@@ -61,31 +61,44 @@ public class RestBoardController {
 		public RestResponse<Object> detailPrevNext(
 						@RequestBody BoardVO boardVO,
 						@ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model)  throws Exception {
-			System.out.println("상세조회 이전,다음 화면 !");
+			System.out.println("---------- 상세조회 이전,다음 ----------");
 			
 			
 			// 이전, 다음행 번호 key, value값으로 가져오기
 			List<Map<String, Object>> nextPrev = (List<Map<String, Object>>) boardService.boardPrevNext(boardVO);
 			Map<String, Object> resultMap = nextPrev.get(0);  //해당 글 이전, 다음 행번호
-			
+			System.out.println("resultMap = "+resultMap);
 			
 			// object 타입 -> long 타입 
-			Long longPrevNo = Long.valueOf(String.valueOf(resultMap.get("prevNo")));
-			Long longNextNo = Long.valueOf(String.valueOf(resultMap.get("nextNo")));
+//			Long longPrevNo = Long.valueOf(String.valueOf(resultMap.get("prevNo")));
+//			Long longNextNo = Long.valueOf(String.valueOf(resultMap.get("nextNo")));
 			
-			boardVO.setPrevNo(longPrevNo);
+			Long longPrevNo = 
+					(resultMap.get("prevNo") != null) ? Long.valueOf(resultMap.get("prevNo").toString()) : 0L;
+			Long longNextNo = 
+					(resultMap.get("nextNo") != null) ? Long.valueOf(resultMap.get("nextNo").toString()) : 0L;
+
+			System.out.println("longPrevNo = " + longPrevNo);
+			System.out.println("longNextNo = " + longNextNo);
+
+			boardVO.setPrevNo(longPrevNo);	
 			boardVO.setNextNo(longNextNo);
-		
-			
+
 			// 행번호로 글 조회
 			List<Map<String, Object>> nextPrevVO = (List<Map<String, Object>>) boardService.selectPrevNext(boardVO);
-			Map<String, Object> resultVO = nextPrevVO.get(0); 
+			Map<String, Object> resultVO = null; 
+			if(nextPrevVO.size() > 0) {				
+				resultVO = nextPrevVO.get(0);
+			}else {
+				resultVO = null;
+			}
+			
 			System.out.println("resultVO: " + resultVO);		
-			Long boardSq = Long.valueOf(String.valueOf(resultVO.get("boardSq")));
 			
 			RestResponse<Object> res = null;
 			
-			if(resultVO.size() > 0) {				
+			if(resultVO != null) {				
+				Long boardSq = Long.valueOf(String.valueOf(resultVO.get("boardSq")));
 				res = RestResponse.createRestResponse("00", "성공", boardSq);
 			}else {
 				res = RestResponse.createRestResponse("99", "실패", null);

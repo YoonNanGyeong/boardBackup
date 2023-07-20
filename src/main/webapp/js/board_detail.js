@@ -26,9 +26,19 @@ for(const ele of $prevNextBtn){
 			.then(res => {
 				if(res.header.rtcd =='00'){
 					console.log(res.rtmsg);
-					location.href = "/"+ res.data +"/detailBoard.do";
-				}else{
+
+				  if(res.data != null){
+					  location.href = "/"+ res.data +"/detailBoard.do";
+				  }else if(res.data == null){
+					$condition.value = null;
+				  }
+				}else if(res.header.rtcd =='99'){
 					console.log(res.rtmsg);
+					if($condition.value == 'next'){
+						alert("다음글이 없습니다. :(");
+					}else{
+						alert("이전글이 없습니다. :(");
+					}
 				}
 			 }
 			)

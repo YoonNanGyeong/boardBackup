@@ -139,7 +139,7 @@
 	<select id="boardDAO.boardPrevNext"  parameterClass="boardVO" resultClass="egovMap">
 	<![CDATA[
  		SELECT DISTINCT t2.next_no, t2.prev_no 
- 		  FROM (SELECT rownum, lag(rownum)over(ORDER BY rownum) AS prev_no, lead(rownum)over(ORDER BY rownum) AS next_no, board_sq 
+ 		  FROM (SELECT rownum AS row_no, lag(rownum)over(ORDER BY rownum) AS prev_no, lead(rownum)over(ORDER BY rownum) AS next_no, board_sq 
 				FROM (SELECT board_sq, board_cd, title, content, view_cnt, user_nm,  
  						 use_yn, to_char(update_dt, 'yyyy.mm.dd hh24:mi')as update_dt , create_dt  
  					FROM TEST_BOARD_TB  
@@ -153,7 +153,7 @@
 	<![CDATA[
  		SELECT t2.board_sq, t2.board_cd, t2.title, t2.content, t2.view_cnt, t2.user_nm,  
  		  		   t2.use_yn, t2.update_dt , t2.create_dt 	 
- 		FROM (SELECT rownum, lag(rownum)over(ORDER BY rownum) AS prev_no, lead(rownum)over(ORDER BY rownum) AS next_no, t1.* 
+ 		FROM (SELECT rownum  AS row_no, lag(rownum)over(ORDER BY rownum) AS prev_no, lead(rownum)over(ORDER BY rownum) AS next_no, t1.* 
  					FROM (SELECT board_sq, board_cd, title, content, view_cnt, user_nm,  
  							 use_yn, to_char(update_dt, 'yyyy.mm.dd hh24:mi')as update_dt , create_dt  
  						FROM TEST_BOARD_TB  
@@ -163,11 +163,11 @@
  	  
  	  	<dynamic prepend="WHERE"> 	  		
 		   <isEqual property="prevNextCondition" compareValue="next">
-		   		 next_no = #nextNo# + 1
+		   		 t2.row_no = #nextNo# 
 		   </isEqual>
 
 		   <isEqual property="prevNextCondition" compareValue="prev">
-		   		 prev_no = #prevNo# - 1
+		   		t2.row_no = #prevNo#
 		   </isEqual>
  	  	</dynamic>
  	 		

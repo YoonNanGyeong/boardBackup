@@ -139,37 +139,41 @@
         
         <div class="ft-l"></div>
         <footer class="ft">
-         <div class="btns">
-         	<button id="writeBtn" type="button">
-							<!--  등록 -->
-	                     <c:if test="${registerFlag == 'create'}"><spring:message code="button.create" /></c:if>
-							<!--  수정 -->
-	                     <c:if test="${registerFlag == 'modify'}"><spring:message code="button.modify" /></c:if>
-         	</button>
-         	
-         	     	
-	         	 <a  href="javascript:document.detailForm.reset();">
-		         	<button id="delPrevBtn" type="button">         	
-			   			 <!-- 취소 -->
-			   			 <spring:message code="button.reset" />
-		         	</button>
-	         	</a>
-	         	
-	         	<a  href="javascript:fn_selectList();">
-		         	<button id="listBtn" type="button">
-		         			<!-- 목록 -->
-			   			  <spring:message code="button.list" />
-		         	</button>
-	         	</a>
-         	
-	             <!-- 삭제 -->
-	             <c:if test="${registerFlag == 'modify'}">
-	              <a href="javascript:fn_delete();">
-		         	<button id="delPrevBtn" type="button">         	
-			              <spring:message code="button.delete" />           
-		         	</button>
-		         	</a>      
-	   			 </c:if>
+         <div class="btns"> 
+			<div class="left-btn">
+				<!-- 목록 -->
+			   <a  href="javascript:fn_selectList();">
+				   <button id="listBtn" type="button">
+						   <spring:message code="button.list" />
+				   </button>
+			   </a>
+			</div>
+			<div class="right-btn">
+				<button id="writeBtn" type="button">
+				   <!--  등록 -->
+				   <c:if test="${registerFlag == 'create'}"><spring:message code="button.create" /></c:if>
+				   <!--  수정 -->
+				   <c:if test="${registerFlag == 'modify'}"><spring:message code="button.modify" /></c:if>
+				</button>
+				
+						 
+			   <!-- 취소 -->
+			   <a  href="javascript:document.detailForm.reset();">
+				   <button id="delPrevBtn" type="button">         	
+						   <spring:message code="button.reset" />
+				   </button>
+			   </a>
+			   
+		   
+			   <!-- 삭제 -->
+			   <c:if test="${registerFlag == 'modify'}">
+				   <a href="javascript:fn_delete();">
+					   <button id="delPrevBtn" type="button">         	
+							   <spring:message code="button.delete" />           
+					   </button>
+				   </a>      
+			   </c:if>
+			</div>
 	   			 
          </div>   
         </footer>
