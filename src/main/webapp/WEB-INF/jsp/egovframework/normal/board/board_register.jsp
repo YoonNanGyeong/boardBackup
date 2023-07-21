@@ -98,7 +98,8 @@
             
                         
 	            <div class="file-area">
-	                <label for="uploadFile">첨부파일</label>
+	                <label for="uploadFile">첨부파일</label> 
+					<p style="color: #0070D2; font-size: 14px;">최대 300MB까지 업로드 가능 합니다.</p>
 						<div class="file-list">
 							<form:input type="file" path="uploadFile" title="첨부파일 추가" multiple="multiple" />
 					  
@@ -115,6 +116,7 @@
 		                		  	첨부파일 다운로드
 		                		  	<i class="fa-solid fa-download" style="color: #0070D2;"></i>
 	                		  	  </label>
+								  
 									<c:forEach var="file" items="${fileList}" varStatus="status">
 										<input id="fileSq" name="fileSq" value = "${file.fileSq}" style="display:none;" />
 			              		  		<div class="files">

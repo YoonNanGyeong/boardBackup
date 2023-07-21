@@ -194,51 +194,97 @@ $addBtn.addEventListener('click', e => {
 });
 
 
-
-
-
-
-
-
-// 첨부한 파일명 보이게
 const $uploadFile = document.getElementById('uploadFile');
 const $fileNameDiv = document.getElementById('fileName');
+const maxSize = 300 * 1024 * 1024;
 
+// 첨부파일 추가 이벤트(첨부파일명 보임, 용량 300mb 넘으면 알림 팝업)
 $uploadFile.addEventListener('change', function (event) {
 	$fileNameDiv.innerHTML = '';
 	for (let i = 0; i < $uploadFile.files.length; i++) {
 		const fileNm = $uploadFile.files[i].name;	// 첨부한 파일명
-		const $addFile = document.createElement('div');
-		$addFile.classList.add("addFile");	// 파일명, 이미지 표시할 태그 생성하고 클래스 추가
+		const $fileSize = $uploadFile.files[i].size;	// 첨부한 파일 사이즈
+		
+		
+		// 첨부파일 용량 체크: 300mb 초과
+		if($uploadFile.files && $fileSize > maxSize){
+			alert("파일 용량이 300MB 초과 했습니다. :(");
+			$uploadFile.value = null;
+			return;
+		}else{
+			const $addFile = document.createElement('div');	// 첨부파일정보 태그
+			$addFile.classList.add("addFile");	// 파일명, 이미지 표시할 태그 생성하고 클래스 추가
 
-		const fileNameEle = document.createElement('p');	// 파일명을 표시할 태그
-		fileNameEle.textContent = fileNm;
-		$addFile.appendChild(fileNameEle);	//fileName div에 자식 태그로 addFile 추가
+			const fileNo = document.createElement('input');
+			fileNo.setAttribute("type","hidden");
+			fileNo.setAttribute("id","fileNo");
+			fileNo.setAttribute("name","fileNo");
+			fileNo.setAttribute("value",i);
 
-		//첨부파일명에 해당 확장자명 포함이면 썸네일 제공
-		if (/\.(jpe?g|png|gif)$/i.test(fileNm)) {
-			const fileImgEle = document.createElement('img');	// 이미지를 표시할 태그
-			console.log('contains image!');
-			const reader = new FileReader();
+			$addFile.appendChild(fileNo);	//file 순번을 저장할 태그 추가
 
-			reader.onload = function (e) {
-				fileImgEle.setAttribute("src", e.target.result);
-				fileImgEle.setAttribute("width", "40px");
-				fileImgEle.setAttribute("height", "40px");
+
+			const fileNameEle = document.createElement('p');	// 파일명을 표시할 태그
+			fileNameEle.textContent = fileNm;
+			$addFile.appendChild(fileNameEle);	//fileName div에 자식 태그로 addFile 추가
+			
+
+			//첨부파일명에 해당 확장자명 포함이면 썸네일 제공
+			if (/\.(jpe?g|png|gif)$/i.test(fileNm)) {
+				const fileImgEle = document.createElement('img');	// 이미지를 표시할 태그
+				console.log('contains image!');
+				const reader = new FileReader();
+	
+				reader.onload = function (e) {
+					fileImgEle.setAttribute("src", e.target.result);
+					fileImgEle.setAttribute("width", "40px");
+					fileImgEle.setAttribute("height", "40px");
+				}
+				reader.readAsDataURL(event.target.files[i]);
+				$addFile.appendChild(fileImgEle);
+			} else {
+				console.log('not contains image!');
 			}
-			reader.readAsDataURL(event.target.files[i]);
-			$addFile.appendChild(fileImgEle);
-		} else {
-			console.log('not contains image!');
+
+			const $delBtn = document.createElement('i');	// 첨부파일 삭제 버튼
+			
+			$delBtn.classList.add("fa-solid", "fa-trash-can");	
+			$addFile.appendChild($delBtn);
+	
+			$fileNameDiv.appendChild($addFile);
 		}
 
-		$fileNameDiv.appendChild($addFile);
+		
+
+		const delBtnAll = document.querySelectorAll('.addFile .fa-solid.fa-trash-can');
+		
+		for(const ele of delBtnAll){
+			ele.addEventListener('click', e => {
+				const dataTransfer = new DataTransfer();
+				const $parent = document.getElementById('fileName');
+				const target = e.target;
+				const $child = target.closest('.addFile');
+				const $fileNo = ele.closest('.addFile').querySelector('#fileNo');
+				const $fileNoValue = $fileNo.value; //삭제할 파일 인덱스
+
+				let files = $uploadFile.files;	//첨부파일 리스트
+				let fileArray = Array.from(files);	//파일 리스트를 배열로 변환
+				fileArray.splice($fileNoValue,1);	//해당하는 인덱스 파일 배열에서 제거
+				fileArray.forEach(file => {dataTransfer.items.add(file);});	//남은 배열 dataTransfer로 처리(Array -> FileList)
+				files = dataTransfer.files;	// 제거 처리된 FileList 리턴
+
+				$parent.removeChild($child); // 해당 첨부파일 정보 화면에서 제거
+			});
+			
+		}
+
+
 
 	}
 
 });
 
 
-// 첨부파일 개수 제한
+
 
 
