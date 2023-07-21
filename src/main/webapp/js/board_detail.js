@@ -31,7 +31,7 @@ for(const ele of $prevNextBtn){
 					  location.href = "/"+ res.data +"/detailBoard.do";
 				  }else if(res.data == null){
 					$condition.value = null;
-				  }
+				  }   
 				}else if(res.header.rtcd =='99'){
 					console.log(res.rtmsg);
 					if($condition.value == 'next'){

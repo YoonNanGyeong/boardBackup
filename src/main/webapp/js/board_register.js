@@ -4,6 +4,7 @@ let frm = document.detailForm;
 
 // 등록 버튼
 const $addBtn = document.getElementById("writeBtn");
+const $listBtn = document.getElementById("listBtn");
 
 // 입력 필드 
 const $user = document.getElementById("userNm");
@@ -105,20 +106,43 @@ const fn_validationOfContent = e => {
 
 // 이벤트 리스너 등록
 // 닉네임 
-$user.addEventListener('change', fn_validationOfUser, false);
+$user.addEventListener('input', fn_validationOfUser, false);
+$user.addEventListener('focusout', fn_validationOfUser, false);
 // 제목 
-$title.addEventListener('change', fn_validationOfTitle, false);
+$title.addEventListener('input', fn_validationOfTitle, false);
+$title.addEventListener('focusout', fn_validationOfTitle, false);
 // 내용
-$content.addEventListener('change', fn_validationOfContent, false);
+$content.addEventListener('input', fn_validationOfContent, false);
+$content.addEventListener('focusout', fn_validationOfContent, false);
+
+// 목록버튼 클릭 시 알림창
+$listBtn.addEventListener('click', e => {
+	e.preventDefault();
+
+	const btnVal = document.getElementById("writeBtn").innerText;
+	let con = confirm(`${btnVal} 중이던 글이 저장되지 않습니다. 목록으로 가시겠습니까?`);
+
+	if(con == false){
+		return;
+	}else if(con == true){
+		location.replace("/boardList.do");
+	}
+}, false);
+
 
 /* 글 등록 function */
 $addBtn.addEventListener('click', e => {
 	e.preventDefault();
+	
+	let valiTxt = [];	// 필드명
+	let valiParse = [];	// 에러문구 
+	let result = [];	// 에러문구 전체
+
 
 	const btnVal = document.getElementById("writeBtn").innerText;
-	let con = confirm(btnVal + "하시겠습니까?");
+	let con = confirm(btnVal + "하시겠습니까?");	// 등록, 수정 확인창
 
-	const flag = document.getElementById("boardSq").value;
+	const flag = document.getElementById("boardSq").value;	// 글 번호 0이면 새 글
 
 
 	if (con == false) {
@@ -136,11 +160,7 @@ $addBtn.addEventListener('click', e => {
 				frm.submit();
 			}
 		} else {
-			let valiTxt = [];
-			let valiParse = [];
-			let result = [];
-
-
+		
 			if ($title.value.trim() == '') {
 				valiTxt.push("제목");
 			}
@@ -172,6 +192,10 @@ $addBtn.addEventListener('click', e => {
 
 	}
 });
+
+
+
+
 
 
 
@@ -214,5 +238,7 @@ $uploadFile.addEventListener('change', function (event) {
 
 });
 
+
+// 첨부파일 개수 제한
 
 
