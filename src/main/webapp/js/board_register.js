@@ -269,6 +269,7 @@ $uploadFile.addEventListener('change', function (event) {
 
 				let files = $uploadFile.files;	//첨부파일 리스트
 				let fileArray = Array.from(files);	//파일 리스트를 배열로 변환
+				
 				fileArray.splice($fileNoValue,1);	//해당하는 인덱스 파일 배열에서 제거
 				fileArray.forEach(file => {dataTransfer.items.add(file);});	//남은 배열 dataTransfer로 처리(Array -> FileList)
 				files = dataTransfer.files;	// 제거 처리된 FileList 리턴
