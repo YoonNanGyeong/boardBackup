@@ -107,7 +107,7 @@
 			</isNotEmpty>		
 			
 			
-			ORDER BY board_sq DESC
+			ORDER BY rownum DESC
 			OFFSET #firstIndex# ROWS 
 			FETCH NEXT #recordCountPerPage# ROWS ONLY	
 	</select>
