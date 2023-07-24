@@ -279,9 +279,11 @@ const $uploadFile = event.target;
 		const delBtnAll = document.querySelectorAll('.addFile .fa-solid.fa-trash-can');
 		
 		for(const ele of delBtnAll){
+
+			let files = $uploadFile.files;	//첨부파일 리스트
+
 			ele.addEventListener('click', e => {
 				const dataTransfer = new DataTransfer();
-				let files = $uploadFile.files;	//첨부파일 리스트
 
 				const target = e.target;	// click 이벤트 타겟(삭제 버튼)
 				const $removeTarget = target.closest('.addFile');	// 삭제할 파일 태그
@@ -294,11 +296,13 @@ const $uploadFile = event.target;
 							dataTransfer.items.add(file);
 						 });	//남은 배열 dataTransfer로 처리(Array -> FileList)
 				files = dataTransfer.files;	// 제거 처리된 FileList 리턴
-				// console.log(files);	
+				console.log(files);	
 
 				$removeTarget.remove(); // 해당 첨부파일 정보 화면에서 제거
 				
 			});
+
+			return files;
 			
 		}
 
