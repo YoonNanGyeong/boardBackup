@@ -131,7 +131,7 @@ if($content.value.trim() == ''){
 	resultOfContent = true;
 }
 
-// 목록버튼 클릭 시 알림창
+// 목록버튼 클릭 시 알림창 
 $listBtn.addEventListener('click', e => {
 	e.preventDefault();
 

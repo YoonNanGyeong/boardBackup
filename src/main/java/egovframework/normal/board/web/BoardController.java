@@ -1,13 +1,10 @@
 package egovframework.normal.board.web;
 
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,13 +20,11 @@ import egovframework.normal.board.service.CodeService;
 import egovframework.normal.board.service.UploadFileVO;
 import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
-import net.coobird.thumbnailator.Thumbnails;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.swing.ImageIcon;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -87,23 +82,19 @@ public class BoardController {
 	}
 	
 	// 이미지 리사이징 
-		public static BufferedImage resize(InputStream inputStream, int width, int height) throws IOException {
-		    return Thumbnails.of(inputStream).size(width,height).asBufferedImage();
-		}
-		
 		public static BufferedImage makeThumbnail(BufferedImage src , int w, int h,String fileName) throws IOException {
 	    	BufferedImage thumbImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);  
 			Graphics2D graphics = thumbImage.createGraphics();  
 	        graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);  
 	        graphics.drawImage(src, 0,0, w, h, null);  
 	    	
-	        ResampleOp resampleOp2 = new ResampleOp (w, h);
-	        resampleOp2.setUnsharpenMask(AdvancedResizeOp.UnsharpenMask.VerySharp);
+	        ResampleOp resampleOp = new ResampleOp (w, h);
+	        resampleOp.setUnsharpenMask(AdvancedResizeOp.UnsharpenMask.VerySharp);
 
-	        BufferedImage rescaled2 = resampleOp2.filter(thumbImage, null);
+	        BufferedImage rescaled = resampleOp.filter(thumbImage, null);
 
 	        
-	       return rescaled2;
+	       return rescaled;
 	    	
 	    }
 
@@ -219,45 +210,35 @@ public class BoardController {
 					// 원본 파일 업로드
 					uploadFile.get(i).transferTo(uplaodFile);
 					
-					
-					InputStream inputStream = new FileInputStream(uplaodFile);
 					originFile = uploadFile.get(i).getOriginalFilename();	// 업로드 파일명 
 					fileType = uploadFile.get(i).getContentType();	//파일타입
 					
-					Image img = null;
 					BufferedImage resizedImage = null;
 					int wantWeight = 1000;
 					int wantHeight = 1000;
-					// 썸네일이 원본 보다 크지 않게 만들기
-					double ratio =Math.min( (double)wantWeight/ (double)wantHeight, 1);
 					
-					
+
 					// 썸네일 파일 객체 생성
 					File thumFile = new File(loot2 + "\\" + fileList.get(i).get("thumFileNm"));
 					if(fileType.contains("image")) {
-						if(originFile.contains("bmp")||originFile.contains("png")||originFile.contains("gif")) {
+						
 							BufferedImage src = ImageIO.read(uplaodFile);
+							
+							// 실제 이미지 크기
 							int imageWidth = src.getWidth(null);
 							int imageHeight = src.getHeight(null);
 
+							// 썸네일이 원본 보다 크지 않게 만들기
+							double ratio =Math.min( (double)wantWeight/ (double)wantHeight, 1);
+							
+							//비율대로 만들어지는 실제 이미지 크기 구하기
 							int w = (int)(imageWidth * ratio);
 							int h = (int)(imageHeight * ratio);
 							
 							resizedImage =makeThumbnail(src, w, h, fileList.get(i).get("changeFile"));					
 							ImageIO.write(resizedImage, "jpg", thumFile);	//리사이징 이미지 해당 경로로 업로드
 							
-						}else{							
-							img = new ImageIcon(uplaodFile.toString()).getImage();	//jpeg 포맷
-							int imageWidth = img.getWidth(null);
-							int imageHeight = img.getHeight(null);
-							
-							int w = (int)(imageWidth * ratio);
-							int h = (int)(imageHeight * ratio);
-							
-							resizedImage =resize(inputStream, w, h);			
-							ImageIO.write(resizedImage, "jpg", thumFile);	//리사이징 이미지 해당 경로로 업로드
-							
-						}
+						
 						System.out.println("이미지 리사이징 완료!");
 					}else {
 						// 이미지 파일이 아닌 경우 리사이징 하지 않고 저장
@@ -414,34 +395,29 @@ public class BoardController {
 			 // 원본 파일 업로드
 			uploadFile.get(i).transferTo(uplaodFile);
 			
-			
-			InputStream inputStream = new FileInputStream(uplaodFile);
 			originFile = uploadFile.get(i).getOriginalFilename();	// 업로드 파일명 
 			fileType = uploadFile.get(i).getContentType();	//파일타입
 			
-			Image img = null;
 			BufferedImage resizedImage = null;
 			int wantWeight = 1000;
 			int wantHeight = 1000;
 			
-			// 썸네일이 원본 보다 크지 않게 만들기
-			double ratio =Math.min( (double)wantWeight/ (double)wantHeight, 1);
 			
 			 // 썸네일 파일 객체 생성
 			File thumFile = new File(loot2 + "\\" + fileList.get(i).get("thumFileNm"));
 			
+			
 			if(fileType.contains("image")) {
-				if(originFile.contains("bmp")||originFile.contains("png")||originFile.contains("gif")) {
-					BufferedImage src = ImageIO.read(uplaodFile);
 					
-					/*
-		             *가로든 세로든 줄어드는 비율이 높은 쪽을 기준으로 으로 만들기(적게 줄이는 쪽기준) 
-		             *만드려는 size 보다 작은 이미지는 확대 된다.
-		             * */
+					BufferedImage src = ImageIO.read(uplaodFile);
+										
 					// 실제 이미지 크기
 					int imageWidth = src.getWidth(null);
 					int imageHeight = src.getHeight(null);
 
+					// 썸네일이 원본 보다 크지 않게 만들기
+					double ratio =Math.min( (double)wantWeight/ (double)wantHeight, 1);
+					
 					//비율대로 만들어지는 실제 이미지 크기 구하기
 					int w = (int)(imageWidth * ratio);
 					int h = (int)(imageHeight * ratio);
@@ -449,19 +425,8 @@ public class BoardController {
 					resizedImage =makeThumbnail(src, w, h, fileList.get(i).get("changeFile"));					
 					ImageIO.write(resizedImage, "jpg", thumFile);	//리사이징 이미지 해당 경로로 업로드
 					System.out.println("png 이미지 리사이징");
-				}else {							
-					img = new ImageIcon(uplaodFile.toString()).getImage();	//jpeg 포맷
-					int imageWidth = img.getWidth(null);
-					int imageHeight = img.getHeight(null);
-					
-					int w = (int)(imageWidth * ratio);
-					int h = (int)(imageHeight * ratio);
-					
-					resizedImage =resize(inputStream, w, h);			
-					ImageIO.write(resizedImage, "jpg", thumFile);	//리사이징 이미지 해당 경로로 업로드
-					System.out.println("jpg 이미지 리사이징");
-				}
-				System.out.println("이미지 리사이징 완료!");   
+
+					System.out.println("이미지 리사이징 완료!");   
 			}else {
 				// 이미지 파일이 아닌 경우 리사이징 하지 않고 저장
 				uploadFile.get(i).transferTo(thumFile);

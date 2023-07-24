@@ -75,8 +75,6 @@ public class RestBoardController {
 			Long longNextNo = 
 					(resultMap.get("nextNo") != null) ? Long.valueOf(resultMap.get("nextNo").toString()) : 0L;
 
-//			System.out.println("longPrevNo = " + longPrevNo);
-//			System.out.println("longNextNo = " + longNextNo);
 
 			boardVO.setPrevNo(longPrevNo);	
 			boardVO.setNextNo(longNextNo);
@@ -89,8 +87,7 @@ public class RestBoardController {
 			}else {
 				resultVO = null;
 			}
-			
-//			System.out.println("resultVO: " + resultVO);		
+				
 			
 			RestResponse<Object> res = null;
 			
