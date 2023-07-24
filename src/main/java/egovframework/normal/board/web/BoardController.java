@@ -228,6 +228,8 @@ public class BoardController {
 					BufferedImage resizedImage = null;
 					int wantWeight = 1000;
 					int wantHeight = 1000;
+					// 썸네일이 원본 보다 크지 않게 만들기
+					double ratio =Math.min( (double)wantWeight/ (double)wantHeight, 1);
 					
 					
 					// 썸네일 파일 객체 생성
@@ -238,8 +240,6 @@ public class BoardController {
 							int imageWidth = src.getWidth(null);
 							int imageHeight = src.getHeight(null);
 							
-							double ratio =Math.max((double)wantWeight/ (double)imageWidth, (double)wantHeight/ (double)imageHeight);
-							ratio =Math.min( (double)wantWeight/ (double)wantHeight, 1);
 							
 							int w = (int)(imageWidth * ratio);
 							int h = (int)(imageHeight * ratio);
@@ -251,9 +251,6 @@ public class BoardController {
 							img = new ImageIcon(uplaodFile.toString()).getImage();	//jpeg 포맷
 							int imageWidth = img.getWidth(null);
 							int imageHeight = img.getHeight(null);
-							
-							double ratio =Math.max((double)wantWeight/ (double)imageWidth, (double)wantHeight/ (double)imageHeight);
-							ratio =Math.min( (double)wantWeight/ (double)wantHeight, 1);
 							
 							int w = (int)(imageWidth * ratio);
 							int h = (int)(imageHeight * ratio);
@@ -412,10 +409,10 @@ public class BoardController {
 			
 			// 파일 업로드 처리(서버 저장)
 			
-			// 원본 파일 객체 생성
+			 // 원본 파일 객체 생성
 			File uplaodFile = new File(loot + "\\" + fileList.get(i).get("changeFile"));
 			
-			// 원본 파일 업로드
+			 // 원본 파일 업로드
 			uploadFile.get(i).transferTo(uplaodFile);
 			
 			
@@ -428,19 +425,25 @@ public class BoardController {
 			int wantWeight = 1000;
 			int wantHeight = 1000;
 			
+			// 썸네일이 원본 보다 크지 않게 만들기
+			double ratio =Math.min( (double)wantWeight/ (double)wantHeight, 1);
 			
-			// 썸네일 파일 객체 생성
+			 // 썸네일 파일 객체 생성
 			File thumFile = new File(loot2 + "\\" + fileList.get(i).get("thumFileNm"));
 			
 			if(fileType.contains("image")) {
 				if(originFile.contains("bmp")||originFile.contains("png")||originFile.contains("gif")) {
 					BufferedImage src = ImageIO.read(uplaodFile);
+					
+					/*
+		             *가로든 세로든 줄어드는 비율이 높은 쪽을 기준으로 으로 만들기(적게 줄이는 쪽기준) 
+		             *만드려는 size 보다 작은 이미지는 확대 된다.
+		             * */
+					// 실제 이미지 크기
 					int imageWidth = src.getWidth(null);
 					int imageHeight = src.getHeight(null);
-					
-					double ratio =Math.max((double)wantWeight/ (double)imageWidth, (double)wantHeight/ (double)imageHeight);
-					ratio =Math.min( (double)wantWeight/ (double)wantHeight, 1);
-					
+
+					//비율대로 만들어지는 실제 이미지 크기 구하기
 					int w = (int)(imageWidth * ratio);
 					int h = (int)(imageHeight * ratio);
 					
@@ -451,9 +454,6 @@ public class BoardController {
 					img = new ImageIcon(uplaodFile.toString()).getImage();	//jpeg 포맷
 					int imageWidth = img.getWidth(null);
 					int imageHeight = img.getHeight(null);
-					
-					double ratio =Math.max((double)wantWeight/ (double)imageWidth, (double)wantHeight/ (double)imageHeight);
-					ratio =Math.min( (double)wantWeight/ (double)wantHeight, 1);
 					
 					int w = (int)(imageWidth * ratio);
 					int h = (int)(imageHeight * ratio);
