@@ -210,12 +210,15 @@ $addBtn.addEventListener('click', e => {
 });
 
 
-const $uploadFile = document.getElementById('uploadFile');
+const uploadFile = document.getElementById('uploadFile');
 const $fileNameDiv = document.getElementById('fileName');
 const maxSize = 300 * 1024 * 1024;
 
 // 첨부파일 추가 이벤트(첨부파일명 보임, 용량 300mb 넘으면 알림 팝업)
-$uploadFile.addEventListener('change', function (event) {
+uploadFile.addEventListener('change', function (event) {
+const $uploadFile = event.target;
+// console.log($uploadFile.files);
+
 	$fileNameDiv.innerHTML = '';
 	for (let i = 0; i < $uploadFile.files.length; i++) {
 		const fileNm = $uploadFile.files[i].name;	// 첨부한 파일명
@@ -264,7 +267,8 @@ $uploadFile.addEventListener('change', function (event) {
 
 			const $delBtn = document.createElement('i');	// 첨부파일 삭제 버튼
 			
-			$delBtn.classList.add("fa-solid", "fa-trash-can");	
+			$delBtn.classList.add("fa-solid", "fa-trash-can");
+			$delBtn.setAttribute("data-index",`${uploadFile.files[i].lastModified}`);	
 			$addFile.appendChild($delBtn);
 	
 			$fileNameDiv.appendChild($addFile);
@@ -277,20 +281,23 @@ $uploadFile.addEventListener('change', function (event) {
 		for(const ele of delBtnAll){
 			ele.addEventListener('click', e => {
 				const dataTransfer = new DataTransfer();
-				const $parent = document.getElementById('fileName');
-				const target = e.target;
-				const $child = target.closest('.addFile');
-				const $fileNo = ele.closest('.addFile').querySelector('#fileNo');
-				const $fileNoValue = $fileNo.value; //삭제할 파일 인덱스
-
 				let files = $uploadFile.files;	//첨부파일 리스트
-				let fileArray = Array.from(files);	//파일 리스트를 배열로 변환
 
-				fileArray.splice($fileNoValue,1);	//해당하는 인덱스 파일 배열에서 제거
-				fileArray.forEach(file => {dataTransfer.items.add(file);});	//남은 배열 dataTransfer로 처리(Array -> FileList)
+				const target = e.target;	// click 이벤트 타겟(삭제 버튼)
+				const $removeTarget = target.closest('.addFile');	// 삭제할 파일 태그
+				const lastModified = e.target.dataset.index; // 삭제할 파일의 lastModified 값
+				console.log(lastModified);
+				
+				Array.from(files) //파일 리스트를 배열로 변환
+						 .filter(file => file.lastModified != lastModified) // 선택한 파일 이외의 파일만 가져오도록 필터링
+						 .forEach(file => {
+							dataTransfer.items.add(file);
+						 });	//남은 배열 dataTransfer로 처리(Array -> FileList)
 				files = dataTransfer.files;	// 제거 처리된 FileList 리턴
+				// console.log(files);	
 
-				$parent.removeChild($child); // 해당 첨부파일 정보 화면에서 제거
+				$removeTarget.remove(); // 해당 첨부파일 정보 화면에서 제거
+				
 			});
 			
 		}
