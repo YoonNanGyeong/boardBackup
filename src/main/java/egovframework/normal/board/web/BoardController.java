@@ -239,8 +239,7 @@ public class BoardController {
 							BufferedImage src = ImageIO.read(uplaodFile);
 							int imageWidth = src.getWidth(null);
 							int imageHeight = src.getHeight(null);
-							
-							
+
 							int w = (int)(imageWidth * ratio);
 							int h = (int)(imageHeight * ratio);
 							

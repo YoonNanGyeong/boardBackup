@@ -107,7 +107,7 @@
 			</isNotEmpty>		
 			
 			
-			ORDER BY rownum DESC
+			ORDER BY board_sq DESC
 			OFFSET #firstIndex# ROWS 
 			FETCH NEXT #recordCountPerPage# ROWS ONLY	
 	</select>
@@ -143,7 +143,8 @@
 				FROM (SELECT board_sq, board_cd, title, content, view_cnt, user_nm,  
  						 use_yn, to_char(update_dt, 'yyyy.mm.dd hh24:mi')as update_dt , create_dt  
  					FROM TEST_BOARD_TB  
- 				   WHERE use_yn = 'Y' AND board_cd = #boardCd#)t1 
+ 				   WHERE use_yn = 'Y' AND board_cd = #boardCd#
+ 				   		ORDER BY board_sq)t1 
  				    				ORDER BY rownum)t2 
 		 WHERE board_sq = #boardSq# 
  	]]> 
@@ -157,7 +158,8 @@
  					FROM (SELECT board_sq, board_cd, title, content, view_cnt, user_nm,  
  							 use_yn, to_char(update_dt, 'yyyy.mm.dd hh24:mi')as update_dt , create_dt  
  						FROM TEST_BOARD_TB  
- 					   WHERE use_yn = 'Y' AND board_cd = #boardCd#)t1 
+ 					   WHERE use_yn = 'Y' AND board_cd = #boardCd#
+ 					   ORDER BY board_sq)t1 
  					ORDER BY rownum)t2 
  	  ]]> 
  	  
