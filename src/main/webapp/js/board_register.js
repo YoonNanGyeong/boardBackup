@@ -213,7 +213,7 @@ const uploadFile = document.getElementById('uploadFile');
 const $fileNameDiv = document.getElementById('fileName');
 const maxSize = 300 * 1024 * 1024;
 
-// 첨부파일 추가 이벤트(첨부파일명 보임, 용량 300mb 넘으면 알림 팝업)
+// 첨부파일 이벤트(첨부파일명 보임, 용량 300mb 넘으면 알림 팝업)
 uploadFile.addEventListener('change', function (event) {
 const $uploadFile = event.target;
 
@@ -284,19 +284,20 @@ const $uploadFile = event.target;
 				const target = e.target;	// click 이벤트 타겟(삭제 버튼)
 				const $removeTarget = target.closest('.addFile');	// 삭제할 파일 태그
 				const lastModified = e.target.dataset.index; // 삭제할 파일의 lastModified 값
-				console.log(lastModified);
 				
-				Array.from(files) //파일 리스트를 배열로 변환
-						 .filter(file => file.lastModified != lastModified) // 선택한 파일 이외의 파일만 가져오도록 필터링
-						 .forEach(file => {
-							dataTransfer.items.add(file);
-						 });	//남은 배열 dataTransfer로 처리(Array -> FileList)
-						 
-						 files = dataTransfer.files;	// 제거 처리된 FileList 리턴
-						 $uploadFile.files = files;
-						 $removeTarget.remove(); // 해당 첨부파일 정보 화면에서 제거
-						 console.log(files);	
-				});
+				
+					Array.from(files) //파일 리스트를 배열로 변환
+							 .filter(file => file.lastModified != lastModified) // 선택한 파일 이외의 파일만 가져오도록 필터링
+							 .forEach(file => {
+								dataTransfer.items.add(file);
+							 });	//남은 배열 dataTransfer로 처리(Array -> FileList)
+							 
+							 files = dataTransfer.files;	// 제거 처리된 FileList 리턴
+							 $uploadFile.files = files;
+							 $removeTarget.remove(); // 해당 첨부파일 정보 화면에서 제거
+				
+						
+			});
 
 		}
 
