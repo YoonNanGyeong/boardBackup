@@ -103,6 +103,29 @@ public class BoardController {
 	    }
 		
 		
+	// 파일 압축
+	   public static void compressZip(List<String>files) throws IOException{
+//		   List<String> srcFiles = Arrays.asList("test1.txt", "test2.txt");
+	        FileOutputStream fos = new FileOutputStream("multiCompressed.zip");
+	        ZipOutputStream zipOut = new ZipOutputStream(fos);
+	        for (String srcFile : files) {
+	            File fileToZip = new File(srcFile);
+	            FileInputStream fis = new FileInputStream(fileToZip);
+	            ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
+	            zipOut.putNextEntry(zipEntry);
+
+	            byte[] bytes = new byte[1024];
+	            int length;
+	            while((length = fis.read(bytes)) >= 0) {
+	                zipOut.write(bytes, 0, length);
+	            }
+	            fis.close();
+	        }
+	        zipOut.close();
+	        fos.close();
+	   }
+		
+		
 	// 글 목록
 	@RequestMapping(value = "/boardList.do")
 	public String selectBoardList(@ModelAttribute("searchVO") BoardVO searchVO, @RequestParam(value="selectedCd", required=false) String boardCd, ModelMap model) throws Exception {
@@ -178,6 +201,7 @@ public class BoardController {
 		if(!fileCheck2.exists()) fileCheck2.mkdirs();
 		
 		List<Map<String, String>> fileList = new ArrayList<>();
+		List<String>files = new ArrayList<>();
 		
 		UploadFileVO uploadFileVO = new UploadFileVO();
 		String originFile = null;
@@ -201,6 +225,7 @@ public class BoardController {
 					map.put("originFile", originFile);
 					map.put("changeFile", changeFile);
 					map.put("thumFileNm", thumFileNm);
+					files.add(changeFile);
 					
 					fileList.add(map);
 									
@@ -233,12 +258,10 @@ public class BoardController {
 					// 압축 스트림 생성
 					FileOutputStream zipFileOutput = new FileOutputStream(zipFilePath);
 					ZipOutputStream zipOutputStream = new ZipOutputStream(zipFileOutput);
-					
-			        String filePath = loot + "\\" + changeFile;
 			        
-			        FileInputStream zipInputStream = new FileInputStream(filePath);
+			        FileInputStream zipInputStream = new FileInputStream(uplaodFile);
 			        
-			        ZipEntry zipEntry = new ZipEntry(changeFile);
+			        ZipEntry zipEntry = new ZipEntry(uplaodFile.getName());
 			        zipOutputStream.putNextEntry(zipEntry);
 					
 					
@@ -264,27 +287,7 @@ public class BoardController {
 						System.out.println("이미지 리사이징 완료!");
 					}else {
 						// 이미지 파일이 아닌 경우 리사이징 하지 않고 압축하여 저장
-										
-						try {
-						        byte[] data = new byte[4096];
-						        int length;
-						        
-						        while ((length = zipInputStream.read(data)) != -1) {
-						            zipOutputStream.write(data, 0, length);
-						        }
-						        
-						        zipOutputStream.closeEntry();
-						        zipInputStream.close();
-
-							System.out.println("file compressed success");
-						}catch(IOException e) {
-							System.out.println("file compressed failed...");				
-							e.printStackTrace();
-						} finally {
-						    zipOutputStream.close(); // ZipOutputStream 닫기
-						    zipFileOutput.close(); // FileOutputStream 닫기
-						}
-					
+						compressZip(files);
 						
 					}
 				
