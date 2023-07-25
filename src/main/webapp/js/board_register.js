@@ -94,7 +94,6 @@ const fn_validationOfContent = e => {
 		resultOfContent = false;
 	} else {
 		$errContent.classList.add('hidden');
-		$content.focus();
 
 		resultOfContent = true;
 	}
@@ -217,7 +216,6 @@ const maxSize = 300 * 1024 * 1024;
 // 첨부파일 추가 이벤트(첨부파일명 보임, 용량 300mb 넘으면 알림 팝업)
 uploadFile.addEventListener('change', function (event) {
 const $uploadFile = event.target;
-// console.log($uploadFile.files);
 
 	$fileNameDiv.innerHTML = '';
 	for (let i = 0; i < $uploadFile.files.length; i++) {
@@ -276,15 +274,13 @@ const $uploadFile = event.target;
 
 		
 
-		const delBtnAll = document.querySelectorAll('.addFile .fa-solid.fa-trash-can');
+		const delBtnAll = document.querySelectorAll('.addFile .fa-solid.fa-trash-can');	// 첨부파일 등록 시 나타나는 삭제 버튼
 		
-		for(const ele of delBtnAll){
-
-			let files = $uploadFile.files;	//첨부파일 리스트
-
+		for(const ele of delBtnAll){	
 			ele.addEventListener('click', e => {
+				
 				const dataTransfer = new DataTransfer();
-
+				let files = $uploadFile.files;	//첨부파일 리스트
 				const target = e.target;	// click 이벤트 타겟(삭제 버튼)
 				const $removeTarget = target.closest('.addFile');	// 삭제할 파일 태그
 				const lastModified = e.target.dataset.index; // 삭제할 파일의 lastModified 값
@@ -295,15 +291,13 @@ const $uploadFile = event.target;
 						 .forEach(file => {
 							dataTransfer.items.add(file);
 						 });	//남은 배열 dataTransfer로 처리(Array -> FileList)
-				files = dataTransfer.files;	// 제거 처리된 FileList 리턴
-				console.log(files);	
+						 
+						 files = dataTransfer.files;	// 제거 처리된 FileList 리턴
+						 $uploadFile.files = files;
+						 $removeTarget.remove(); // 해당 첨부파일 정보 화면에서 제거
+						 console.log(files);	
+				});
 
-				$removeTarget.remove(); // 해당 첨부파일 정보 화면에서 제거
-				
-			});
-
-			return files;
-			
 		}
 
 
