@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -103,27 +106,6 @@ public class BoardController {
 	    }
 		
 		
-	// 파일 압축
-	   public static void compressZip(List<String>files) throws IOException{
-	        FileOutputStream fos = new FileOutputStream("multiCompressed.zip");
-	        ZipOutputStream zipOut = new ZipOutputStream(fos);
-	        for (String srcFile : files) {
-	            File fileToZip = new File(srcFile);
-	            FileInputStream fis = new FileInputStream(fileToZip);
-	            ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
-	            zipOut.putNextEntry(zipEntry);
-
-	            byte[] bytes = new byte[1024];
-	            int length;
-	            while((length = fis.read(bytes)) >= 0) {
-	                zipOut.write(bytes, 0, length);
-	            }
-	            fis.close();
-	        }
-	        zipOut.close();
-	        fos.close();
-	   }
-		
 		
 	// 글 목록
 	@RequestMapping(value = "/boardList.do")
@@ -200,7 +182,7 @@ public class BoardController {
 		if(!fileCheck2.exists()) fileCheck2.mkdirs();
 		
 		List<Map<String, String>> fileList = new ArrayList<>();
-		List<String>files = new ArrayList<>();
+		List<File>files = new ArrayList<>();
 		
 		UploadFileVO uploadFileVO = new UploadFileVO();
 		String originFile = null;
@@ -209,7 +191,7 @@ public class BoardController {
 		String thumFileNm = null;
 		String fileSize = null;
 		String fileType = null;
-		
+
 		Map<String, String> map = new HashMap<>();
 		
 		if (uploadFile != null && !uploadFile.get(0).isEmpty()) {
@@ -224,7 +206,7 @@ public class BoardController {
 					map.put("originFile", originFile);
 					map.put("changeFile", changeFile);
 					map.put("thumFileNm", thumFileNm);
-					files.add(changeFile);
+					
 					
 					fileList.add(map);
 									
@@ -235,6 +217,8 @@ public class BoardController {
 					
 					// 원본 파일 객체 생성
 					File uplaodFile = new File(loot + "\\" + fileList.get(i).get("changeFile"));
+					
+					files.add(uplaodFile); // 파일 객체 담기
 					
 					// 원본 파일 업로드
 					uploadFile.get(i).transferTo(uplaodFile);
@@ -249,14 +233,7 @@ public class BoardController {
 
 					// 썸네일 파일 객체 생성
 					File thumFile = new File(loot2 + "\\" + fileList.get(i).get("thumFileNm"));
-					
-					
-					String zipName = boardNo+ "_files";		// 압축파일명
-					String zipFilePath = loot2 + "\\" + zipName + ".zip";
-					
-					
-					
-					
+
 					if(fileType.contains("image")) {
 						
 							BufferedImage src = ImageIO.read(uplaodFile);
@@ -277,10 +254,6 @@ public class BoardController {
 							
 						
 						System.out.println("이미지 리사이징 완료!");
-					}else {
-						// 이미지 파일이 아닌 경우 리사이징 하지 않고 압축하여 저장
-//						compressZip(files);
-						
 					}
 				
 					// 파일정보 db 저장
@@ -293,6 +266,39 @@ public class BoardController {
 					
 				}
 				
+				// 첨부파일 타입이 이미지 아닌 경우 thm 경로에 압축하여 저장
+				String zipName = boardNo+ "_files";		// 압축파일명
+				String zipFilePath = loot2 + "\\" + zipName + ".zip";	// 압축파일 저장경로 + 파일명
+				File zipFile = new File(zipFilePath);	//압축파일 객체 생성
+				byte[] buf = new byte[4096];	// stream에 사용할 byte 지정
+				
+				// zip 파일 형식으로 파일을 쓰기 위한 출력 스트림 필터 구현하여 글번호_files.zip 파일 생성
+				try(ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFile))){
+					// 파일 객체 리스트로 loop
+					for(File file : files) {
+						String filePath = file.getPath();
+						// 파일의 경로를 Path 객체로 변환
+						Path path = Paths.get(filePath);
+						// 파일의 MIME 타입 확인
+						fileType = Files.probeContentType(path);
+						
+						if(!fileType.contains("image")) {
+							try(FileInputStream in = new FileInputStream(file)){
+								// 압축되어지는 파일 파일명 지정
+								ZipEntry ze = new ZipEntry(file.getName());
+								out.putNextEntry(ze); // 새 zip 파일 항목 쓰기를 시작하고 항목 데이터의 시작에 스트림 배치
+								int len;
+								
+								// FileInputStream을 통해 파일 데이터 읽어들여 ZipOutputStream으로 생성된 zip 파일에 write
+								while((len = in.read(buf)) > 0) {
+									out.write(buf, 0, len);
+								}
+								// 현재 zip 항목 닫고 다음 항목을 쓸 수 있도록 스트림 배치
+								out.closeEntry();
+							}					
+						}
+					}
+				}
 				System.out.println("다중 파일 업로드 성공!");
 				
 			}catch(IllegalStateException | IOException e){
@@ -306,6 +312,7 @@ public class BoardController {
 			}
 			
 		}
+		
 		
 
 		status.setComplete();
