@@ -105,7 +105,6 @@ public class BoardController {
 		
 	// 파일 압축
 	   public static void compressZip(List<String>files) throws IOException{
-//		   List<String> srcFiles = Arrays.asList("test1.txt", "test2.txt");
 	        FileOutputStream fos = new FileOutputStream("multiCompressed.zip");
 	        ZipOutputStream zipOut = new ZipOutputStream(fos);
 	        for (String srcFile : files) {
@@ -251,18 +250,11 @@ public class BoardController {
 					// 썸네일 파일 객체 생성
 					File thumFile = new File(loot2 + "\\" + fileList.get(i).get("thumFileNm"));
 					
-					System.out.println("---------- 압축하기 ----------");
+					
 					String zipName = boardNo+ "_files";		// 압축파일명
 					String zipFilePath = loot2 + "\\" + zipName + ".zip";
 					
-					// 압축 스트림 생성
-					FileOutputStream zipFileOutput = new FileOutputStream(zipFilePath);
-					ZipOutputStream zipOutputStream = new ZipOutputStream(zipFileOutput);
-			        
-			        FileInputStream zipInputStream = new FileInputStream(uplaodFile);
-			        
-			        ZipEntry zipEntry = new ZipEntry(uplaodFile.getName());
-			        zipOutputStream.putNextEntry(zipEntry);
+					
 					
 					
 					if(fileType.contains("image")) {
@@ -287,7 +279,7 @@ public class BoardController {
 						System.out.println("이미지 리사이징 완료!");
 					}else {
 						// 이미지 파일이 아닌 경우 리사이징 하지 않고 압축하여 저장
-						compressZip(files);
+//						compressZip(files);
 						
 					}
 				
