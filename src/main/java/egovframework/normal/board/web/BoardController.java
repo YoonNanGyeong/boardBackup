@@ -4,12 +4,16 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import egovframework.normal.board.service.CodeVO;
 import egovframework.normal.board.service.UploadFileService;
@@ -97,7 +101,8 @@ public class BoardController {
 	       return rescaled;
 	    	
 	    }
-
+		
+		
 	// 글 목록
 	@RequestMapping(value = "/boardList.do")
 	public String selectBoardList(@ModelAttribute("searchVO") BoardVO searchVO, @RequestParam(value="selectedCd", required=false) String boardCd, ModelMap model) throws Exception {
@@ -196,9 +201,9 @@ public class BoardController {
 					map.put("originFile", originFile);
 					map.put("changeFile", changeFile);
 					map.put("thumFileNm", thumFileNm);
+					
 					fileList.add(map);
-					
-					
+									
 					fileSize = String.valueOf(uploadFile.get(i).getSize());	//파일크기
 					fileType = uploadFile.get(i).getContentType();	//파일타입
 					
@@ -220,6 +225,23 @@ public class BoardController {
 
 					// 썸네일 파일 객체 생성
 					File thumFile = new File(loot2 + "\\" + fileList.get(i).get("thumFileNm"));
+					
+					System.out.println("---------- 압축하기 ----------");
+					String zipName = boardNo+ "_files";		// 압축파일명
+					String zipFilePath = loot2 + "\\" + zipName + ".zip";
+					
+					// 압축 스트림 생성
+					FileOutputStream zipFileOutput = new FileOutputStream(zipFilePath);
+					ZipOutputStream zipOutputStream = new ZipOutputStream(zipFileOutput);
+					
+			        String filePath = loot + "\\" + changeFile;
+			        
+			        FileInputStream zipInputStream = new FileInputStream(filePath);
+			        
+			        ZipEntry zipEntry = new ZipEntry(changeFile);
+			        zipOutputStream.putNextEntry(zipEntry);
+					
+					
 					if(fileType.contains("image")) {
 						
 							BufferedImage src = ImageIO.read(uplaodFile);
@@ -241,8 +263,29 @@ public class BoardController {
 						
 						System.out.println("이미지 리사이징 완료!");
 					}else {
-						// 이미지 파일이 아닌 경우 리사이징 하지 않고 저장
-						uploadFile.get(i).transferTo(thumFile);
+						// 이미지 파일이 아닌 경우 리사이징 하지 않고 압축하여 저장
+										
+						try {
+						        byte[] data = new byte[4096];
+						        int length;
+						        
+						        while ((length = zipInputStream.read(data)) != -1) {
+						            zipOutputStream.write(data, 0, length);
+						        }
+						        
+						        zipOutputStream.closeEntry();
+						        zipInputStream.close();
+
+							System.out.println("file compressed success");
+						}catch(IOException e) {
+							System.out.println("file compressed failed...");				
+							e.printStackTrace();
+						} finally {
+						    zipOutputStream.close(); // ZipOutputStream 닫기
+						    zipFileOutput.close(); // FileOutputStream 닫기
+						}
+					
+						
 					}
 				
 					// 파일정보 db 저장
