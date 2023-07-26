@@ -7,9 +7,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -262,7 +259,7 @@ public class BoardController {
 					
 				}
 				
-//				System.out.println("files = "+files);
+				System.out.println("fileType = "+fileType);
 				
 				// 첨부파일 타입이 이미지 아닌 경우 thm 경로에 압축하여 저장
 				String zipName = boardNo+ "_files";		// 압축파일명
@@ -270,30 +267,19 @@ public class BoardController {
 				File zipFile = new File(zipFilePath);	//압축파일 객체 생성
 				byte[] buf = new byte[4096];	// stream에 사용할 byte 지정
 				
-				// zip 파일 형식으로 파일을 쓰기 위한 출력 스트림 필터 구현하여 글번호_files.zip 파일 생성
-				try(ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFile))){
-					// 파일 객체 리스트로 loop
-					for(File file : files) {
-						String filePath = file.getPath();
-						// 파일의 경로를 Path 객체로 변환
-						Path path = Paths.get(filePath);
-						// 파일의 MIME 타입 확인
-						fileType = Files.probeContentType(path);
-//						System.out.println("fileType = "+fileType);
-						
-						if(fileType.contains("image")) {
-							System.out.println(file.getName()+"은 image 타입 파일입니다!");
-						}else {
+					
+					// zip 파일 형식으로 파일을 쓰기 위한 출력 스트림 필터 구현하여 글번호_files.zip 파일 생성
+					try(ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFile))){
+						// 파일 객체 리스트로 loop
+						for(File file : files) {
 							try(FileInputStream in = new FileInputStream(file)){
 								// 압축되어지는 파일 파일명 지정
 								ZipEntry ze = new ZipEntry(file.getName());
 								out.putNextEntry(ze); // 새 zip 파일 항목 쓰기를 시작하고 항목 데이터의 시작에 스트림 배치
-								
 								int len;
-								
+		
 								// FileInputStream을 통해 파일 데이터 읽어들여 ZipOutputStream으로 생성된 zip 파일에 write
 								while((len = in.read(buf)) > 0) {
-									System.out.println("len = "+len);
 									out.write(buf, 0, len);
 								}
 								// 현재 zip 항목 닫고 다음 항목을 쓸 수 있도록 스트림 배치
@@ -301,7 +287,7 @@ public class BoardController {
 							}				
 						}
 					}
-				}
+				
 				System.out.println("다중 파일 업로드 성공!");
 				
 			}catch(IllegalStateException | IOException e){
