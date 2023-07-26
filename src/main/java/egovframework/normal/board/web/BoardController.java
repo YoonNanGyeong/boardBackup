@@ -102,6 +102,29 @@ public class BoardController {
 	    	
 	    }
 		
+	// 첨부파일 압축
+		public static void compressZip(List<File>files, File zipFile, byte[] buf) throws IOException{
+			// zip 파일 형식으로 파일을 쓰기 위한 출력 스트림 필터 구현하여 글번호_files.zip 파일 생성
+			try(ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFile))){
+				// 파일 객체 리스트로 loop
+				for(File file : files) {
+					try(FileInputStream in = new FileInputStream(file)){
+						// 압축되어지는 파일 파일명 지정
+						ZipEntry ze = new ZipEntry(file.getName());
+						out.putNextEntry(ze); // 새 zip 파일 항목 쓰기를 시작하고 항목 데이터의 시작에 스트림 배치
+						int len;
+
+						// FileInputStream을 통해 파일 데이터 읽어들여 ZipOutputStream으로 생성된 zip 파일에 write
+						while((len = in.read(buf)) > 0) {
+							out.write(buf, 0, len);
+						}
+						// 현재 zip 항목 닫고 다음 항목을 쓸 수 있도록 스트림 배치
+						out.closeEntry();
+					}				
+				}
+			}
+		}
+		
 		
 		
 	// 글 목록
@@ -171,12 +194,17 @@ public class BoardController {
 		
 		String loot = context.getRealPath("/images/board/upload");	// 원본 저장경로
 		String loot2 = context.getRealPath("/images/board/upload/thm");	// 썸네일 저장경로
+		String loot3 = context.getRealPath("/images/board/upload/files");	// 압축파일 저장경로
 		
+		// 경로 존재하는지 체크
 		File fileCheck = new File(loot);
 		File fileCheck2 = new File(loot2);
+		File fileCheck3 = new File(loot3);
 		
+		// 경로 존재 안하면 해당 폴더 생성
 		if(!fileCheck.exists()) fileCheck.mkdirs();
 		if(!fileCheck2.exists()) fileCheck2.mkdirs();
+		if(!fileCheck3.exists()) fileCheck3.mkdirs();
 		
 		List<Map<String, String>> fileList = new ArrayList<>();
 		List<File>files = new ArrayList<>();
@@ -188,6 +216,8 @@ public class BoardController {
 		String thumFileNm = null;
 		String fileSize = null;
 		String fileType = null;
+		String zipName = null;
+		String zipFilePath = null;
 
 		Map<String, String> map = new HashMap<>();
 		
@@ -213,12 +243,12 @@ public class BoardController {
 					// 파일 업로드 처리(서버 저장)
 					
 					// 원본 파일 객체 생성
-					File uplaodFile = new File(loot + "\\" + fileList.get(i).get("changeFile"));
+					File fileObject = new File(loot + "\\" + fileList.get(i).get("changeFile"));
 					
-					files.add(uplaodFile); // 파일 객체 담기
+					files.add(fileObject); // 파일 객체 담기
 					
 					// 원본 파일 업로드
-					uploadFile.get(i).transferTo(uplaodFile);
+					uploadFile.get(i).transferTo(fileObject);
 					
 					BufferedImage resizedImage = null;
 					int wantWeight = 1000;
@@ -230,7 +260,7 @@ public class BoardController {
 
 					if(fileType.contains("image")) {
 						
-							BufferedImage src = ImageIO.read(uplaodFile);
+							BufferedImage src = ImageIO.read(fileObject);
 							
 							// 실제 이미지 크기
 							int imageWidth = src.getWidth(null);
@@ -259,35 +289,14 @@ public class BoardController {
 					
 				}
 				
-				System.out.println("fileType = "+fileType);
-				
-				// 첨부파일들 모두 압축하여 저장
-				String zipName = boardNo+ "_files";		// 압축파일명
-				String zipFilePath = loot2 + "\\" + zipName + ".zip";	// 압축파일 저장경로 + 파일명
+				zipName = boardNo+ "_files";		// 압축파일명
+				zipFilePath = loot3 + "\\" + zipName + ".zip";	// 압축파일 저장경로 + 파일명
 				File zipFile = new File(zipFilePath);	//압축파일 객체 생성
 				byte[] buf = new byte[4096];	// stream에 사용할 byte 지정
 				
+				// 첨부파일들 모두 압축하여 저장
+				compressZip(files, zipFile, buf);
 					
-					// zip 파일 형식으로 파일을 쓰기 위한 출력 스트림 필터 구현하여 글번호_files.zip 파일 생성
-					try(ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFile))){
-						// 파일 객체 리스트로 loop
-						for(File file : files) {
-							try(FileInputStream in = new FileInputStream(file)){
-								// 압축되어지는 파일 파일명 지정
-								ZipEntry ze = new ZipEntry(file.getName());
-								out.putNextEntry(ze); // 새 zip 파일 항목 쓰기를 시작하고 항목 데이터의 시작에 스트림 배치
-								int len;
-		
-								// FileInputStream을 통해 파일 데이터 읽어들여 ZipOutputStream으로 생성된 zip 파일에 write
-								while((len = in.read(buf)) > 0) {
-									out.write(buf, 0, len);
-								}
-								// 현재 zip 항목 닫고 다음 항목을 쓸 수 있도록 스트림 배치
-								out.closeEntry();
-							}				
-						}
-					}
-				
 				System.out.println("다중 파일 업로드 성공!");
 				
 			}catch(IllegalStateException | IOException e){
@@ -296,13 +305,12 @@ public class BoardController {
 				for(int i = 0; i < uploadFile.size(); i++) {
 					new File(loot + "\\" + fileList.get(i).get("changeFile")).delete();	
 					new File(loot2 + "\\" + fileList.get(i).get("thumFileNm")).delete();	
+					new File(zipFilePath).delete();
 				}
 				e.printStackTrace();
 			}
 			
 		}
-		
-		
 
 		status.setComplete();
 		return "redirect:{boardNo}/detailBoard.do";
@@ -383,14 +391,20 @@ public class BoardController {
 		
 		String loot = context.getRealPath("/images/board/upload");	// 저장경로
 		String loot2 = context.getRealPath("/images/board/upload/thm");	// 썸네일 저장경로
+		String loot3 = context.getRealPath("/images/board/upload/modify");	// 수정된 파일 압축파일 저장경로
 		
+		// 경로 존재하는지 체크
 		File fileCheck = new File(loot);
 		File fileCheck2 = new File(loot2);
+		File fileCheck3 = new File(loot3);
 		
+		// 경로 존재 안하면 해당 폴더 생성
 		if(!fileCheck.exists()) fileCheck.mkdirs();
 		if(!fileCheck2.exists()) fileCheck2.mkdirs();
+		if(!fileCheck3.exists()) fileCheck3.mkdirs();
 		
 		List<Map<String, String>> fileList = new ArrayList<>();
+		List<File>files = new ArrayList<>();
 		
 		UploadFileVO uploadFileVO = new UploadFileVO();
 		uploadFileVO.setBoardNo(boardNo);
@@ -401,6 +415,8 @@ public class BoardController {
 		String thumFileNm = null;
 		String fileSize = null;
 		String fileType = null;
+		String zipName = null;
+		String zipFilePath = null;
 		
 	if(uploadFile != null && !uploadFile.get(0).isEmpty()) {
 		
@@ -424,13 +440,11 @@ public class BoardController {
 			// 파일 업로드 처리(서버 저장)
 			
 			 // 원본 파일 객체 생성
-			File uplaodFile = new File(loot + "\\" + fileList.get(i).get("changeFile"));
+			File fileObject = new File(loot + "\\" + fileList.get(i).get("changeFile"));
+			files.add(fileObject); // 파일 객체 담기
 			
 			 // 원본 파일 업로드
-			uploadFile.get(i).transferTo(uplaodFile);
-			
-			originFile = uploadFile.get(i).getOriginalFilename();	// 업로드 파일명 
-			fileType = uploadFile.get(i).getContentType();	//파일타입
+			uploadFile.get(i).transferTo(fileObject);
 			
 			BufferedImage resizedImage = null;
 			int wantWeight = 1000;
@@ -443,7 +457,7 @@ public class BoardController {
 			
 			if(fileType.contains("image")) {
 					
-					BufferedImage src = ImageIO.read(uplaodFile);
+					BufferedImage src = ImageIO.read(fileObject);
 										
 					// 실제 이미지 크기
 					int imageWidth = src.getWidth(null);
@@ -461,9 +475,6 @@ public class BoardController {
 					System.out.println("png 이미지 리사이징");
 
 					System.out.println("이미지 리사이징 완료!");   
-			}else {
-				// 이미지 파일이 아닌 경우 리사이징 하지 않고 저장
-				uploadFile.get(i).transferTo(thumFile);
 			}
 			
 			// 저장할 정보를 담고 있는 첨부파일 세팅 
@@ -476,6 +487,14 @@ public class BoardController {
 			
 			}
 			
+			zipName = boardNo+ "_files_md";		// 압축파일명
+		    zipFilePath = loot3 + "\\" + zipName + ".zip";	// 압축파일 저장경로 + 파일명
+			File zipFile = new File(zipFilePath);	//압축파일 객체 생성
+			byte[] buf = new byte[4096];	// stream에 사용할 byte 지정
+			
+			// 첨부파일들 모두 압축하여 저장
+			compressZip(files, zipFile, buf);
+			
 		 System.out.println("다중 파일 업로드 성공!");
 		 
 		}catch(IllegalStateException | IOException e){
@@ -486,6 +505,7 @@ public class BoardController {
 			for(int i = 0; i < uploadFile.size(); i++) {
 				new File(loot + "\\" + fileList.get(i).get("changeFile")).delete();	
 				new File(loot2 + "\\" + fileList.get(i).get("thumFileNm")).delete();	
+				new File(zipFilePath).delete();
 			}
 			e.printStackTrace();
 		}
