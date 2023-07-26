@@ -156,7 +156,7 @@ public class BoardController {
 		paginationInfo.setTotalRecordCount(totCnt);
 		
 		model.addAttribute("paginationInfo", paginationInfo);
-	
+		
 		return "board/board_list";
 	}
 
