@@ -261,7 +261,7 @@ public class BoardController {
 				
 				System.out.println("fileType = "+fileType);
 				
-				// 첨부파일 타입이 이미지 아닌 경우 thm 경로에 압축하여 저장
+				// 첨부파일들 모두 압축하여 저장
 				String zipName = boardNo+ "_files";		// 압축파일명
 				String zipFilePath = loot2 + "\\" + zipName + ".zip";	// 압축파일 저장경로 + 파일명
 				File zipFile = new File(zipFilePath);	//압축파일 객체 생성
