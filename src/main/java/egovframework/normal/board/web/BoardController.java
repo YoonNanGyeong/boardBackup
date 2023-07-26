@@ -223,9 +223,6 @@ public class BoardController {
 					// 원본 파일 업로드
 					uploadFile.get(i).transferTo(uplaodFile);
 					
-					originFile = uploadFile.get(i).getOriginalFilename();	// 업로드 파일명 
-					fileType = uploadFile.get(i).getContentType();	//파일타입
-					
 					BufferedImage resizedImage = null;
 					int wantWeight = 1000;
 					int wantHeight = 1000;
@@ -255,7 +252,6 @@ public class BoardController {
 						
 						System.out.println("이미지 리사이징 완료!");
 					}
-				
 					// 파일정보 db 저장
 					uploadFileVO.setUploadNm(originFile);
 					uploadFileVO.setStoreNm(changeFile);
@@ -265,6 +261,8 @@ public class BoardController {
 					uploadFileService.insertFile(uploadFileVO);
 					
 				}
+				
+//				System.out.println("files = "+files);
 				
 				// 첨부파일 타입이 이미지 아닌 경우 thm 경로에 압축하여 저장
 				String zipName = boardNo+ "_files";		// 압축파일명
@@ -281,21 +279,26 @@ public class BoardController {
 						Path path = Paths.get(filePath);
 						// 파일의 MIME 타입 확인
 						fileType = Files.probeContentType(path);
+//						System.out.println("fileType = "+fileType);
 						
-						if(!fileType.contains("image")) {
+						if(fileType.contains("image")) {
+							System.out.println(file.getName()+"은 image 타입 파일입니다!");
+						}else {
 							try(FileInputStream in = new FileInputStream(file)){
 								// 압축되어지는 파일 파일명 지정
 								ZipEntry ze = new ZipEntry(file.getName());
 								out.putNextEntry(ze); // 새 zip 파일 항목 쓰기를 시작하고 항목 데이터의 시작에 스트림 배치
+								
 								int len;
 								
 								// FileInputStream을 통해 파일 데이터 읽어들여 ZipOutputStream으로 생성된 zip 파일에 write
 								while((len = in.read(buf)) > 0) {
+									System.out.println("len = "+len);
 									out.write(buf, 0, len);
 								}
 								// 현재 zip 항목 닫고 다음 항목을 쓸 수 있도록 스트림 배치
 								out.closeEntry();
-							}					
+							}				
 						}
 					}
 				}
