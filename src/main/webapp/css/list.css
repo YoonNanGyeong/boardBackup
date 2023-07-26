@@ -175,6 +175,9 @@ footer{
     align-items: center;
 }
 #paging {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 400px;
     height: 32px;
     text-align: center;
@@ -183,6 +186,33 @@ footer{
 }
 #sysbtn {
 	flex: 2;
+}
+#paging a button {
+	cursor: pointer;
+}
+#paging a img {
+    max-width: 32px;
+    max-height: 32px;
+}
+#paging span {
+	display: flex;
+	align-items: center;
+    justify-content: center;
+	width: 32px;
+    height: 32px;
+	border-radius: 8px;
+	border: 1px solid #2F80ED;
+	background-color: #2F80ED;
+}
+#paging span strong {
+	color: #ffffff;
+}
+.page-btns{
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid #D5D9DE;
+    background-color: #ffffff;
 }
 
 /* 작성 버튼 */
