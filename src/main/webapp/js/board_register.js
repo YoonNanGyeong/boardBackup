@@ -189,11 +189,11 @@ $addBtn.addEventListener('click', e => {
 			}
 
 			for (let i = 0; i < valiTxt.length; i++) {
-				valiParse.push(`${valiTxt[i]}을 입력해주세요!`);
+				valiParse.push(`${valiTxt[i]}을 입력해주세요!\n`);
 			}
 
 			if (regExp.test($user.value.trim())) {
-				valiParse.push("작성자명은 특수문자를 입력할 수 없습니다!");
+				valiParse.push("작성자명은 특수문자를 입력할 수 없습니다!\n");
 			}
 
 			for (let i = 0; i < valiParse.length; i++) {
@@ -293,7 +293,7 @@ const $uploadFile = event.target;
 							 });	//남은 배열 dataTransfer로 처리(Array -> FileList)
 							 
 							 files = dataTransfer.files;	// 제거 처리된 FileList 리턴
-							 $uploadFile.files = files;
+							 $uploadFile.files = files;		// 현재 파일목록에 반영
 							 $removeTarget.remove(); // 해당 첨부파일 정보 화면에서 제거
 				
 						
