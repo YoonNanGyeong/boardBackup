@@ -307,6 +307,14 @@ const $uploadFile = event.target;
 
 });
 
+// 파일 확장자 체크
+function checkFileName(str){
+	const ext = str.split('.').pop().toLowerCase();
+	if(ext.includes("jsp" || "html" || "js" || "css") ){
+		alert("해당 파일은 업로드 할 수 없습니다.");
+	}
+}
+
 
 
 
