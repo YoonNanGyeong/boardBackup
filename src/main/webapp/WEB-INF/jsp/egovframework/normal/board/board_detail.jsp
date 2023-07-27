@@ -44,9 +44,10 @@
 
 <body>
 <form:form modelAttribute="searchVO" id="detailForm" name="detailForm" method="post">
- 		<input type="hidden" id="selectedId" name="selectedId" />
         <input type="hidden" id="boardCd" name="boardCd" value="${boardVO.boardCd}" />
         <input type="hidden" id="boardSq" name="boardSq" value="${boardVO.boardSq}" />
+        <input type="hidden" id="selectedId" name="selectedId" value="${boardVO.boardSq}" />
+
         
    		 <!-- 상단바 -->
         <div class="nv-l"></div>
@@ -150,8 +151,14 @@
          </div>   
         </footer>
         <div class="ft-r"></div>
+        <!-- 검색조건 유지 -->
+        <input type="hidden" id="boardCd2" name="boardCd2" value="${searchBoard.boardCd}"/>
+        <input type="hidden" id="searchCondition" name="searchCondition" value="${searchVO.searchCondition}"/>
+        <input type="hidden" id="searchKeyword" name="searchKeyword" value="${searchVO.searchKeyword}"/>
+        <input type="hidden" id="pageIndex" name="pageIndex" value="${searchVO.pageIndex}"/> 
         
     </form:form>
 </body>
+
 <script type="module" language="javaScript" src="/js/board_detail.js?after"></script>
 </html>

@@ -46,3 +46,21 @@ for(const ele of $prevNextBtn){
 			return;
 	}, false);
 }
+
+// function fn_selectList2(){
+// 	const searchCd = document.detailForm.boardCd2.value;
+// 	const condition = document.detailForm.searchCondition.value;
+// 	const keyword = document.detailForm.searchKeyword.value;
+// 	const pageIndex = document.detailForm.pageIndex.value;
+	
+// 	const searchValue = "?boardCd="+searchCd+"&amp;searchCondition=" +condition+"&amp;searchKeyword="+keyword+"&amp;pageIndex="+pageIndex;
+// 	const url = "/boardList.do"+searchValue;
+
+// 	if(searchCd.value != '' || condition.value != '' || keyword.value != '' ){
+// 		document.detailForm.action = url;
+// 		document.detailForm.submit();
+// 	}else{
+// 		document.detailForm.action = "/boardList.do";
+// 		document.detailForm.submit();
+// 	}
+// }

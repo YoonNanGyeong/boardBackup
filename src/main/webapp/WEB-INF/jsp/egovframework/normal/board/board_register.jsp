@@ -11,26 +11,21 @@
     <!-- fontawesome 아이콘 -->
     <script src="https://kit.fontawesome.com/dcfc9e7feb.js" ></script>
     
-    <c:set var="registerFlag" value="${empty boardVO.boardCd ? 'create' : 'modify'}"/>
+    <c:set var="registerFlag" value="${empty boardVO.title ? 'create' : 'modify'}"/>
     <title>게시글
     	 <c:if test="${registerFlag == 'create'}">작성</c:if>
          <c:if test="${registerFlag == 'modify'}">수정</c:if>
     </title>
     <link type="text/css" rel="stylesheet" href="<c:url value='/css/register.css?after'/>"/>
     <script type="text/javascript" language="javaScript" defer = "defer">    
-		/* 글 목록 화면 function */
-	    function fn_selectList() {
-	       	document.detailForm.action = "<c:url value='/boardList.do'/>";
-	       	document.detailForm.submit();
-	    }
 	    
 	    /* 글 삭제 function */
 	    function fn_delete() {
 	    	if(!confirm("삭제하시겠습니까?")){
-	    		document.detailForm.action = "<c:url value='/detailBoard.do'/>";
+	    		document.addForm.action = "<c:url value='/detailBoard.do'/>";
 	    	}else{    		
-		       	document.detailForm.action = "<c:url value='/deleteBoard.do'/>";
-		       	document.detailForm.submit();
+		       	document.addForm.action = "<c:url value='/deleteBoard.do'/>";
+		       	document.addForm.submit();
 	    		alert("삭제완료되었습니다.");
 	    	}
 	    }
@@ -39,7 +34,7 @@
 </head>
 <body >
 
-<form:form method ="post" commandName="boardVO" id="detailForm" name="detailForm"  enctype="multipart/form-data" >
+<form:form method ="post" commandName="boardVO" id="addForm" name="addForm"  enctype="multipart/form-data" >
  <input type="hidden" id="boardSq" name="boardSq" value="${boardVO.boardSq}" />
     <!-- 상단바 -->
         <div class="nv-l"></div>
@@ -79,7 +74,7 @@
 	                </form:select>
 	                <span class = "error error-category"></span>
 	             <label id="userNmLabel" for="userNm">작성자</label>
-             	<form:input path="userNm"  id="userNm" placeholder="닉네임 입력" maxlength="6"/>
+             	<form:input path="userNm"  id="userNm" placeholder="닉네임 입력" maxlength="15"/>
              	 <span class = "error-user hidden"></span>
             </div>
             
@@ -144,11 +139,12 @@
          <div class="btns"> 
 			<div class="left-btn">
 				<!-- 목록 -->
-			   <a  href="javascript:fn_selectList();">
-				   <button id="listBtn" type="button">
-						   <spring:message code="button.list" />
-				   </button>
-			   </a>
+				<a  href="javascript:fn_selectList();">
+					<button id="listBtn" type="button">
+							<spring:message code="button.list" />
+					</button>
+				</a>
+			  
 			</div>
 			<div class="right-btn">
 				<button id="writeBtn" type="button">
@@ -160,7 +156,7 @@
 				
 						 
 			   <!-- 취소 -->
-			   <a  href="javascript:document.detailForm.reset();">
+			   <a  href="javascript:document.addForm.reset();">
 				   <button id="delPrevBtn" type="button">         	
 						   <spring:message code="button.reset" />
 				   </button>
@@ -180,11 +176,12 @@
          </div>   
         </footer>
         <div class="ft-r"></div>
-    
-    <!-- 검색조건 유지 -->
-    <input type="hidden" name="searchCondition" value="<c:out value='${searchVO.searchCondition}'/>"/>
-    <input type="hidden" name="searchKeyword" value="<c:out value='${searchVO.searchKeyword}'/>"/>
-    <input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
+
+	<!-- 검색조건 유지 -->
+	<input type="hidden" id="boardCd2" name="boardCd2" value="${boardVO.boardCd}"/>
+	<input type="hidden" id="searchCondition" name="searchCondition" value="${searchVO.searchCondition}"/>
+	<input type="hidden" id="searchKeyword" name="searchKeyword" value="${searchVO.searchKeyword}"/>
+	<input type="hidden" id="pageIndex" name="pageIndex" value="${searchVO.pageIndex}"/> 
 </form:form>
 </body>
 

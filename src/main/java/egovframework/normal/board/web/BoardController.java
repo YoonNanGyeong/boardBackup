@@ -129,7 +129,7 @@ public class BoardController {
 		
 	// 글 목록
 	@RequestMapping(value = "/boardList.do")
-	public String selectBoardList(@ModelAttribute("searchVO") BoardVO searchVO, @RequestParam(value="selectedCd", required=false) String boardCd, ModelMap model) throws Exception {
+	public String selectBoardList(@ModelAttribute("searchVO") BoardVO searchVO, ModelMap model) throws Exception {
 
 		System.out.println("-----Get selectSampleList");
 		
@@ -163,8 +163,11 @@ public class BoardController {
 
 	// 등록 화면
 	@GetMapping(value = "/addBoardView.do")
-	public String addBoardView(@ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model) throws Exception {
-		model.addAttribute("boardVO", new BoardVO());
+	public String addBoardView(
+			BoardVO boardVO,
+			@ModelAttribute("searchVO") BoardDefaultVO searchVO, 
+			Model model) throws Exception {
+		model.addAttribute("boardVO", boardVO);
 		return "board/board_register";
 	}
 
@@ -326,7 +329,9 @@ public class BoardController {
 	
 	// 상세 조회 화면
 	@GetMapping("{selectedId}/detailBoard.do")
-	public String detailBoardView(@PathVariable("selectedId") Long boardSq, @ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model)  throws Exception {
+	public String detailBoardView(@PathVariable("selectedId") Long boardSq, 
+			@ModelAttribute("searchBoard") BoardVO searchBoard,
+			@ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model)  throws Exception {
 		System.out.println("상세조회 화면 !");
 		BoardVO boardVO = new BoardVO();
 		boardVO.setBoardSq(boardSq);
@@ -386,6 +391,7 @@ public class BoardController {
 		boardService.updateBoard(boardVO);
 		Long boardNo = boardVO.getBoardSq();
 		model.addAttribute("boardNo",boardNo);
+		model.addAttribute("boardVO",boardVO);
 		
 		// path 가져오기
 		ServletContext context = request.getSession().getServletContext();

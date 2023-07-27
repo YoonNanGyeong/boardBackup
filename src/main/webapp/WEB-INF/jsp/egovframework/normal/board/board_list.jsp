@@ -15,22 +15,26 @@
     <script type="text/javaScript" language="javascript" defer="defer">
         /* 상세조회 화면 function */
         function fn_select(id) {
-    		location.href = id + "/detailBoard.do";
+			const url = id + "/detailBoard.do";
+			document.listForm.action = url;
+			document.listForm.method = 'get';
+           	document.listForm.submit();
         }  
+
+		/* 글 목록 화면 function */
+		function fn_selectList() {
+			document.listForm.pageIndex.value = 1;
+			document.listForm.action = "<c:url value='/boardList.do'/>";
+		   	document.listForm.submit();
+		}
         
         /* 글 등록 화면 function */
         function fn_addView() {
-           	location.href = "/addBoardView.do";
+			document.listForm.action = "<c:url value='/addBoardView.do'/>";
+			document.listForm.method = 'get';
+           	document.listForm.submit();
         } 
         
-        /* 글 목록 화면 function */
-        function fn_selectList() {
-			document.listForm.pageIndex.value = 1;
-        	document.listForm.action = "<c:url value='/boardList.do'/>";
-           	document.listForm.submit();
-        }
-
-         
         /* pagination 페이지 링크 function */
          function fn_link_page(pageNo){
         	document.listForm.pageIndex.value = pageNo;
@@ -44,8 +48,6 @@
 
 <body>
 <form:form modelAttribute="searchVO" id="listForm" name="listForm" method="post">
-        <input type="hidden" name="selectedId" />
-   
           <!-- 상단바 -->
         <div class="nv-l"></div>
         <nav class="nv" > 
@@ -150,17 +152,18 @@
 		       	<div class="pagingArea">
 		               <div id="paging">
 		                   <ui:pagination paginationInfo = "${paginationInfo}" type="image" jsFunction="fn_link_page" />
-        					<form:hidden path="pageIndex" />		
-		               </div>
-		               <div id="sysbtn">
-	       	              <a href="javascript:fn_addView();" id="writeBtn">
-	       	              	글 작성
-	       	              </a>
-		               </div>
-		           </div>	
-        	</footer>
-       	  <div class="ft-r"></div>
-        
+						</div>
+						<div id="sysbtn">
+							<a href="javascript:fn_addView();" id="writeBtn">
+								글 작성
+							</a>
+						</div>
+					</div>	
+				</footer>
+				<div class="ft-r"></div>
+		
+				<form:hidden path="pageIndex" />
+				
     </form:form>
 </body>
 <script>
