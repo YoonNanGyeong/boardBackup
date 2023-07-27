@@ -136,6 +136,7 @@ public class BoardController {
 		/** EgovPropertyService */
 		searchVO.setPageUnit(propertiesService.getInt("pageUnit"));
 		searchVO.setPageSize(propertiesService.getInt("pageSize"));
+		System.out.println("pageUnit = " + searchVO.getPageUnit());
 
 		/** 페이징 세팅 */
 		PaginationInfo paginationInfo = new PaginationInfo();
@@ -147,6 +148,11 @@ public class BoardController {
 		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
 		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
 
+		System.out.println("searchCondition = " + searchVO.getSearchCondition());
+		System.out.println("searchKeyword = " + searchVO.getSearchKeyword());
+		System.out.println("pageIndex = " + searchVO.getPageIndex());
+		System.out.println("firstIndex = " + searchVO.getFirstIndex());
+		System.out.println("lastIndex = " + searchVO.getLastIndex());
 	
 		List<?> boardList = boardService.selectBoardList(searchVO);
 		model.addAttribute("resultList", boardList);

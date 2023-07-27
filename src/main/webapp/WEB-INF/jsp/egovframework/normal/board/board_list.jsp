@@ -24,10 +24,20 @@
         } 
         
         /* 글 목록 화면 function */
+		const $keyWord = document.getElementById('searchKeyword');
+		$keyWord.addEventListener('keydown', e => {
+			e.preventDefault();
+			if(e.target == 'Enter'){
+				document.listForm.pageIndex.value = 1;
+			}
+		});
+		
         function fn_selectList() {
+			document.listForm.pageIndex.value = 1;
         	document.listForm.action = "<c:url value='/boardList.do'/>";
            	document.listForm.submit();
         }
+
          
         /* pagination 페이지 링크 function */
          function fn_link_page(pageNo){
