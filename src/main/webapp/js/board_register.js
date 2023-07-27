@@ -201,8 +201,8 @@ $addBtn.addEventListener('click', e => {
 			}
 			alert(result);
 
-			console.log(valiTxt);
-			console.log(valiParse);
+			// console.log(valiTxt);
+			// console.log(valiParse);
 		}
 
 	}
