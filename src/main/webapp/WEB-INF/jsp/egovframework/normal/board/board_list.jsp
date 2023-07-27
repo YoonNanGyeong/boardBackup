@@ -24,14 +24,6 @@
         } 
         
         /* 글 목록 화면 function */
-		const $keyWord = document.getElementById('searchKeyword');
-		$keyWord.addEventListener('keydown', e => {
-			e.preventDefault();
-			if(e.target == 'Enter'){
-				document.listForm.pageIndex.value = 1;
-			}
-		});
-		
         function fn_selectList() {
 			document.listForm.pageIndex.value = 1;
         	document.listForm.action = "<c:url value='/boardList.do'/>";
@@ -171,4 +163,14 @@
         
     </form:form>
 </body>
+<script>
+	const $keyWord = document.getElementById("searchKeyword");
+	$keyWord.addEventListener('keydown', e => {
+		if(e.key == 'Enter'){
+			document.listForm.pageIndex.value = 1;
+			document.listForm.action = "<c:url value='/boardList.do'/>";
+           	document.listForm.submit();
+		}
+	});
+</script>
 </html>
