@@ -229,6 +229,9 @@ const $uploadFile = event.target;
 			$uploadFile.value = null;
 			return;
 		}else{
+			// 파일 확장자 체크
+			checkFileName(fileNm);
+
 			const $addFile = document.createElement('div');	// 첨부파일정보 태그
 			$addFile.classList.add("addFile");	// 파일명, 이미지 표시할 태그 생성하고 클래스 추가
 
@@ -270,6 +273,7 @@ const $uploadFile = event.target;
 			$addFile.appendChild($delBtn);
 	
 			$fileNameDiv.appendChild($addFile);
+
 		}
 
 		
@@ -312,6 +316,7 @@ function checkFileName(str){
 	const ext = str.split('.').pop().toLowerCase();
 	if(ext.includes("jsp" || "html" || "js" || "css") ){
 		alert("해당 파일은 업로드 할 수 없습니다.");
+		return;
 	}
 }
 
