@@ -18,7 +18,7 @@
     </title>
     <link type="text/css" rel="stylesheet" href="<c:url value='/css/register.css?after'/>"/>
 </head>
-<body >
+<body onpageshow="initPage(e)">
 <form:form method ="post" commandName="boardVO" id="addForm" name="addForm"  enctype="multipart/form-data" >
  <input type="hidden" id="boardSq" name="boardSq" value="${boardVO.boardSq}" />
  <!-- <input type="hidden" id="useYn" name="useYn" value="${boardVO.useYn}" /> -->
@@ -126,11 +126,10 @@
          <div class="btns"> 
 			<div class="left-btn">
 				<!-- 목록 -->
-				<a  href="javascript:fn_selectList();">
-					<button id="listBtn" type="button">
-							<spring:message code="button.list" />
-					</button>
-				</a>
+				<button id="listBtn" type="button">
+						<spring:message code="button.list" />
+				</button>
+			
 			  
 			</div>
 			<div class="right-btn">
@@ -152,11 +151,9 @@
 		   
 			   <!-- 삭제 -->
 			   <c:if test="${registerFlag == 'modify'}">
-				   <a href="javascript:fn_delete();">
-					   <button id="delPrevBtn" type="button">         	
-							   <spring:message code="button.delete" />           
-					   </button>
-				   </a>      
+					<button id="delBtn" type="button">         	
+							<spring:message code="button.delete" />           
+					</button>
 			   </c:if>
 			</div>
 	   			 
@@ -170,9 +167,26 @@
 	<input type="hidden" id="searchKeyword" name="searchKeyword" value="${searchVO.searchKeyword}"/>
 	<input type="hidden" id="pageIndex" name="pageIndex" value="${searchVO.pageIndex}"/> 
 </form:form>
-</body>
+<script type="text/javascript">
+	function fn_selectList(){
+		const btnVal = document.getElementById("writeBtn").innerText;
+		let con = confirm(btnVal+"중이던 글이 저장되지 않습니다.\n목록으로 가시겠습니까?");
 
-<script language="javaScript" src="/js/board_register.js?after"></script>
-<script type = "module" language="javaScript" src="/js/deleteFile.js?after"></script>
+		if(con == false){
+			return;
+		}else if(con == true){
+			document.addForm.action = "/boardList.do";
+			document.addForm.submit();
+		}
+	}
+	function initPage(e){
+		if(e.persisted){
+			console.log("history back 으로 접근");
+		}
+	}
+</script>
+</body>
+<script type = "module" language="javaScript" src="/js/board_register.js?after"></script>
+<!-- <script type = "module" language="javaScript" src="/js/deleteFile.js?after"></script> -->
 
 </html>

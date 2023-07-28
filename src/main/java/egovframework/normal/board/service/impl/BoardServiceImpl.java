@@ -87,10 +87,9 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	public BoardVO selectBoard(BoardVO vo) throws Exception {
 		BoardVO resultVO = boardDAO.selectBoard(vo);
 
-		if (resultVO == null)
-			throw processException("info.nodata.msg");
-		
-		boardDAO.increaseViewCnt(resultVO);
+		if (resultVO != null) {			
+			boardDAO.increaseViewCnt(resultVO);
+		}	
 		return resultVO;
 	}
 

@@ -102,5 +102,25 @@ public class RestBoardController {
 			return res ;
 		} 
 		
+		@GetMapping("{boardSq}/selectBoard.do")
+		@ResponseBody
+		public RestResponse<Object> selectBoard(@PathVariable("boardSq")Long boardSq, Model model)throws Exception{
+			RestResponse<Object> res = null;
+			
+			BoardVO vo = new BoardVO();
+			vo.setBoardSq(boardSq);
+			
+			BoardVO selectedVO = boardService.selectBoard(vo);
+			
+			if(selectedVO == null) {
+				res = RestResponse.createRestResponse("99", "실패", null);
+			}else {
+				String selectedYn = selectedVO.getUseYn();
+				res = RestResponse.createRestResponse("00", "성공", selectedYn);
+			}
+			
+			return res;
+		}
+		
 
 }

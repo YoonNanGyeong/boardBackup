@@ -1,3 +1,4 @@
+import { ajax } from "/js/ajax.js";
 
 // form
 let frm = document.detailForm;
@@ -5,6 +6,7 @@ let frm = document.detailForm;
 // 등록 버튼
 const $addBtn = document.getElementById("writeBtn");
 const $listBtn = document.getElementById("listBtn");
+const $delBtn = document.getElementById("delBtn");
 
 // 입력 필드 
 const $user = document.getElementById("userNm");
@@ -143,17 +145,38 @@ function fn_selectList(){
 		document.addForm.submit();
 	}
 }
+$listBtn.addEventListener('click', fn_selectList, false);
 
 /* 글 삭제 function */
-let delFlag = false; 
 function fn_delete() {
 	if(!confirm("삭제하시겠습니까?")){
 		document.addForm.action = "/detailBoard.do";
 	}else{    		
 			document.addForm.action = "/deleteBoard.do";
 			document.addForm.submit();
-			delFlag = true;
 		alert("삭제완료되었습니다.");
+	}
+}
+$delBtn.addEventListener('click', fn_delete, false);
+
+// 브라우저 뒤로가기 버튼 눌렀을 경우
+const $boardSq = document.getElementById('boardSq');
+window.onpageshow = function (e){
+	if(e.persisted){
+		console.log("뒤로가기!");
+		const url = `/api/${$boardSq}/selectBoard.do`;
+		ajax
+			.get(url)
+			.then(res => res.json())
+			.then(res => {
+				if(res.header.rtcd == '99'){
+					console.log("삭제된 게시글 입니다!");
+					location.replace('/boardList.do');
+				}else{
+					console.log(res.rtmsg);
+				}
+			})
+			.catch(console.error);
 	}
 }
 
@@ -338,4 +361,40 @@ function checkFileName(fileName){
 
 
 
+// 파일 삭제 처리
+const $delBtn2 =  document.querySelectorAll('.fa-solid.fa-trash-can');
+
+
+for(const ele of $delBtn2){
+	ele.addEventListener('click', e => {
+		const target = e.target;
+		const $fileSq = target.parentNode.previousElementSibling;
+		
+		if(e.target.tagName != 'I') return;
+		if(!confirm('삭제하시겠습니까?')) return;
+
+		const url = `/api/${$fileSq.value}/deleteFile.do`;
+		ajax
+			.get(url)
+			.then(res => res.json())
+			.then(res => {
+				if(res.header.rtcd == '00'){
+					console.log("파일 삭제 성공!")
+					//첨부파일 정보 화면에서 제거
+					removeAttachFileFromView(e);
+				}else{
+					console.log(res.rtmsg);
+				}
+			})
+			.catch(console.error);
+	}, false);
+
+}
+
+//첨부파일 정보 화면에서 제거
+function removeAttachFileFromView(e){
+    const $parent = document.querySelector('.download-area');
+    const $child = e.target.closest('.files');
+    $parent.removeChild($child);
+}	
 
