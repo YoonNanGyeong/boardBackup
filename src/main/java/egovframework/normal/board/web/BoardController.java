@@ -479,7 +479,6 @@ public class BoardController {
 					
 					resizedImage =makeThumbnail(src, w, h, fileList.get(i).get("changeFile"));					
 					ImageIO.write(resizedImage, "jpg", thumFile);	//리사이징 이미지 해당 경로로 업로드
-					System.out.println("png 이미지 리사이징");
 
 					System.out.println("이미지 리사이징 완료!");   
 			}

@@ -17,25 +17,11 @@
          <c:if test="${registerFlag == 'modify'}">수정</c:if>
     </title>
     <link type="text/css" rel="stylesheet" href="<c:url value='/css/register.css?after'/>"/>
-    <script type="text/javascript" language="javaScript" defer = "defer">    
-	    
-	    /* 글 삭제 function */
-	    function fn_delete() {
-	    	if(!confirm("삭제하시겠습니까?")){
-	    		document.addForm.action = "<c:url value='/detailBoard.do'/>";
-	    	}else{    		
-		       	document.addForm.action = "<c:url value='/deleteBoard.do'/>";
-		       	document.addForm.submit();
-	    		alert("삭제완료되었습니다.");
-	    	}
-	    }
-	    
-    </script>
 </head>
 <body >
-
 <form:form method ="post" commandName="boardVO" id="addForm" name="addForm"  enctype="multipart/form-data" >
  <input type="hidden" id="boardSq" name="boardSq" value="${boardVO.boardSq}" />
+ <!-- <input type="hidden" id="useYn" name="useYn" value="${boardVO.useYn}" /> -->
     <!-- 상단바 -->
         <div class="nv-l"></div>
         <nav class="nv">
@@ -95,6 +81,7 @@
 	            <div class="file-area">
 	                <label for="uploadFile">첨부파일 업로드</label> 
 					<p style="color: #0070D2; font-size: 14px;">최대 300MB까지 업로드 가능 합니다.</p>
+					<p style="color: #7CA3C6; font-size: 12px;">업로드 가능 파일 확장자: hwp,doc,docx,ppt,pptx,xls,xlsx,txt,csv,jpg,jpeg,gif,png,bmp,pdf</p>
 						<div class="file-list">
 							<form:input type="file" path="uploadFile" title="첨부파일 추가" multiple="multiple" />
 					  

@@ -134,13 +134,26 @@ if($content.value.trim() == ''){
 /* 글 목록 화면 function */
 function fn_selectList(){
 	const btnVal = document.getElementById("writeBtn").innerText;
-	let con = confirm(`${btnVal} 중이던 글이 저장되지 않습니다.\n 목록으로 가시겠습니까?`);
+	let con = confirm(`${btnVal} 중이던 글이 저장되지 않습니다.\n목록으로 가시겠습니까?`);
 
 	if(con == false){
 		return;
 	}else if(con == true){
 		document.addForm.action = "/boardList.do";
 		document.addForm.submit();
+	}
+}
+
+/* 글 삭제 function */
+let delFlag = false; 
+function fn_delete() {
+	if(!confirm("삭제하시겠습니까?")){
+		document.addForm.action = "/detailBoard.do";
+	}else{    		
+			document.addForm.action = "/deleteBoard.do";
+			document.addForm.submit();
+			delFlag = true;
+		alert("삭제완료되었습니다.");
 	}
 }
 
