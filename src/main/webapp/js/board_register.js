@@ -228,10 +228,11 @@ const $uploadFile = event.target;
 			alert("파일 용량이 300MB 초과 했습니다. :(");
 			$uploadFile.value = null;
 			return;
-		}else{
+		}else if(checkFileName(fileNm) == false){
 			// 파일 확장자 체크
-			checkFileName(fileNm);
-
+			alert("허용하지 않는 확장자입니다.");
+			return;
+		}else{
 			const $addFile = document.createElement('div');	// 첨부파일정보 태그
 			$addFile.classList.add("addFile");	// 파일명, 이미지 표시할 태그 생성하고 클래스 추가
 
@@ -311,13 +312,13 @@ const $uploadFile = event.target;
 
 });
 
-// 파일 확장자 체크
-function checkFileName(str){
-	const ext = str.split('.').pop().toLowerCase();
-	if(ext.includes("jsp" || "html" || "js" || "css") ){
-		alert("해당 파일은 업로드 할 수 없습니다.");
-		return;
-	}
+// 파일 확장자 체크 (허용하는 확장자 외에 불가능)
+// 결과 true 정상, false 업로드 불가
+function checkFileName(fileName){
+	// 허용하는 확장자
+	const extReg =  /(hwp|doc|docx|ppt|pptx|xls|xlsx|txt|csv|jpg|jpeg|gif|png|bmp|pdf)$/i;
+	const ext = fileName.substr( (fileName.lastIndexOf('.') +1) );
+	return extReg.test(ext);
 }
 
 
