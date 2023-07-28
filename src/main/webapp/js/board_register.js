@@ -225,12 +225,13 @@ const $uploadFile = event.target;
 		
 		// 첨부파일 용량 체크: 300mb 초과
 		if($uploadFile.files && $fileSize > maxSize){
-			alert("파일 용량이 300MB 초과 했습니다. :(");
+			alert("파일 용량이 300MB 초과 했습니다.");
 			$uploadFile.value = null;
 			return;
 		}else if(checkFileName(fileNm) == false){
 			// 파일 확장자 체크
 			alert("허용하지 않는 확장자입니다.");
+			$uploadFile.value = null;
 			return;
 		}else{
 			const $addFile = document.createElement('div');	// 첨부파일정보 태그
@@ -262,7 +263,7 @@ const $uploadFile = event.target;
 					fileImgEle.setAttribute("height", "40px");
 				}
 				reader.readAsDataURL(event.target.files[i]);
-				$addFile.appendChild(fileImgEle);
+				$addFile.appendChild(fileImgEle); 
 			} else {
 				console.log('not contains image!');
 			}
