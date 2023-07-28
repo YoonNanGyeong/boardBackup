@@ -187,6 +187,5 @@
 </script>
 </body>
 <script type = "module" language="javaScript" src="/js/board_register.js?after"></script>
-<!-- <script type = "module" language="javaScript" src="/js/deleteFile.js?after"></script> -->
 
 </html>
