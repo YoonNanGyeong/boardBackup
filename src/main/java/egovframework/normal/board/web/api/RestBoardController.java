@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -61,7 +62,8 @@ public class RestBoardController {
 		@ResponseBody
 		public RestResponse<Object> detailPrevNext(
 						@RequestBody BoardVO boardVO,
-						@ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model)  throws Exception {
+						@ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model
+						)  throws Exception {
 			System.out.println("---------- 상세조회 이전,다음 ----------");
 			
 			

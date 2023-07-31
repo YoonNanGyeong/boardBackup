@@ -8,10 +8,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<!-- Cache Control 설정 -->
-	<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate" />
-	<meta http-equiv="pragma" content="no-cache" />
-	<meta http-equiv="expires" content="0" />
     <!-- fontawesome 아이콘 -->
     <script src="https://kit.fontawesome.com/dcfc9e7feb.js" ></script>
     

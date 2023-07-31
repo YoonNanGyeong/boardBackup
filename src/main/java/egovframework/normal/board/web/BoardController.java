@@ -332,7 +332,7 @@ public class BoardController {
 	@GetMapping("{selectedId}/detailBoard.do")
 	public String detailBoardView(@PathVariable("selectedId") Long boardSq, 
 			@ModelAttribute("searchBoard") BoardVO searchBoard,
-			@ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model)  throws Exception {
+			@ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model, HttpServletResponse response)  throws Exception {
 		System.out.println("상세조회 화면 !");
 		BoardVO boardVO = new BoardVO();
 		boardVO.setBoardSq(boardSq);
@@ -343,6 +343,8 @@ public class BoardController {
 		
 		if(vo == null){
 			System.out.println("존재하지 않는 게시글입니다!");
+			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+	        response.setHeader("Pragma", "no-cache");
 			return "board/board_exist";
 		}
 		
