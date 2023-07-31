@@ -18,7 +18,7 @@
     </title>
     <link type="text/css" rel="stylesheet" href="<c:url value='/css/register.css?after'/>"/>
 </head>
-<body onpageshow="initPage(e)">
+<body>
 <form:form method ="post" commandName="boardVO" id="addForm" name="addForm"  enctype="multipart/form-data" >
  <input type="hidden" id="boardSq" name="boardSq" value="${boardVO.boardSq}" />
  <!-- <input type="hidden" id="useYn" name="useYn" value="${boardVO.useYn}" /> -->
@@ -179,11 +179,7 @@
 			document.addForm.submit();
 		}
 	}
-	function initPage(e){
-		if(e.persisted){
-			console.log("history back 으로 접근");
-		}
-	}
+
 </script>
 </body>
 <script type = "module" language="javaScript" src="/js/board_register.js?after"></script>

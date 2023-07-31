@@ -340,6 +340,11 @@ public class BoardController {
 		BoardVO vo = selectBoard(boardVO, searchVO);
 		model.addAttribute("boardVO", vo);
 		
+		if(vo == null){
+			System.out.println("존재하지 않는 게시글입니다!");
+			return "board/board_exist";
+		}
+		
 		
 		UploadFileVO uploadFileVO = new UploadFileVO();
 		uploadFileVO.setBoardNo(boardSq);

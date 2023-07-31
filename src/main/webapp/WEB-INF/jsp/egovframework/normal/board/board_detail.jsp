@@ -4,6 +4,7 @@
 <%@ taglib prefix="form"   uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ui"     uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
 <head>
@@ -43,6 +44,12 @@
 </head>
 
 <body>
+    <% if(request.getAttribute("boardVO") == null){%>
+    <script>
+        alert("존재하지 않는 게시글입니다.");
+        history.back();
+   </script>
+    <%}%>
 <form:form modelAttribute="searchVO" id="detailForm" name="detailForm" method="post">
         <input type="hidden" id="boardCd" name="boardCd" value="${boardVO.boardCd}" />
         <input type="hidden" id="boardSq" name="boardSq" value="${boardVO.boardSq}" />
