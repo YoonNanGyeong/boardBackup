@@ -6,7 +6,7 @@ let frm = document.detailForm;
 // 등록 버튼
 const $addBtn = document.getElementById("writeBtn");
 const $listBtn = document.getElementById("listBtn");
-const $delBtn = document.getElementById("delBtn");
+// const $delBtn = document.getElementById("delBtn");
 
 // 입력 필드 
 const $user = document.getElementById("userNm");
@@ -157,7 +157,7 @@ function fn_delete() {
 		alert("삭제완료되었습니다.");
 	}
 }
-$delBtn.addEventListener('click', fn_delete, false);
+// $delBtn.addEventListener('click', fn_delete, false);
 
 /* 글 등록 function */
 $addBtn.addEventListener('click', e => {
@@ -282,11 +282,11 @@ const $uploadFile = event.target;
 				console.log('not contains image!');
 			}
 
-			const $delBtn = document.createElement('i');	// 첨부파일 삭제 버튼
+			const $fileDelBtn = document.createElement('i');	// 첨부파일 삭제 버튼
 			
-			$delBtn.classList.add("fa-solid", "fa-trash-can");
-			$delBtn.setAttribute("data-index",`${uploadFile.files[i].lastModified}`);	
-			$addFile.appendChild($delBtn);
+			$fileDelBtn.classList.add("fa-solid", "fa-trash-can");
+			$fileDelBtn.setAttribute("data-index",`${uploadFile.files[i].lastModified}`);	
+			$addFile.appendChild($fileDelBtn);
 	
 			$fileNameDiv.appendChild($addFile);
 
@@ -340,10 +340,10 @@ function checkFileName(fileName){
 
 
 // 파일 삭제 처리
-const $delBtn2 =  document.querySelectorAll('.fa-solid.fa-trash-can');
+const fileDelBtns =  document.querySelectorAll('.fa-solid.fa-trash-can');
 
 
-for(const ele of $delBtn2){
+for(const ele of fileDelBtns){
 	ele.addEventListener('click', e => {
 		const target = e.target;
 		const $fileSq = target.parentNode.previousElementSibling;

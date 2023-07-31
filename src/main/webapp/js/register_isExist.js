@@ -11,7 +11,6 @@ const $boardSq = document.getElementById("boardSq");
 					if(res.header.rtcd == 99){
 						alert('삭제된 게시글 입니다.');
 						location.replace("/boardList.do");
-						// history.back(); //이전 페이지로 가기
 					}else{
 					console.log(res.rtmsg);
 					}	

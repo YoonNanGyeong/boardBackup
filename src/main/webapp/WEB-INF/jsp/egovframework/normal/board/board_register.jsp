@@ -150,7 +150,7 @@
 		   
 			   <!-- 삭제 -->
 			   <c:if test="${registerFlag == 'modify'}">
-					<button id="delBtn" type="button">         	
+					<button id="delBtn" type="button" onclick="fn_delete();">         	
 							<spring:message code="button.delete" />           
 					</button>
 			   </c:if>
