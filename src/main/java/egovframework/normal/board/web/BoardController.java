@@ -29,6 +29,7 @@ import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -362,10 +363,21 @@ public class BoardController {
 	
 	// 수정화면
 	@RequestMapping("/updateBoardView.do")
-	public String updateBoardView(@RequestParam("selectedId") Long boardSq, @ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model) throws Exception {
+	public String updateBoardView(@RequestParam("selectedId") Long boardSq, 
+			@ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model, HttpServletResponse response) throws Exception {
 		BoardVO boardVO = new BoardVO();
 		boardVO.setBoardSq(boardSq);
+		BoardVO selectedVO = selectBoard(boardVO, searchVO);
 		model.addAttribute(selectBoard(boardVO, searchVO));
+		
+		if(selectedVO == null) {
+			System.out.println("삭제된 게시글 입니다!");
+			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+	        response.setHeader("Pragma", "no-cache");
+			return "board/board_exist";
+		}
+		
+		System.out.println("수정화면!");
 		
 		UploadFileVO uploadFileVO = new UploadFileVO();
 		uploadFileVO.setBoardNo(boardSq);

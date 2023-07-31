@@ -8,6 +8,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<!-- Cache Control 설정 -->
+	<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="pragma" content="no-cache" />
+	<meta http-equiv="expires" content="0" />
     <!-- fontawesome 아이콘 -->
     <script src="https://kit.fontawesome.com/dcfc9e7feb.js" ></script>
     
@@ -17,18 +21,10 @@
          <c:if test="${registerFlag == 'modify'}">수정</c:if>
     </title>
     <link type="text/css" rel="stylesheet" href="<c:url value='/css/register.css?after'/>"/>
-	<script>
-		window.onpageshow = function(e){
-			if(e.persisted){
-				console.log("뒤로가기 눌림!");
-			}
-		}
-	</script>
 </head>
 <body>
 <form:form method ="post" commandName="boardVO" id="addForm" name="addForm"  enctype="multipart/form-data" >
  <input type="hidden" id="boardSq" name="boardSq" value="${boardVO.boardSq}" />
- <!-- <input type="hidden" id="useYn" name="useYn" value="${boardVO.useYn}" /> -->
     <!-- 상단바 -->
         <div class="nv-l"></div>
         <nav class="nv">
@@ -174,6 +170,7 @@
 	<input type="hidden" id="searchKeyword" name="searchKeyword" value="${searchVO.searchKeyword}"/>
 	<input type="hidden" id="pageIndex" name="pageIndex" value="${searchVO.pageIndex}"/> 
 </form:form>
+<script type ="module" src="/js/register_isExist.js"></script>
 <script type="text/javascript">
 	function fn_selectList(){
 		const btnVal = document.getElementById("writeBtn").innerText;

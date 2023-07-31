@@ -159,29 +159,6 @@ function fn_delete() {
 }
 $delBtn.addEventListener('click', fn_delete, false);
 
-// 브라우저 뒤로가기 버튼 눌렀을 경우
-const $boardSq = document.getElementById('boardSq');
-// window.onpageshow = function (e){
-// 	if(e.persisted){
-// 		console.log("뒤로가기!");
-// 		const url = `/api/${$boardSq}/selectBoard.do`;
-// 		ajax
-// 			.get(url)
-// 			.then(res => res.json())
-// 			.then(res => {
-// 				if(res.header.rtcd == '99'){
-// 					console.log("삭제된 게시글 입니다!");
-// 					location.replace('/boardList.do');
-// 				}else{
-// 					console.log(res.rtmsg);
-// 				}
-// 			})
-// 			.catch(console.error);
-// 	}
-// }
-
-
-
 /* 글 등록 function */
 $addBtn.addEventListener('click', e => {
 	e.preventDefault();
