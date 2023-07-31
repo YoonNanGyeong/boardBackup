@@ -6,7 +6,6 @@ let frm = document.detailForm;
 // 등록 버튼
 const $addBtn = document.getElementById("writeBtn");
 const $listBtn = document.getElementById("listBtn");
-// const $delBtn = document.getElementById("delBtn");
 
 // 입력 필드 
 const $user = document.getElementById("userNm");
@@ -147,17 +146,7 @@ function fn_selectList(){
 }
 $listBtn.addEventListener('click', fn_selectList, false);
 
-/* 글 삭제 function */
-function fn_delete() {
-	if(!confirm("삭제하시겠습니까?")){
-		document.addForm.action = "/detailBoard.do";
-	}else{    		
-			document.addForm.action = "/deleteBoard.do";
-			document.addForm.submit();
-		alert("삭제완료되었습니다.");
-	}
-}
-// $delBtn.addEventListener('click', fn_delete, false);
+
 
 /* 글 등록 function */
 $addBtn.addEventListener('click', e => {

@@ -17,6 +17,19 @@
          <c:if test="${registerFlag == 'modify'}">수정</c:if>
     </title>
     <link type="text/css" rel="stylesheet" href="<c:url value='/css/register.css?after'/>"/>
+	<script>
+		
+	/* 글 삭제 function */
+	function fn_delete() {
+		if(!confirm("삭제하시겠습니까?")){
+			document.addForm.action = "/detailBoard.do";
+		}else{    		
+				document.addForm.action = "/deleteBoard.do";
+				document.addForm.submit();
+			alert("삭제완료되었습니다.");
+		}
+	}
+	</script>
 </head>
 <body>
 <form:form method ="post" commandName="boardVO" id="addForm" name="addForm"  enctype="multipart/form-data" >
