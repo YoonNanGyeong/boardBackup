@@ -180,13 +180,6 @@ const $boardSq = document.getElementById('boardSq');
 // 	}
 // }
 
-if(document.addEventListener){
-	window.addEventListener('popstate',function (e){
-		if(e.persisted){
-			console.log('뒤로가기 눌림!');
-		}
-	},false);
-}
 
 
 /* 글 등록 function */

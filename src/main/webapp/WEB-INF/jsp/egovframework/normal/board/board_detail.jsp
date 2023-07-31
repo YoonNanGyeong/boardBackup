@@ -44,12 +44,6 @@
 </head>
 
 <body>
-    <% if(request.getAttribute("boardVO") == null){%>
-    <script>
-        alert("존재하지 않는 게시글입니다.");
-        history.back();
-   </script>
-    <%}%>
 <form:form modelAttribute="searchVO" id="detailForm" name="detailForm" method="post">
         <input type="hidden" id="boardCd" name="boardCd" value="${boardVO.boardCd}" />
         <input type="hidden" id="boardSq" name="boardSq" value="${boardVO.boardSq}" />

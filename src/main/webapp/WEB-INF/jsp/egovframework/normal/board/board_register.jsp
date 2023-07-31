@@ -17,6 +17,13 @@
          <c:if test="${registerFlag == 'modify'}">수정</c:if>
     </title>
     <link type="text/css" rel="stylesheet" href="<c:url value='/css/register.css?after'/>"/>
+	<script>
+		window.onpageshow = function(e){
+			if(e.persisted){
+				console.log("뒤로가기 눌림!");
+			}
+		}
+	</script>
 </head>
 <body>
 <form:form method ="post" commandName="boardVO" id="addForm" name="addForm"  enctype="multipart/form-data" >
