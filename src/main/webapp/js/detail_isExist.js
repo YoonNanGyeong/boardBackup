@@ -1,6 +1,6 @@
 import { ajax } from "/js/ajax.js";
 const $boardSq = document.getElementById("boardSq");
-	// 뒤로가기 눌렀을 경우 캐시된 페이지이면 실행
+	// 뒤로가기 눌렀을 경우 캐시된 페이지면 실행
 	window.onpageshow = function (e) {
 		if (e.persisted|| (window.performance && window.performance.navigation.type == 2)) {
 			const url = "/api/"+ $boardSq.value + "/selectBoard.do";

@@ -159,6 +159,10 @@ public class BoardController {
 		
 		model.addAttribute("paginationInfo", paginationInfo);
 		
+//		System.out.println("TotalRecordCount : " +paginationInfo.getTotalRecordCount());
+//		System.out.println("searchVO pageIndex : " +searchVO.getPageIndex());
+//		System.out.println("searchVO pageSize : " +searchVO.getPageSize());
+		
 		return "board/board_list";
 	}
 

@@ -132,7 +132,7 @@
 				content LIKE '%' || #searchKeyword# || '%'
 			</isEqual>
 			<isEqual prepend="AND" property="searchCondition" compareValue="2">
-				user_nm LIKE '%' || #searchKeyword# || '%v'
+				user_nm LIKE '%' || #searchKeyword# || '%'
 			</isEqual>
 	</select>
 	

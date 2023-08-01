@@ -1,7 +1,7 @@
 import { ajax } from "/js/ajax.js";
 
 // form
-let frm = document.detailForm;
+let frm = document.addForm;
 
 // 등록 버튼
 const $addBtn = document.getElementById("writeBtn");
@@ -204,8 +204,6 @@ $addBtn.addEventListener('click', e => {
 			}
 			alert(result);
 
-			// console.log(valiTxt);
-			// console.log(valiParse);
 		}
 
 	}

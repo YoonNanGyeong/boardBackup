@@ -194,7 +194,7 @@
 	}
 
 </script>
-</body>
 <script type = "module" language="javaScript" src="/js/board_register.js?after"></script>
+</body>
 
 </html>
