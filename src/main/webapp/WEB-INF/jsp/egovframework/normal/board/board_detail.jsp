@@ -113,7 +113,10 @@
 				<c:if test="${fileSize gt 0}">				
 	                <div class="download-title">
 	                     <label for="uploadNm" style="margin-right: 0;">첨부파일 다운로드</label>
-	                    <i class="fa-solid fa-download"></i>
+                         <!-- 다운로드 아이콘(압축파일 다운로드) -->
+	                    <a href="/zipFileDownload.do?boardSq=${boardVO.boardSq}">
+                            <i class="fa-solid fa-download"></i>
+                        </a>
 	                </div>
 		                <div class="download-area">
 							<c:forEach var="file" items="${fileList}" varStatus="status">

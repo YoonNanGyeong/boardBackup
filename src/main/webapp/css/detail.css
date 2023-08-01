@@ -215,6 +215,10 @@ header {
     font-size: 0.8rem;
 }
 
+.fa-solid.fa-download {
+    cursor: pointer;
+}
+
 
 /* /첨부파일 영역 */
 

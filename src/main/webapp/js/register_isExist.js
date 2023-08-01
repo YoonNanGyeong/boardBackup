@@ -10,7 +10,7 @@ const $boardSq = document.getElementById("boardSq");
 				.then(res => {
 					if(res.header.rtcd == 99){
 						alert('삭제된 게시글 입니다.');
-						location.replace("/boardList.do");
+						location.href = "/boardList.do";
 					}else{
 					console.log(res.rtmsg);
 					}	

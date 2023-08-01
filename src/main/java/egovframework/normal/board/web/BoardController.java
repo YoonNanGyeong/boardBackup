@@ -159,10 +159,6 @@ public class BoardController {
 		
 		model.addAttribute("paginationInfo", paginationInfo);
 		
-//		System.out.println("TotalRecordCount : " +paginationInfo.getTotalRecordCount());
-//		System.out.println("searchVO pageIndex : " +searchVO.getPageIndex());
-//		System.out.println("searchVO pageSize : " +searchVO.getPageSize());
-		
 		return "board/board_list";
 	}
 
@@ -276,7 +272,7 @@ public class BoardController {
 							int imageHeight = src.getHeight(null);
 
 							// 썸네일이 원본 보다 크지 않게 만들기
-							double ratio =Math.min( (double)wantWeight/ (double)wantHeight, 1);
+							double ratio =Math.min( (double)wantWeight/ (double)wantHeight, 0.1);
 							
 							//비율대로 만들어지는 실제 이미지 크기 구하기
 							int w = (int)(imageWidth * ratio);
@@ -494,7 +490,7 @@ public class BoardController {
 					int imageHeight = src.getHeight(null);
 
 					// 썸네일이 원본 보다 크지 않게 만들기
-					double ratio =Math.min( (double)wantWeight/ (double)wantHeight, 1);
+					double ratio =Math.min( (double)wantWeight/ (double)wantHeight, 0.1);
 					
 					//비율대로 만들어지는 실제 이미지 크기 구하기
 					int w = (int)(imageWidth * ratio);
