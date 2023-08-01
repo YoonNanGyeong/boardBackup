@@ -2,8 +2,10 @@
 <!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
 
 <sqlMap namespace="uploadFile">
+	<!-- 클래스 별칭 정의  -->
 	<typeAlias  alias="uploadFileVO" type="egovframework.normal.board.service.UploadFileVO"/>
 	
+	<!-- 클래스 프로퍼티와 테이블 컬럼 매칭  -->
 	<resultMap id="uploadfile" class="egovframework.normal.board.service.UploadFileVO">
 		<result property="fileSq" column="file_sq"/>
 		<result property="boardNo" column="board_no"/>
@@ -14,6 +16,7 @@
 		<result property="useYn" column="use_yn"/>
 	</resultMap>
 	
+	<!--  첨부파일 추가	-->
 	<insert id="uploadFileDAO.insertFile" parameterClass="uploadFileVO">
 		<![CDATA[
  			INSERT INTO test_uploadfile_tb  
@@ -32,7 +35,7 @@
 				  , #fileType# 
  				  ) 
  		]]> 
-		
+		<!--  파일 추가 시 생성되는 파일 아이디 	-->
 		<selectKey keyProperty="fileSq"  resultClass="Long">
 			SELECT test_uploadFile_seq.currval AS file_sq FROM dual
 		</selectKey>

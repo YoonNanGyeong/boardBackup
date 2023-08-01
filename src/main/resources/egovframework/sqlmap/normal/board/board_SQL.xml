@@ -2,11 +2,12 @@
 <!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
 
 <sqlMap namespace="board">
-
+	<!-- 클래스 별칭 정의  -->
 	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
 	<typeAlias  alias="searchVO" type="egovframework.normal.board.service.BoardDefaultVO"/>
 	<typeAlias  alias="boardVO" type="egovframework.normal.board.service.BoardVO"/>
 	
+	<!-- 클래스 프로퍼티와 테이블 컬럼 매칭  -->
 	<resultMap id="board" class="egovframework.normal.board.service.BoardVO" >
 		<result property="boardSq" column="board_sq"/>
 		<result property="boardCd" column="board_cd"/>
@@ -19,7 +20,7 @@
 		<result property="updateDt" column="update_dt"/>
 	</resultMap>
 
-
+	<!-- 게시글 저장 -->
 	<insert id="boardDAO.insertBoard" parameterClass="egovframework.normal.board.service.BoardVO" >
 		
 		<![CDATA[
@@ -37,11 +38,13 @@
 				  , #userNm#
 					 )
 		]]>
+		<!-- 게시글 저장 시 생성되는 게시글 번호 -->
 		<selectKey keyProperty="boardSq"  resultClass="Long">
 			SELECT test_board_seq.currval AS board_sq FROM dual
 		</selectKey>
 	</insert>
 	
+	<!-- 게시글 수정 -->
 	<update id="boardDAO.updateBoard">
 		<![CDATA[
 			UPDATE test_board_tb
@@ -54,6 +57,7 @@
 		]]>
 	</update>
 	
+	<!-- 게시글 조회수 증가 -->
 	<update id="boardDAO.updateViewCnt">
 		<![CDATA[
 			UPDATE test_board_tb
@@ -62,7 +66,7 @@
 		]]>
 	</update>
 	
-	
+	<!-- 게시글 삭제 처리 -->
 	<delete id="boardDAO.deleteBoard">
 		<![CDATA[
 			UPDATE test_board_tb
@@ -71,6 +75,7 @@
 		]]>
 	</delete>
     
+    <!-- 게시글 조회 -->
     <select id="boardDAO.selectBoard" resultMap="board" remapResults="true">
        	<![CDATA[
             SELECT
@@ -82,18 +87,21 @@
         ]]>
     </select>
 	
+	<!-- 게시글 목록 조회 -->
 	<select id="boardDAO.selectBoardList"  parameterClass="searchVO" resultClass="egovMap">
 
 			SELECT
 				board_sq, board_cd, title, view_cnt, user_nm, TO_CHAR(update_dt,'YYYY.MM.DD')update_dt
 			FROM test_board_tb
 			WHERE 1=1 and use_yn = 'Y'
+			<!-- 선택된 글 카테고리가 없으면 기본 카테고리 코드 'B0101' -->
 			<isEmpty prepend="AND" property="boardCd">
 				board_cd = 'B0101'
 			</isEmpty>
 			<isNotEmpty prepend="AND" property="boardCd">			
 				board_cd = #boardCd#
 			</isNotEmpty>
+			<!-- 선택된 검색 조건에 따라 쿼리문 바뀜 -->
 			<isNotEmpty property="searchCondition">
 				<isEqual prepend="AND" property="searchCondition" compareValue="0">
 					title LIKE '%' || #searchKeyword# || '%'
@@ -106,22 +114,24 @@
 				</isEqual>
 			</isNotEmpty>		
 			
-			
+			<!-- 페이징  -->
 			ORDER BY board_sq DESC
 			OFFSET #firstIndex# ROWS 
 			FETCH NEXT #recordCountPerPage# ROWS ONLY	
 	</select>
 	
 
-	
+	<!-- 게시글 총 개수 조회 -->
 	<select id="boardDAO.selectBoardListTotCnt" parameterClass="searchVO" resultClass="int">
 
 			SELECT COUNT(*) totcnt
 			FROM test_board_tb
 			WHERE 1=1 and use_yn = 'Y'
+			<!-- 선택된 글 카테고리가 없으면 기본 카테고리 코드 'B0101' -->
 			<isEmpty prepend="AND" property="boardCd">
 				board_cd = 'B0101'
 			</isEmpty>
+			<!-- 선택된 검색 조건에 따라 쿼리문 바뀜 -->
 			<isNotEmpty prepend="AND" property="boardCd">			
 				board_cd = #boardCd#
 			</isNotEmpty>
@@ -136,6 +146,7 @@
 			</isEqual>
 	</select>
 	
+	<!-- 게시글 이전, 다음 행 번호 조회 -->
 	<select id="boardDAO.boardPrevNext"  parameterClass="boardVO" resultClass="egovMap">
 	<![CDATA[
  		SELECT DISTINCT t2.next_no, t2.prev_no 
@@ -150,6 +161,7 @@
  	]]> 
 	</select>
 
+	<!-- 이전, 다음 행 번호로 게시글 조회  -->
 	<select id="boardDAO.selectPrevNext" parameterClass="boardVO" resultClass="egovMap">
 	<![CDATA[
  		SELECT t2.board_sq, t2.board_cd, t2.title, t2.content, t2.view_cnt, t2.user_nm,  
@@ -162,7 +174,7 @@
  					   ORDER BY board_sq)t1 
  					ORDER BY rownum)t2 
  	  ]]> 
- 	  
+ 	  <!-- boardVO 클래스의 prevNextCondition 값에 따라 바뀜 -->
  	  	<dynamic prepend="WHERE"> 	  		
 		   <isEqual property="prevNextCondition" compareValue="next">
 		   		 t2.row_no = #nextNo# 

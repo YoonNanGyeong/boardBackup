@@ -2,14 +2,14 @@
 <!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
 
 <sqlMap namespace="code">
-	
+	<!-- 클래스 프로퍼티와 테이블 컬럼 매칭  -->
 	<resultMap id="code" class="egovframework.normal.board.service.CodeVO">
 		<result property="code" column="code"/>
 		<result property="decode" column="decode"/>
 		<result property="codePid" column="code_pid"/>
 	</resultMap>
 	
-	
+	<!-- 선택한 부모 코드의 하위 코드 조회 -->
 	<select id="codeDAO.selectCodeList" parameterClass="egovframework.normal.board.service.CodeVO" resultClass="egovframework.normal.board.service.CodeVO">
 	<![CDATA[
         SELECT CODE, DECODE, CODE_PID

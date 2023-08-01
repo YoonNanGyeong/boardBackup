@@ -47,3 +47,15 @@ for(const ele of $prevNextBtn){
 	}, false);
 }
 
+// 다운로드 아이콘
+const $downZip = document.querySelector('.fa-solid.fa-download');
+
+// 아이콘 클릭 시 압축 파일 다운로드
+$downZip.addEventListener('click', e => {
+	const url = `/zipFileDownload.do?boardSq=${$boardSq.value}`;
+	if(!confirm('첨부 된 파일들이 압축파일로 저장됩니다.\n다운로드 하시겠습니까?')){
+		return;
+	}else{
+		location.href = url;
+	}
+});
