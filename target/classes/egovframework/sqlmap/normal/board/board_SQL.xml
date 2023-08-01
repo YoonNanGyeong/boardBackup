@@ -2,8 +2,10 @@
 <!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
 
 <sqlMap namespace="board">
+
 	<!-- 클래스 별칭 정의  -->
-	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<!-- EgovMap은 전자정부에서 제공되는 클래스(Map형태): 테이블 컬럼명 카멜케이스로 바꿔줌(user_nm => userNm)   -->
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/> 
 	<typeAlias  alias="searchVO" type="egovframework.normal.board.service.BoardDefaultVO"/>
 	<typeAlias  alias="boardVO" type="egovframework.normal.board.service.BoardVO"/>
 	

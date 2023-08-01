@@ -30,8 +30,8 @@ public class FileDownloadController {
 	@RequestMapping(value = "fileDownload.do")
 	public void fileDownload(HttpServletRequest request, HttpServletResponse response)throws Exception {
 
-		String filename =   request.getParameter("storeNm");
-
+		String storeFilename =   request.getParameter("storeNm");
+		String uploadFilename =   request.getParameter("uploadNm");
 		
         String realFilename = "";
         
@@ -39,10 +39,10 @@ public class FileDownloadController {
         	String browser = request.getHeader("User-Agent");
         	// 파일 인코딩
         	if(browser.contains("MSIE") || browser.contains("Trident") || browser.contains("Chrome")) {
-        		filename = URLEncoder.encode(filename, "UTF-8").replaceAll("\\\\", "%20");
-        		System.out.println("filename = " +filename);
+        		uploadFilename = URLEncoder.encode(uploadFilename, "UTF-8").replaceAll("\\\\", "%20");
+        		System.out.println("uploadFilename = " +uploadFilename);
         	}else {
-        		filename = new String(filename.getBytes("UTF-8"),"ISO-8859-1");
+        		uploadFilename = new String(uploadFilename.getBytes("UTF-8"),"ISO-8859-1");
         	}
 		} catch (UnsupportedEncodingException  e) {
 			System.out.println("UnsupportedEncodingException 발생");
@@ -51,7 +51,7 @@ public class FileDownloadController {
         ServletContext context = request.getSession().getServletContext();
 		String loot = context.getRealPath("/images/board/upload/");
         
-        realFilename = loot + filename;
+        realFilename = loot + storeFilename;
  
         File file = new File(realFilename);
         if (!file.exists()) {
@@ -61,7 +61,7 @@ public class FileDownloadController {
         // 파일명 지정
         response.setContentType("application/octer-stream");
         response.setHeader("Content-Transfer-Encoding", "binary");
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + uploadFilename + "\"");
  
         try {
             OutputStream os = response.getOutputStream();

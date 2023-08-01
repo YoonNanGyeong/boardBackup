@@ -114,15 +114,14 @@
 	                <div class="download-title">
 	                     <label for="uploadNm" style="margin-right: 0;">첨부파일 다운로드</label>
                          <!-- 다운로드 아이콘(압축파일 다운로드) -->
-	                    <!-- <a href="/zipFileDownload.do?boardSq=${boardVO.boardSq}"> -->
-                            <i class="fa-solid fa-download"></i>
-                        <!-- </a> -->
+                        <i class="fa-solid fa-download"></i>
 	                </div>
 		                <div class="download-area">
 							<c:forEach var="file" items="${fileList}" varStatus="status">
 	              		  		<div class="files">
-				                         <a href="/fileDownload.do?storeNm=${file.storeNm}">
-				                        	<input type="text" id="storeNm" value="${file.storeNm}" name="storeNm" readonly="readonly" alt="첨부파일명 링크" style="display: none;"/>
+				                         <a href="/fileDownload.do?storeNm=${file.storeNm}&uploadNm=${file.uploadNm}">
+                                            <!-- <input type="hidden" id="fileSq" name="fileSq" value="${file.fileSq}"> -->
+				                        	<input type="hidden" id="storeNm" value="${file.storeNm}" name="storeNm" />
 				                        	<input type="text" id="uploadNm" value="${file.uploadNm}" name="uploadNm" readonly="readonly" alt="첨부파일명 링크"/>
 				                         </a>
 	               		  		</div>
