@@ -26,6 +26,7 @@ public class FileDownloadController {
 	@Resource(name = "uploadFileService")
 	private UploadFileService uploadFileService;
 	
+	// 첨부파일 다운로드(단건)
 	@RequestMapping(value = "fileDownload.do")
 	public void fileDownload(HttpServletRequest request, HttpServletResponse response)throws Exception {
 
@@ -67,7 +68,7 @@ public class FileDownloadController {
             FileInputStream fis = new FileInputStream(realFilename);
  
             int cnt = 0;
-            byte[] bytes = new byte[512];
+            byte[] bytes = new byte[(int)file.length()];
  
             while ((cnt = fis.read(bytes)) != -1) {
                 os.write(bytes, 0, cnt);
@@ -82,6 +83,7 @@ public class FileDownloadController {
         	
 	}
 	
+	// 압축파일 다운로드
 	@RequestMapping(value = "zipFileDownload.do")
 	public void zipFileDownload(HttpServletRequest request, HttpServletResponse response)throws Exception {
 
@@ -95,7 +97,6 @@ public class FileDownloadController {
         	// 파일 인코딩
         	if(browser.contains("MSIE") || browser.contains("Trident") || browser.contains("Chrome")) {
         		filename = URLEncoder.encode(filename, "UTF-8").replaceAll("\\\\", "%20");
-        		System.out.println("filename = " +filename);
         	}else {
         		filename = new String(filename.getBytes("UTF-8"),"ISO-8859-1");
         	}
@@ -104,12 +105,13 @@ public class FileDownloadController {
 		}
         
         ServletContext context = request.getSession().getServletContext();
-		String loot = context.getRealPath("/images/board/upload/files");
+		String loot = context.getRealPath("/images/board/upload/files/");
         
         realFilename = loot + filename;
  
         File file = new File(realFilename);
         if (!file.exists()) {
+        	System.out.println("압축파일이 존재하지 않습니다.");
             return;
         }
         
@@ -131,7 +133,7 @@ public class FileDownloadController {
             bos = new BufferedOutputStream(so);
  
             int cnt = 0;
-            byte[] bytes = new byte[2048];
+            byte[] bytes = new byte[(int)file.length()];
  
             while ((cnt = bis.read(bytes)) != -1) {
                 bos.write(bytes, 0, cnt);
