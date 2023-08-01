@@ -116,6 +116,7 @@
                          <!-- 다운로드 아이콘(압축파일 다운로드) -->
                         <i class="fa-solid fa-download"></i>
 	                </div>
+                    <p style="color: #7CA3C6; font-size: 12px;">다운로드 아이콘을 클릭하면 첨부된 파일 전체를 압축파일로 받을 수 있습니다.</p>
 		                <div class="download-area">
 							<c:forEach var="file" items="${fileList}" varStatus="status">
 	              		  		<div class="files">
