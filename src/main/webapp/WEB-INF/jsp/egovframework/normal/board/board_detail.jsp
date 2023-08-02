@@ -110,7 +110,7 @@
                        <p><c:out value="${boardVO.content}"/>&nbsp;</p>
                     </div>
                 </div>
-				<c:if test="${fileSize gt 0}">				
+				<c:if test="${fileSize gt 0 && dateResult eq true}">				
 	                <div class="download-title">
 	                     <label for="uploadNm" style="margin-right: 0;">첨부파일 다운로드</label>
                          <!-- 다운로드 아이콘(압축파일 다운로드) -->
