@@ -127,7 +127,31 @@ public class BoardController {
 				}
 			}
 		}
-		
+	
+	// 게시글 수정날짜와 현재날짜 일수 차이
+//	@ModelAttribute("dateResult")		
+//	public boolean resultOfDate(String updateDt) {
+//		LocalDate now = LocalDate.now();	 // 현재 날짜
+//		updateDt = updateDt.replace(".", "-");
+//		String[] parts = updateDt.split(" "); 
+//		String result = parts[0];  // 최근 글 작성 날짜에서 시간 제거
+//		LocalDate resultDt = LocalDate.parse(result);	// 문자열 -> 날짜 타입
+//		
+//		long daysDifference = ChronoUnit.DAYS.between(resultDt, now);	// 날짜 일수 차이 계산
+//		System.out.println("날짜 일수 차이: " + daysDifference);
+//		
+//		Boolean dateResult = true;
+//		
+//		if(daysDifference > 30) {
+//			dateResult = false;
+//		}else {
+//			dateResult = true;
+//		}
+//		
+//		System.out.println("dateResult = "+dateResult);
+//		
+//		return dateResult;
+//	}
 		
 		
 	// 글 목록
@@ -390,9 +414,10 @@ public class BoardController {
 		model.addAttribute("fileList", fileList);
 		model.addAttribute("fileSize",fileList.size());
 		
-		LocalDate now = LocalDate.now();	 // 현재 날짜
 		
 		String updateDt = selectedVO.getUpdateDt(); // 최근 글 작성 날짜(시간)
+		
+		LocalDate now = LocalDate.now();	 // 현재 날짜
 		updateDt = updateDt.replace(".", "-");
 		String[] parts = updateDt.split(" "); 
 		String result = parts[0];  // 최근 글 작성 날짜에서 시간 제거
@@ -408,8 +433,10 @@ public class BoardController {
 		}else {
 			dateResult = true;
 		}
-		model.addAttribute("dateResult",dateResult);
+		
 		System.out.println("dateResult = "+dateResult);
+		
+		model.addAttribute("dateResult", dateResult);
 		
 		
 		return "board/board_register";
