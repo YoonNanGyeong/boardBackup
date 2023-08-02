@@ -105,7 +105,6 @@
 						</div>
 
 	           			<!-- 기존에 첨부된 파일이 있으면 표시  -->   
-						<!-- 수정일 기준 30일 경과 되면 다운로드 안됨 -->
 						<c:if test="${fileSize gt 0}">			
 				                <div class="download-area">
 		                		  <label for="fileSq" style="margin-bottom: 20px;">
