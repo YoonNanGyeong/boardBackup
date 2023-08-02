@@ -121,7 +121,6 @@
 							<c:forEach var="file" items="${fileList}" varStatus="status">
 	              		  		<div class="files">
 				                         <a href="/fileDownload.do?storeNm=${file.storeNm}&uploadNm=${file.uploadNm}">
-                                            <!-- <input type="hidden" id="fileSq" name="fileSq" value="${file.fileSq}"> -->
 				                        	<input type="hidden" id="storeNm" value="${file.storeNm}" name="storeNm" />
 				                        	<input type="text" id="uploadNm" value="${file.uploadNm}" name="uploadNm" readonly="readonly" alt="첨부파일명 링크"/>
 				                         </a>

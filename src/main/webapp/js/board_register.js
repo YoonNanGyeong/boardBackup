@@ -212,107 +212,122 @@ $addBtn.addEventListener('click', e => {
 
 const uploadFile = document.getElementById('uploadFile');
 const $fileNameDiv = document.getElementById('fileName');
-const maxSize = 300 * 1024 * 1024;
+const maxSize = 300 * 1024 * 1024; // 첨부가능 최대 용량 (300MB)
+const maxFileCnt = 5;	// 파일 최대 개수
 
 // 첨부파일 이벤트(첨부파일명 보임, 용량 300mb 넘으면 알림 팝업)
 uploadFile.addEventListener('change', function (event) {
-const $uploadFile = event.target;
+	const $uploadFile = event.target;
+	const curFileCnt = $uploadFile.files.length;	// 현재 선택된 파일 개수
 
 	$fileNameDiv.innerHTML = '';
-	for (let i = 0; i < $uploadFile.files.length; i++) {
-		const fileNm = $uploadFile.files[i].name;	// 첨부한 파일명
-		const $fileSize = $uploadFile.files[i].size;	// 첨부한 파일 사이즈
-		
-		
-		// 첨부파일 용량 체크: 300mb 초과
-		if($uploadFile.files && $fileSize > maxSize){
-			alert("파일 용량이 300MB 초과 했습니다.");
-			$uploadFile.value = null;
-			return;
-		}else if(checkFileName(fileNm) == false){
-			// 파일 확장자 체크
-			alert("허용하지 않는 확장자입니다.");
-			$uploadFile.value = null;
-			return;
-		}else{
-			const $addFile = document.createElement('div');	// 첨부파일정보 태그
-			$addFile.classList.add("addFile");	// 파일명, 이미지 표시할 태그 생성하고 클래스 추가
 
-			const fileNo = document.createElement('input');
-			fileNo.setAttribute("type","hidden");
-			fileNo.setAttribute("id","fileNo");
-			fileNo.setAttribute("name","fileNo");
-			fileNo.setAttribute("value",i);
-
-			$addFile.appendChild(fileNo);	//file 순번을 저장할 태그 추가
-
-
-			const fileNameEle = document.createElement('p');	// 파일명을 표시할 태그
-			fileNameEle.textContent = fileNm;
-			$addFile.appendChild(fileNameEle);	//fileName div에 자식 태그로 addFile 추가
+	// 첨부파일 개수 확인
+	if(maxFileCnt - curFileCnt < 0){
+		alert("첨부파일은 최대 " + maxFileCnt + "개 까지 첨부 가능합니다.");
+		$uploadFile.value = null;
+		return;
+	}else{
+		for (let i = 0; i < $uploadFile.files.length; i++) {
+			const fileNm = $uploadFile.files[i].name;	// 첨부한 파일명
+			const $fileSize = $uploadFile.files[i].size;	// 첨부한 파일 사이즈
 			
-
-			//첨부파일명에 해당 확장자명 포함이면 썸네일 제공
-			if (/\.(jpe?g|png|gif)$/i.test(fileNm)) {
-				const fileImgEle = document.createElement('img');	// 이미지를 표시할 태그
-				console.log('contains image!');
-				const reader = new FileReader();
-	
-				reader.onload = function (e) {
-					fileImgEle.setAttribute("src", e.target.result);
-					fileImgEle.setAttribute("width", "40px");
-					fileImgEle.setAttribute("height", "40px");
-				}
-				reader.readAsDataURL(event.target.files[i]);
-				$addFile.appendChild(fileImgEle); 
-			} else {
-				console.log('not contains image!');
+			// 첨부파일 용량 체크: 300mb 초과
+			if($fileSize > maxSize){
+				alert("파일 용량이 300MB 초과 했습니다.");
+				$uploadFile.value = null;
+				return;
+			}else if(checkFileName(fileNm) == false){ // 파일 확장자 체크
+				alert("허용하지 않는 확장자입니다.");
+				$uploadFile.value = null;
+				return;
 			}
+			else{	// 검증결과 이상 없으면 파일정보 표시
+				const $addFile = document.createElement('div');	// 첨부파일정보 태그
+				$addFile.classList.add("addFile");	// 파일명, 이미지 표시할 태그 생성하고 클래스 추가
+		
+				const fileNo = document.createElement('input');
+				fileNo.setAttribute("type","hidden");
+				fileNo.setAttribute("id","fileNo");
+				fileNo.setAttribute("name","fileNo");
+				fileNo.setAttribute("value",i);
+		
+				$addFile.appendChild(fileNo);	//file 순번을 저장할 태그 추가
+		
+		
+				const fileNameEle = document.createElement('p');	// 파일명을 표시할 태그
+				fileNameEle.textContent = fileNm;
+				$addFile.appendChild(fileNameEle);	//fileName div에 자식 태그로 addFile 추가
+				
+		
+				//첨부파일명에 해당 확장자명 포함이면 썸네일 제공
+				if (/\.(jpe?g|png|gif)$/i.test(fileNm)) {
+					const fileImgEle = document.createElement('img');	// 이미지를 표시할 태그
+					console.log('contains image!');
+					const reader = new FileReader();
+		
+					reader.onload = function (e) {
+						fileImgEle.setAttribute("src", e.target.result);
+						fileImgEle.setAttribute("width", "40px");
+						fileImgEle.setAttribute("height", "40px");
+					}
+					reader.readAsDataURL(event.target.files[i]);
+					$addFile.appendChild(fileImgEle); 
+				} else {
+					console.log('not contains image!');
+				}
+		
 
-			const $fileDelBtn = document.createElement('i');	// 첨부파일 삭제 버튼
+				const $fileDelBtn = document.createElement('i');	// 첨부파일 삭제 버튼
+				
+				// 첨부파일 삭제 버튼 추가
+				$fileDelBtn.classList.add("fa-solid", "fa-trash-can");
+				$fileDelBtn.setAttribute("data-index",`${uploadFile.files[i].lastModified}`);	
+				$addFile.appendChild($fileDelBtn);
+		
+				$fileNameDiv.appendChild($addFile);
+		
+			}
+		
 			
-			$fileDelBtn.classList.add("fa-solid", "fa-trash-can");
-			$fileDelBtn.setAttribute("data-index",`${uploadFile.files[i].lastModified}`);	
-			$addFile.appendChild($fileDelBtn);
+		
+			const delBtnAll = document.querySelectorAll('.addFile .fa-solid.fa-trash-can');	// 첨부파일 등록 시 나타나는 삭제 버튼
+			
+			// 첨부파일 등록 시 삭제 버튼 클릭하면 파일 단건 삭제 
+			for(const ele of delBtnAll){	
+				ele.addEventListener('click', e => {
+					
+					const dataTransfer = new DataTransfer();
+					let files = $uploadFile.files;	//첨부파일 리스트
+					const target = e.target;	// click 이벤트 타겟(삭제 버튼)
+					const $removeTarget = target.closest('.addFile');	// 삭제할 파일 태그
+					const lastModified = e.target.dataset.index; // 삭제할 파일의 lastModified 값
+					
+					
+						Array.from(files) //파일 리스트를 배열로 변환
+								.filter(file => file.lastModified != lastModified) // 선택한 파일 이외의 파일만 가져오도록 필터링
+								.forEach(file => {
+									dataTransfer.items.add(file);
+								});	//남은 배열 dataTransfer로 처리(Array -> FileList)
+								
+								files = dataTransfer.files;	// 제거 처리된 FileList 리턴
+								$uploadFile.files = files;		// 현재 파일목록에 반영
+								$removeTarget.remove(); // 해당 첨부파일 정보 화면에서 제거
+					
+							
+				});
+		
+			}
 	
-			$fileNameDiv.appendChild($addFile);
-
-		}
-
-		
-
-		const delBtnAll = document.querySelectorAll('.addFile .fa-solid.fa-trash-can');	// 첨부파일 등록 시 나타나는 삭제 버튼
-		
-		for(const ele of delBtnAll){	
-			ele.addEventListener('click', e => {
-				
-				const dataTransfer = new DataTransfer();
-				let files = $uploadFile.files;	//첨부파일 리스트
-				const target = e.target;	// click 이벤트 타겟(삭제 버튼)
-				const $removeTarget = target.closest('.addFile');	// 삭제할 파일 태그
-				const lastModified = e.target.dataset.index; // 삭제할 파일의 lastModified 값
-				
-				
-					Array.from(files) //파일 리스트를 배열로 변환
-							 .filter(file => file.lastModified != lastModified) // 선택한 파일 이외의 파일만 가져오도록 필터링
-							 .forEach(file => {
-								dataTransfer.items.add(file);
-							 });	//남은 배열 dataTransfer로 처리(Array -> FileList)
-							 
-							 files = dataTransfer.files;	// 제거 처리된 FileList 리턴
-							 $uploadFile.files = files;		// 현재 파일목록에 반영
-							 $removeTarget.remove(); // 해당 첨부파일 정보 화면에서 제거
-				
-						
-			});
-
-		}
-
-
-
+	
+	
 	}
+}
+
+
 
 });
+
 
 // 파일 확장자 체크 (허용하는 확장자 외에 불가능)
 // 결과 true 정상, false 업로드 불가
@@ -325,11 +340,10 @@ function checkFileName(fileName){
 
 
 
-
-// 파일 삭제 처리
+// 파일 삭제 버튼
 const fileDelBtns =  document.querySelectorAll('.fa-solid.fa-trash-can');
 
-
+// 기존 파일 삭제 처리
 for(const ele of fileDelBtns){
 	ele.addEventListener('click', e => {
 		const target = e.target;

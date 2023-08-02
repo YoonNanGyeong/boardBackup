@@ -40,7 +40,6 @@ public class FileDownloadController {
         	// 파일 인코딩
         	if(browser.contains("MSIE") || browser.contains("Trident") || browser.contains("Chrome")) {
         		uploadFilename = URLEncoder.encode(uploadFilename, "UTF-8").replaceAll("\\\\", "%20");
-        		System.out.println("uploadFilename = " +uploadFilename);
         	}else {
         		uploadFilename = new String(uploadFilename.getBytes("UTF-8"),"ISO-8859-1");
         	}
@@ -55,6 +54,7 @@ public class FileDownloadController {
  
         File file = new File(realFilename);
         if (!file.exists()) {
+        	System.out.println("파일이 존재하지 않습니다.");
             return;
         }
         

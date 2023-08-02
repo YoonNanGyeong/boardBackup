@@ -3,6 +3,7 @@
 <%@ taglib prefix="form"      uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring"    uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fn" 		uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
@@ -102,7 +103,7 @@
 							   		
 							   </div>
 						</div>
-	           			
+
 	           			<!-- 기존에 첨부된 파일이 있으면 표시  -->   
 						<c:if test="${fileSize gt 0}">			
 				                <div class="download-area">
@@ -114,8 +115,8 @@
 									<c:forEach var="file" items="${fileList}" varStatus="status">
 										<input id="fileSq" name="fileSq" value = "${file.fileSq}" style="display:none;" />
 			              		  		<div class="files">
-						                         <a href="/fileDownload.do?storeNm=${file.storeNm}">
-						                        	<input type="text" id="storeNm" value="${file.storeNm}" name="storeNm" readonly="readonly" alt="첨부파일명 링크" style="display: none;"/>
+						                         <a href="/fileDownload.do?storeNm=${file.storeNm}&uploadNm=${file.uploadNm}">
+						                        	<input type="hidden" id="storeNm" value="${file.storeNm}" name="storeNm" />
 				                        			<input type="text" id="uploadNm" value="${file.uploadNm}" name="uploadNm" readonly="readonly" alt="첨부파일명 링크"/>
 							                         <c:if test="${fn:contains(file.fileType,'image')}">	
 							                          <img src="<c:url value='/images/board/upload/thm/thum_${file.storeNm}'/>" alt="image" style="width: 40px; height: 40px;">
