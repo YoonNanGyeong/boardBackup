@@ -7,13 +7,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -401,6 +397,7 @@ public class BoardController {
 		String[] parts = updateDt.split(" "); 
 		String result = parts[0];  // 최근 글 작성 날짜에서 시간 제거
 		LocalDate resultDt = LocalDate.parse(result);	// 문자열 -> 날짜 타입
+		System.out.println("resultDt = " + resultDt);
 		
 		long daysDifference = ChronoUnit.DAYS.between(resultDt, now);	// 날짜 일수 차이 계산
 		System.out.println("날짜 일수 차이: " + daysDifference);
