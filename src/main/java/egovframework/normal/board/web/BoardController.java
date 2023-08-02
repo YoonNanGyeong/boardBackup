@@ -397,7 +397,6 @@ public class BoardController {
 		String[] parts = updateDt.split(" "); 
 		String result = parts[0];  // 최근 글 작성 날짜에서 시간 제거
 		LocalDate resultDt = LocalDate.parse(result);	// 문자열 -> 날짜 타입
-		System.out.println("resultDt = " + resultDt);
 		
 		long daysDifference = ChronoUnit.DAYS.between(resultDt, now);	// 날짜 일수 차이 계산
 		System.out.println("날짜 일수 차이: " + daysDifference);
@@ -410,6 +409,7 @@ public class BoardController {
 			dateResult = true;
 		}
 		model.addAttribute("dateResult",dateResult);
+		System.out.println("dateResult = "+dateResult);
 		
 		
 		return "board/board_register";
