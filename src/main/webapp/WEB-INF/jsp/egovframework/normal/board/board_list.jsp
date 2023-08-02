@@ -41,8 +41,13 @@
         	document.listForm.action = "<c:url value='/boardList.do'/>";
            	document.listForm.submit();
         } 
-         
         
+		// BackForwardCache로 화면 불러올 경우 페이지 새로고침
+        window.onpageshow = function (e) {
+			if(e.persisted ||(window.performance && window.performance.navigation.type == 2)){
+				location.reload();
+			}
+		}
     </script>
 </head>
 
