@@ -114,13 +114,13 @@
 	                <div class="download-title">
 	                     <label for="uploadNm" style="margin-right: 0;">첨부파일 다운로드</label>
                          <!-- 다운로드 아이콘(압축파일 다운로드) -->
-                        <i class="fa-solid fa-download"></i>
+                        <i class="fa-solid fa-download" title="압축 파일 다운로드"></i>
 	                </div>
                     <p style="color: #7CA3C6; font-size: 12px;">다운로드 아이콘을 클릭하면 첨부된 파일 전체를 압축파일로 받을 수 있습니다.</p>
 		                <div class="download-area">
 							<c:forEach var="file" items="${fileList}" varStatus="status">
 	              		  		<div class="files">
-				                         <a href="/fileDownload.do?storeNm=${file.storeNm}&uploadNm=${file.uploadNm}">
+				                         <a href="/fileDownload.do?storeNm=${file.storeNm}&uploadNm=${file.uploadNm}"  title="${file.uploadNm} 파일 다운로드">
 				                        	<input type="hidden" id="storeNm" value="${file.storeNm}" name="storeNm" />
 				                        	<input type="text" id="uploadNm" value="${file.uploadNm}" name="uploadNm" readonly="readonly" alt="첨부파일명 링크"/>
 				                         </a>
@@ -136,18 +136,18 @@
          <div class="btns">
              <div class="left-btn">
                  <!-- 목록 버튼 -->
-                 <a href="javascript:fn_selectList();">
+                 <a href="javascript:fn_selectList();"  title="목록 버튼">
                  <button id="listBtn" type= "button">목록</button>
                  </a>
              </div>    
 
              <div class="right-btn">
                  <!-- 수정 버튼 -->
-                 <a href="javascript:fn_modifyView('${boardVO.boardSq}');">
+                 <a href="javascript:fn_modifyView('${boardVO.boardSq}');" title="수정 버튼">
                  <button id="editBtn"  type= "button">수정 </button>
                  </a>
                  <!-- 삭제 버튼 -->
-                 <a href="javascript:fn_delete();">
+                 <a href="javascript:fn_delete();" title="삭제 버튼">
                  <button id="deleteBtn"   type= "button">삭제</button>
                 </a>
              </div>             
