@@ -335,7 +335,7 @@ public class BoardController {
 	public String detailBoardView(@PathVariable("selectedId") Long boardSq, 
 			@ModelAttribute("searchBoard") BoardVO searchBoard,
 			@ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model, HttpServletResponse response)  throws Exception {
-		System.out.println("상세조회 화면 !");
+//		System.out.println("상세조회 화면 !");
 		BoardVO boardVO = new BoardVO();
 		boardVO.setBoardSq(boardSq);
 		

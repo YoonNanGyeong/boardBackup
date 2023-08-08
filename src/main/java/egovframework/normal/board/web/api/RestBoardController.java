@@ -23,7 +23,7 @@ import egovframework.normal.board.service.BoardVO;
 import egovframework.normal.board.service.UploadFileService;
 import egovframework.normal.board.service.UploadFileVO;
 
-@SuppressWarnings(value = { "all" }) 
+
 @Controller
 @RequestMapping("/api")
 public class RestBoardController {
