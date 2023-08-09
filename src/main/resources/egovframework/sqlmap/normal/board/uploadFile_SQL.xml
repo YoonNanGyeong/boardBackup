@@ -25,7 +25,8 @@
  				  , store_nm 
  				  , upload_nm 
  				  , file_size 
- 				  , file_type 
+ 				  , file_type
+ 				  , file_no 
  				   ) 
  			VALUES ( test_uploadfile_seq.nextval 
  				  , #boardNo# 
@@ -33,6 +34,7 @@
 				  , #uploadNm# 
 			      , #fileSize# 
 				  , #fileType# 
+				  ,  test_uploadfile_seq2.nextval 
  				  ) 
  		]]> 
 		<!--  파일 추가 시 생성되는 파일 아이디 	-->
