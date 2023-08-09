@@ -48,8 +48,6 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	public Long insertBoard(BoardVO vo) throws Exception {
 		LOGGER.debug(vo.toString());
 
-		LOGGER.debug(vo.toString());
-
 		Long id = boardDAO.insertBoard(vo);
 
 		return id;

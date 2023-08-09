@@ -14,7 +14,18 @@ public class UploadFileDAO extends EgovAbstractDAO{
 	   * 업로드 파일 등록 - 단건
 	   */
 	  public Long insertFile(UploadFileVO vo) throws Exception{
-		  return (Long) insert("uploadFileDAO.insertFile", vo);
+		  Long fileSq = (Long) insert("uploadFileDAO.insertFile", vo);
+		  return fileSq;
+	  }
+	  
+	  /**
+	   * 파일 순번 시퀀스 초기화
+	   */
+	  public void updateSequence(UploadFileVO vo)throws Exception{
+		  UploadFileVO result = (UploadFileVO)select("uploadFileDAO.selectSequence",vo);
+		  update("uploadFileDAO.updateIncrement",result);
+		  select("uploadFileDAO.updateSequence",result);
+		  update("uploadFileDAO.backIncrement",result);
 	  }
 	  
 	  /**
@@ -47,8 +58,5 @@ public class UploadFileDAO extends EgovAbstractDAO{
 		 return delete("uploadFileDAO.deleteAllFile",vo);
 	  }
 	  
-	  
-	  
-	 
   
 }

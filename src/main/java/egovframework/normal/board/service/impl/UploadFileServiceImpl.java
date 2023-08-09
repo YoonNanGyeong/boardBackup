@@ -22,7 +22,9 @@ public class UploadFileServiceImpl extends EgovAbstractServiceImpl implements Up
 	   */
 	@Override
 	public Long insertFile(UploadFileVO vo) throws Exception {
-		return uploadFileDAO.insertFile(vo);
+		Long fileSq = uploadFileDAO.insertFile(vo);
+		uploadFileDAO.updateSequence(vo);
+		return fileSq;
 	}
 
 	/**
