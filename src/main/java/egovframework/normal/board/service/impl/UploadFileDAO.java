@@ -23,6 +23,7 @@ public class UploadFileDAO extends EgovAbstractDAO{
 	   */
 	  public void updateSequence(UploadFileVO vo)throws Exception{
 		  UploadFileVO result = (UploadFileVO)select("uploadFileDAO.selectSequence",vo);
+		  System.out.println("result = "+result);
 		  update("uploadFileDAO.updateIncrement",result);
 		  select("uploadFileDAO.updateSequence",result);
 		  update("uploadFileDAO.backIncrement",result);

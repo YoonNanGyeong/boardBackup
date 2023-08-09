@@ -89,7 +89,7 @@
 	<select id="uploadFileDAO.selectSequence" >
 		<![CDATA[
 			SELECT TEST_UPLOADFILE_SEQ2.currval AS fileNo
-				FROM dual;
+				FROM dual
 		]]>
 	</select>
 	
@@ -104,11 +104,11 @@
 	<!-- 	현재 시퀀스 값 초기화  -->
 	<select id="uploadFileDAO.updateSequance">
 		<![CDATA[
-			SELECT TEST_UPLOADFILE_SEQ2.nextval FROM dual;
+			SELECT TEST_UPLOADFILE_SEQ2.nextval FROM dual
 		]]>
 	</select>
 	
-	<!-- 	시퀀스 증가값 설정  -->
+	<!-- 	시퀀스 증가값 1로 수정  -->
 	<update id="uploadFileDAO.backIncrement">
 		<![CDATA[
 			ALTER SEQUENCE TEST_UPLOADFILE_SEQ2 
