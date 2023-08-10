@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Service("uploadFileService")
 public class UploadFileServiceImpl extends EgovAbstractServiceImpl implements UploadFileService {
 	/** logger 객체 */
-	private static final Logger log = LoggerFactory.getLogger(BoardServiceImpl.class);
+	private static final Logger log = LoggerFactory.getLogger(UploadFileServiceImpl.class);
 	
 	@Resource(name = "uploadFileDAO")
 	private UploadFileDAO uploadFileDAO;

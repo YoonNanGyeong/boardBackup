@@ -29,7 +29,7 @@ public class FileDownloadController {
 	private UploadFileService uploadFileService;
 	
 	/** logger 객체 */
-	private static final Logger log = LoggerFactory.getLogger(BoardController.class);
+	private static final Logger log = LoggerFactory.getLogger(FileDownloadController.class);
 	
 	// 첨부파일 다운로드(단건)
 	@RequestMapping(value = "fileDownload.do")
