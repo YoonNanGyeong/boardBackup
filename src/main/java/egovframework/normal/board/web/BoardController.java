@@ -472,6 +472,7 @@ public class BoardController {
 		String fileType = null;
 		String zipName = null;
 		String zipFilePath = null;
+		Long fileNo = 0L;
 		
 	if(uploadFile != null && !uploadFile.get(0).isEmpty()) {
 		
@@ -482,6 +483,7 @@ public class BoardController {
 			ext = originFile.substring(originFile.lastIndexOf("."));
 			changeFile = UUID.randomUUID().toString() + ext;		// 서버 저장용 파일명
 			thumFileNm =  "thum_" + changeFile;		// 저용량 파일명
+			fileNo = Long.valueOf(i);	//파일 순번 
 			
 			Map<String, String> map = new HashMap<>();
 			map.put("originFile", originFile);
@@ -536,6 +538,7 @@ public class BoardController {
 			uploadFileVO.setStoreNm(changeFile);
 			uploadFileVO.setFileSize(fileSize);
 			uploadFileVO.setFileType(fileType);
+			uploadFileVO.setFileNo(fileNo);
 			
 			uploadFileService.insertFile(uploadFileVO); //첨부파일 정보 DB저장
 			
