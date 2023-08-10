@@ -12,7 +12,6 @@ public class UploadFileVO {
 		private String fileType;		//  --파일유형(mimetype)
 		private String useYn;	// 사용여부
 		private LocalDateTime createDt;	//	 --등록일시
-		private LocalDateTime updateDt;	//	  --수정일시
 
 		
 		
@@ -70,13 +69,6 @@ public class UploadFileVO {
 		public void setCreateDt(LocalDateTime createDt) {
 			this.createDt = createDt;
 		}
-		public LocalDateTime getUpdateDt() {
-			return updateDt;
-		}
-		public void setUpdateDt(LocalDateTime updateDt) {
-			this.updateDt = updateDt;
-		}
-		
 		
 		
 		
