@@ -35,7 +35,7 @@
 				  , #uploadNm# 
 			      , #fileSize# 
 				  , #fileType# 
-				  ,  test_uploadfile_seq2.nextval 
+				  , test_uploadfile_seq2.nextval 
  				  ) 
  		]]> 
 		<!--  파일 추가 시 생성되는 파일 아이디 	-->

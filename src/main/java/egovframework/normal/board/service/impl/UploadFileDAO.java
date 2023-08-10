@@ -15,6 +15,7 @@ public class UploadFileDAO extends EgovAbstractDAO{
 	   */
 	  public Long insertFile(UploadFileVO vo) throws Exception{
 		  Long fileSq = (Long) insert("uploadFileDAO.insertFile", vo);
+		  select("uploadFileDAO.selectSequence",vo); //null
 		  return fileSq;
 	  }
 	  
@@ -23,10 +24,12 @@ public class UploadFileDAO extends EgovAbstractDAO{
 	   */
 	  public void updateSequence(UploadFileVO vo)throws Exception{
 		  UploadFileVO result = (UploadFileVO)select("uploadFileDAO.selectSequence",vo);
-		  System.out.println("result = "+result);
-		  update("uploadFileDAO.updateIncrement",result);
-		  select("uploadFileDAO.updateSequence",result);
-		  update("uploadFileDAO.backIncrement",result);
+		  Long fileNo = result.getFileNo();
+		  vo.setFileNo(fileNo);
+		  
+		  update("uploadFileDAO.updateIncrement",vo);
+		  select("uploadFileDAO.updateSequence",vo);
+		  update("uploadFileDAO.backIncrement",vo);
 	  }
 	  
 	  /**
