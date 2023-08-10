@@ -35,7 +35,7 @@
 				  , #uploadNm# 
 			      , #fileSize# 
 				  , #fileType# 
-				  , test_uploadfile_seq2.nextval 
+				  , #fileNo# 
  				  ) 
  		]]> 
 		<!--  파일 추가 시 생성되는 파일 아이디 	-->
@@ -84,36 +84,5 @@
 			WHERE board_no=#boardNo#
 		]]>
 	</delete>
-	
-	<!-- 	현재 파일 번호 조회  -->
-	<select id="uploadFileDAO.selectSequence" >
-		<![CDATA[
-			SELECT TEST_UPLOADFILE_SEQ2.currval AS fileNo
-				FROM dual
-		]]>
-	</select>
-	
-	<!-- 	시퀀스 증가값 설정  -->
-	<update id="uploadFileDAO.updateIncrement">
-		<![CDATA[
-			ALTER SEQUENCE TEST_UPLOADFILE_SEQ2
-				 INCREMENT BY -#fileNo#
-		]]>
-	</update>
-	
-	<!-- 	현재 시퀀스 값 초기화  -->
-	<select id="uploadFileDAO.updateSequance">
-		<![CDATA[
-			SELECT TEST_UPLOADFILE_SEQ2.nextval FROM dual
-		]]>
-	</select>
-	
-	<!-- 	시퀀스 증가값 1로 수정  -->
-	<update id="uploadFileDAO.backIncrement">
-		<![CDATA[
-			ALTER SEQUENCE TEST_UPLOADFILE_SEQ2 
-				INCREMENT BY 1
-		]]>
-	</update>
 	
 </sqlMap>

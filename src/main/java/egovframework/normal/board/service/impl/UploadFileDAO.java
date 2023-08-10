@@ -10,27 +10,20 @@ import egovframework.rte.psl.dataaccess.EgovAbstractDAO;
 @Repository("uploadFileDAO")
 public class UploadFileDAO extends EgovAbstractDAO{
 	
+	
 	 /**
 	   * 업로드 파일 등록 - 단건
 	   */
 	  public Long insertFile(UploadFileVO vo) throws Exception{
+		  // 파일 순번 
+		  Long fileNo = vo.getFileNo();
+		  vo.setFileNo(fileNo + 1);
+		  
+		  // 파일 번호 반환
 		  Long fileSq = (Long) insert("uploadFileDAO.insertFile", vo);
-		  select("uploadFileDAO.selectSequence",vo); //null
 		  return fileSq;
 	  }
 	  
-	  /**
-	   * 파일 순번 시퀀스 초기화
-	   */
-	  public void updateSequence(UploadFileVO vo)throws Exception{
-		  UploadFileVO result = (UploadFileVO)select("uploadFileDAO.selectSequence",vo);
-		  Long fileNo = result.getFileNo();
-		  vo.setFileNo(fileNo);
-		  
-		  update("uploadFileDAO.updateIncrement",vo);
-		  select("uploadFileDAO.updateSequence",vo);
-		  update("uploadFileDAO.backIncrement",vo);
-	  }
 	  
 	  /**
 	   * 업로드파일 리스트조회
