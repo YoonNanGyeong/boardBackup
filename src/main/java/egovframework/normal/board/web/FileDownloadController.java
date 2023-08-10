@@ -14,6 +14,8 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -25,6 +27,9 @@ public class FileDownloadController {
 	
 	@Resource(name = "uploadFileService")
 	private UploadFileService uploadFileService;
+	
+	/** logger 객체 */
+	private static final Logger log = LoggerFactory.getLogger(BoardController.class);
 	
 	// 첨부파일 다운로드(단건)
 	@RequestMapping(value = "fileDownload.do")
@@ -44,7 +49,7 @@ public class FileDownloadController {
         		uploadFilename = new String(uploadFilename.getBytes("UTF-8"),"ISO-8859-1");
         	}
 		} catch (UnsupportedEncodingException  e) {
-			System.out.println("UnsupportedEncodingException 발생");
+			log.info("UnsupportedEncodingException 발생");
 		}
         
         ServletContext context = request.getSession().getServletContext();
@@ -54,7 +59,7 @@ public class FileDownloadController {
  
         File file = new File(realFilename);
         if (!file.exists()) {
-        	System.out.println("파일이 존재하지 않습니다.");
+        	log.info("파일이 존재하지 않습니다.");
             return;
         }
         
@@ -101,7 +106,7 @@ public class FileDownloadController {
         		filename = new String(filename.getBytes("UTF-8"),"ISO-8859-1");
         	}
 		} catch (UnsupportedEncodingException  e) {
-			System.out.println("UnsupportedEncodingException 발생");
+			log.info("UnsupportedEncodingException 발생");
 		}
         
         ServletContext context = request.getSession().getServletContext();
@@ -111,7 +116,7 @@ public class FileDownloadController {
  
         File file = new File(realFilename);
         if (!file.exists()) {
-        	System.out.println("압축파일이 존재하지 않습니다.");
+        	log.info("압축파일이 존재하지 않습니다.");
             return;
         }
         

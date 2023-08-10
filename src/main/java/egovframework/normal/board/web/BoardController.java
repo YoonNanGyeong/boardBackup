@@ -33,6 +33,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -49,11 +51,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.mortennobel.imagescaling.ResampleOp;
 import com.mortennobel.imagescaling.AdvancedResizeOp;
 
-
 @Controller
 @RequestMapping("/")
 public class BoardController {
-	
 
 	@Resource(name = "boardService")
 	private BoardService boardService;
@@ -68,6 +68,8 @@ public class BoardController {
 	@Resource(name = "propertiesService")
 	protected EgovPropertyService propertiesService;
 
+	/** logger 객체 */
+	private static final Logger log = LoggerFactory.getLogger(BoardController.class);
 
 	
 	// 게시판 코드 디코드 
@@ -133,8 +135,7 @@ public class BoardController {
 	// 글 목록
 	@RequestMapping(value = "/boardList.do")
 	public String selectBoardList(@ModelAttribute("searchVO") BoardVO searchVO, ModelMap model) throws Exception {
-
-		System.out.println("-----Get selectSampleList");
+		log.info("----- 게시글 목록 화면 -----");
 		
 		/** EgovPropertyService */
 		searchVO.setPageUnit(propertiesService.getInt("pageUnit"));
@@ -170,6 +171,7 @@ public class BoardController {
 			BoardVO boardVO,
 			@ModelAttribute("searchVO") BoardDefaultVO searchVO, 
 			Model model) throws Exception {
+		log.info("----- 게시글 등록 화면 -----");
 		model.addAttribute("boardVO", boardVO);
 		return "board/board_register";
 	}
@@ -185,7 +187,7 @@ public class BoardController {
 
 
 		if (bindingResult.hasErrors()) {
-			System.out.println("bindingResult = " + bindingResult);
+			log.info("bindingResult = " + bindingResult);
 			model.addAttribute("boardVO", boardVO);
 			return "board/board_register";
 		}
@@ -286,7 +288,7 @@ public class BoardController {
 							ImageIO.write(resizedImage, "jpg", thumFile);	//리사이징 이미지 해당 경로로 업로드
 							
 						
-						System.out.println("이미지 리사이징 완료!");
+							log.info("이미지 리사이징 완료!");
 					}
 					// 파일정보 db 저장
 					uploadFileVO.setUploadNm(originFile);
@@ -307,10 +309,10 @@ public class BoardController {
 				// 첨부파일들 모두 압축하여 저장
 				compressZip(files, zipFile, buf);
 					
-				System.out.println("다중 파일 업로드 성공!");
+				log.info("다중 파일 업로드 성공!");
 				
 			}catch(IllegalStateException | IOException e){
-				System.out.println("다중 파일 업로드 실패...");
+				log.info("다중 파일 업로드 실패...");
 				// 업로드 실패 시 파일 삭제
 				for(int i = 0; i < uploadFile.size(); i++) {
 					new File(loot + "\\" + fileList.get(i).get("changeFile")).delete();	
@@ -338,7 +340,7 @@ public class BoardController {
 	public String detailBoardView(@PathVariable("selectedId") Long boardSq, 
 			@ModelAttribute("searchBoard") BoardVO searchBoard,
 			@ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model, HttpServletResponse response)  throws Exception {
-//		System.out.println("상세조회 화면 !");
+		log.info("----- 상세조회 화면 -----");
 		BoardVO boardVO = new BoardVO();
 		boardVO.setBoardSq(boardSq);
 		
@@ -347,7 +349,7 @@ public class BoardController {
 		model.addAttribute("boardVO", vo);
 		
 		if(vo == null){
-			System.out.println("존재하지 않는 게시글입니다!");
+			log.info("존재하지 않는 게시글입니다!");
 			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 	        response.setHeader("Pragma", "no-cache");
 			return "board/board_exist";
@@ -371,7 +373,6 @@ public class BoardController {
 		LocalDate resultDt = LocalDate.parse(result);	// 문자열 -> 날짜 타입
 		
 		long daysDifference = ChronoUnit.DAYS.between(resultDt, now);	// 날짜 일수 차이 계산
-//		System.out.println("날짜 일수 차이: " + daysDifference);
 		
 		Boolean dateResult = true;
 		
@@ -380,8 +381,6 @@ public class BoardController {
 		}else {
 			dateResult = true;
 		}
-		
-//		System.out.println("dateResult = "+dateResult);
 		
 		model.addAttribute("dateResult", dateResult);
 
@@ -401,13 +400,13 @@ public class BoardController {
 		model.addAttribute("boardVO",selectedVO);
 		
 		if(selectedVO == null) {
-			System.out.println("삭제된 게시글 입니다!");
+			log.info("삭제된 게시글 입니다!");
 			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 	        response.setHeader("Pragma", "no-cache");
 			return "board/board_exist";
 		}
 		
-		System.out.println("수정화면!");
+		log.info("----- 게시글 수정 화면 -----");
 		
 		UploadFileVO uploadFileVO = new UploadFileVO();
 		uploadFileVO.setBoardNo(boardSq);
@@ -430,7 +429,7 @@ public class BoardController {
 		
 
 		if (bindingResult.hasErrors()) {
-			System.out.println("bindingResult = " + bindingResult);
+			log.info("bindingResult = " + bindingResult);
 			model.addAttribute("boardVO", boardVO);
 			return "board/board_register";
 		}
@@ -530,7 +529,7 @@ public class BoardController {
 					resizedImage =makeThumbnail(src, w, h, fileList.get(i).get("changeFile"));					
 					ImageIO.write(resizedImage, "jpg", thumFile);	//리사이징 이미지 해당 경로로 업로드
 
-					System.out.println("이미지 리사이징 완료!");   
+					log.info("이미지 리사이징 완료!");
 			}
 			
 			// 저장할 정보를 담고 있는 첨부파일 세팅 
@@ -552,12 +551,10 @@ public class BoardController {
 			// 첨부파일들 모두 압축하여 저장
 			compressZip(files, zipFile, buf);
 			
-		 System.out.println("다중 파일 업로드 성공!");
+		 log.info("다중 파일 업로드 성공!");
 		 
 		}catch(IllegalStateException | IOException e){
-			
-			System.out.println("다중 파일 업로드 실패...");
-			
+			log.info("다중 파일 업로드 실패...");
 			// 업로드 실패 시 파일 삭제
 			for(int i = 0; i < uploadFile.size(); i++) {
 				new File(loot + "\\" + fileList.get(i).get("changeFile")).delete();	
@@ -588,6 +585,7 @@ public class BoardController {
 		// 첨부파일 전체 삭제 
 		uploadFileService.deleteAllFile(uploadFile);
 		
+		log.info("----- 게시글  삭제 완료 -----");
 		status.setComplete();
 		return "redirect:/boardList.do";
 	}

@@ -31,8 +31,8 @@ import org.springframework.stereotype.Service;
 
 @Service("boardService")
 public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardService {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(BoardServiceImpl.class);
+	/** logger 객체 */
+	private static final Logger log = LoggerFactory.getLogger(BoardServiceImpl.class);
 
 	@Resource(name = "boardDAO")
 	private BoardDAO boardDAO;
@@ -46,7 +46,7 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	 */
 	@Override
 	public Long insertBoard(BoardVO vo) throws Exception {
-		LOGGER.debug(vo.toString());
+		log.debug(vo.toString());
 
 		Long id = boardDAO.insertBoard(vo);
 

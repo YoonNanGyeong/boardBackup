@@ -8,12 +8,16 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 
 @Service("uploadFileService")
 public class UploadFileServiceImpl extends EgovAbstractServiceImpl implements UploadFileService {
-
+	/** logger 객체 */
+	private static final Logger log = LoggerFactory.getLogger(BoardServiceImpl.class);
+	
 	@Resource(name = "uploadFileDAO")
 	private UploadFileDAO uploadFileDAO;
 	
@@ -22,6 +26,8 @@ public class UploadFileServiceImpl extends EgovAbstractServiceImpl implements Up
 	   */
 	@Override
 	public Long insertFile(UploadFileVO vo) throws Exception {
+		log.debug(vo.toString());
+		
 		Long fileSq = uploadFileDAO.insertFile(vo);
 		return fileSq;
 	}
