@@ -66,6 +66,25 @@ public class UploadFileServiceImpl extends EgovAbstractServiceImpl implements Up
 	public int deleteAllFile(UploadFileVO vo) throws Exception {
 		return uploadFileDAO.deleteAllFile(vo);
 	}
+
+	/**
+	    * 첨부파일 순번 조회
+	   */
+	@Override
+	public List<?> selectFileNo(UploadFileVO vo) throws Exception {
+		return uploadFileDAO.selectFileNo(vo);
+	}
+
+	/**
+	   *  첨부파일 순번 수정
+	   */
+	@Override
+	public void updateFileNo(UploadFileVO vo) throws Exception {
+		uploadFileDAO.updateFileNo(vo);
+	}
+
+	
+
 		
 
 

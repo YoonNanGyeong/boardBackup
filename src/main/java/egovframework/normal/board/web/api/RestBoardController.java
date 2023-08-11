@@ -47,6 +47,7 @@ public class RestBoardController {
 			
 			RestResponse<Object> result = null;
 			
+			
 		    if(cnt == 1){
 		      result = RestResponse.createRestResponse("00", "성공", null);
 		    }else{

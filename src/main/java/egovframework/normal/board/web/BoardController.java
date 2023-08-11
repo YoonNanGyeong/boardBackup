@@ -129,6 +129,24 @@ public class BoardController {
 				}
 			}
 		}
+		
+		// 파일 순번 조회
+//		public Map<Long,Long> filesNo(Long boardNo)throws Exception{
+//			UploadFileVO uploadFile = new UploadFileVO();
+//				uploadFile.setBoardNo(boardNo);
+//				List<?>result = uploadFileService.selectFileNo(uploadFile);
+//				
+//			
+//				Map<Long,Long> fileNoList = new HashMap<>();
+//			
+//				for(Object item : result) {
+//					log.info("selectFileNo = {}",item);
+//					UploadFileVO resultFile = (UploadFileVO) item;
+//					fileNoList.put(resultFile.getFileSq(),resultFile.getFileNo());
+//				}	
+//				
+//				return fileNoList;
+//			}
 	
 		
 		
@@ -290,6 +308,8 @@ public class BoardController {
 						
 							log.info("이미지 리사이징 완료!");
 					}
+					
+					
 					// 파일정보 db 저장
 					uploadFileVO.setUploadNm(originFile);
 					uploadFileVO.setStoreNm(changeFile);
@@ -358,6 +378,7 @@ public class BoardController {
 		
 		UploadFileVO uploadFileVO = new UploadFileVO();
 		uploadFileVO.setBoardNo(boardSq);
+		
 		
 		List<?> fileList = uploadFileService.selectFileList(uploadFileVO);
 		model.addAttribute("fileList",fileList);
@@ -540,8 +561,23 @@ public class BoardController {
 			uploadFileVO.setFileNo(fileNo);
 			
 			uploadFileService.insertFile(uploadFileVO); //첨부파일 정보 DB저장
-			
 			}
+
+//			기존 첨부파일 존재하면 파일 순번 수정
+//			List<?> resultFileList = uploadFileService.selectFileList(uploadFileVO);
+//			if(resultFileList.size() > 0) {
+//				for(Object item : resultFileList) {
+//					UploadFileVO result = (UploadFileVO)item;
+//					Long resultFileSq = result.getFileSq();
+//					Long resultBoardNo = result.getBoardNo();
+//					
+//					Map<Long,Long> filesNo = filesNo(resultBoardNo);
+//					Long resultFileNo = filesNo.get(resultFileSq);
+//					result.setFileNo(resultFileNo);
+//					
+//					uploadFileService.updateFileNo(result);
+//				}
+//			}
 			
 			zipName = boardNo+ "_files_md";		// 압축파일명
 		    zipFilePath = loot3 + "\\" + zipName + ".zip";	// 압축파일 저장경로 + 파일명

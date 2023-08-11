@@ -33,6 +33,13 @@ public interface UploadFileService {
 	    */
 	   int deleteAllFile(UploadFileVO vo) throws Exception;
 	  
+	   /**
+	    * 첨부파일 순번 조회
+	   */
+	   List<?> selectFileNo(UploadFileVO vo)throws Exception;
 	   
-
+	   /**
+	   *  첨부파일 순번 수정
+	   */
+	   void updateFileNo(UploadFileVO vo)throws Exception;
 }

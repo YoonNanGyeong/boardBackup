@@ -7,6 +7,10 @@ import org.springframework.stereotype.Repository;
 import egovframework.normal.board.service.UploadFileVO;
 import egovframework.rte.psl.dataaccess.EgovAbstractDAO;
 
+/**
+ * @author nangyeong
+ *
+ */
 @Repository("uploadFileDAO")
 public class UploadFileDAO extends EgovAbstractDAO{
 	
@@ -55,5 +59,18 @@ public class UploadFileDAO extends EgovAbstractDAO{
 		 return delete("uploadFileDAO.deleteAllFile",vo);
 	  }
 	  
+	  /**
+	   *  첨부파일 순번 조회
+	   */
+	  public List<?> selectFileNo(UploadFileVO vo)throws Exception{
+		  return list("uploadFileDAO.selectFileNo",vo);
+	  }
+	  
+	  /**
+	   *  첨부파일 순번 수정
+	   */
+	  public void updateFileNo(UploadFileVO vo)throws Exception{
+		  update("uploadFileDAO.updateFileNo",vo);
+	  }
   
 }

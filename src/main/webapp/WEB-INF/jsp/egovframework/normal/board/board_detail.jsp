@@ -137,7 +137,7 @@
                                                             title="${file.uploadNm} 파일 다운로드">
                                                             <p
                                                                 style="color: #0070D2; font-size: 14px; margin-right: 10px;" />
-                                                            <c:out value="${file.fileNo}" />.
+                                                            <c:out value="${status.count}" />.
                                                             </p>
                                                             <input type="hidden" id="storeNm" value="${file.storeNm}"
                                                                 name="storeNm" />

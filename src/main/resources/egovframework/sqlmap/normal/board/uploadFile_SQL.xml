@@ -78,11 +78,32 @@
 	
 	<!-- 	파일 전체 삭제 처리  -->
     <delete id="uploadFileDAO.deleteAllFile">
-		<![CDATA[
+		<![CDATA[	
 			UPDATE test_uploadfile_tb
 			SET use_yn = 'N'
 			WHERE board_no=#boardNo#
 		]]>
 	</delete>
+	
+	<!-- 첨부파일 순번 조회 -->
+	<select id="uploadFileDAO.selectFileNo" parameterClass="uploadFileVO"  resultClass = "uploadFileVO">
+	<![CDATA[	
+			SELECT rownum AS file_no, t1.file_sq
+			 	FROM (SELECT *
+						FROM test_uploadfile_tb
+						WHERE 1=1 and use_yn = 'Y'
+						 AND BOARD_NO = #boardNo#)t1
+	]]>
+	</select>
+	
+	<!-- 첨부파일 순번 수정 -->
+	<update id="uploadFileDAO.updateFileNo" parameterClass="uploadFileVO" >
+	<![CDATA[	
+		UPDATE test_uploadfile_tb
+			SET 
+				file_no = #fileNo#
+			WHERE file_sq = #fileSq#
+		]]>
+	</update>
 	
 </sqlMap>
