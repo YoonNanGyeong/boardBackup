@@ -38,11 +38,11 @@ public class RestBoardController {
 		@ResponseBody
 		public RestResponse<Object> deleteFile(@PathVariable("fileSq")Long fileSq, Model model ) throws Exception{
 			
-			UploadFileVO uploadFile = new UploadFileVO();
-			uploadFile.setFileSq(fileSq);
-			int cnt = uploadFileService.deleteFile(uploadFile);	//첨부파일 정보 삭제처리
+			UploadFileVO uploadFile = new UploadFileVO(); //첨부파일 정보를 담을 객체 생성
+			uploadFile.setFileSq(fileSq); // url 경로로 얻은 파일번호로 세팅
+			int cnt = uploadFileService.deleteFile(uploadFile);	//첨부파일 정보 삭제처리, 삭제 건 수 반환
 			
-			model.addAttribute("fileSq",fileSq);
+			model.addAttribute("fileSq",fileSq); // 삭제된 파일 번호 모델 속성에 저장
 			
 			RestResponse<Object> result = null;
 			
