@@ -1,24 +1,24 @@
 import { ajax } from '/js/ajax.js';
 
 const $prevNextBtn = document.querySelectorAll('.prevNext-btn');	//이전 다음 버튼
-const $condition = document.getElementById('prevNextCondition');	//이전 다음 버튼 value 값 
+const $condition = document.getElementById('prevNextCondition');	//이전 다음 버튼 value 값이 들어갈 input 태그
 const $boardCd = document.getElementById('boardCd');	//게시물 코드
 const $boardSq = document.getElementById('boardSq');	//게시물 번호
 
 
 for(const ele of $prevNextBtn){
 	ele.addEventListener('click', e => {
-		if(ele.value === 'prev'){
-			$condition.value = ele.value;
-		}else if(ele.value === 'next'){
+		if(ele.value === 'prev'){ //버튼의 value 가 prev일 때(이전버튼 클릭)
+			$condition.value = ele.value; //조회 조건 저장(이전, 다음)
+		}else if(ele.value === 'next'){ //버튼의 value 가 next일 때(다음버튼 클릭)
 			$condition.value = ele.value;
 		}
 
-		const url = "/api/detailBoard.do";
-		const payLoad = {
-			boardCd : $boardCd.value,
-			boardSq : $boardSq.value,
-			prevNextCondition : $condition.value
+		const url = "/api/detailBoard.do"; //이전, 다음글 번호로 조회하는 url 
+		const payLoad = {//payload에 들어갈 데이터
+			boardCd : $boardCd.value,	//카테고리 코드
+			boardSq : $boardSq.value,	//글 번호
+			prevNextCondition : $condition.value	//조회 조건
 		};
 		ajax
 			.post(url, payLoad)
