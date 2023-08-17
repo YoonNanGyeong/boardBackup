@@ -1,7 +1,7 @@
 
 package egovframework.normal.board.service.impl;
 
-import java.util.List;
+import java.util.List;  
 
 import egovframework.normal.board.service.BoardDefaultVO;
 import egovframework.normal.board.service.BoardVO;

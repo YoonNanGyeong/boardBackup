@@ -31,7 +31,6 @@ import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,13 +55,13 @@ import com.mortennobel.imagescaling.AdvancedResizeOp;
 public class BoardController {
 
 	@Resource(name = "boardService")
-	private BoardService boardService;
+	private BoardService boardService; // 게시글 서비스
 	
 	@Resource(name = "codeService")
-	private CodeService codeService;
+	private CodeService codeService; // 코드 서비스
 	
 	@Resource(name = "uploadFileService")
-	private UploadFileService uploadFileService;
+	private UploadFileService uploadFileService;  // 첨부파일 서비스
 
 	/** EgovPropertyService */
 	@Resource(name = "propertiesService")
@@ -76,14 +75,15 @@ public class BoardController {
 	@ModelAttribute("category")
 	public Map<String,String> classifier()throws Exception{
 	CodeVO codeVO = new CodeVO();
-		codeVO.setCodePid("B01");
-		List<?>resultCodes = codeService.selectCodeList(codeVO);
+		codeVO.setCodePid("B01"); //조회 정보가 담긴 코드 객체(부모코드)
+		List<?>resultCodes = codeService.selectCodeList(codeVO); //부모코드가 B01 인 코드 목록 조회
 	
+		 // 코드 목록을 저장할 객체(key : 카테고리 코드 , value : 카테고리명)
 		Map<String,String> category = new HashMap<>();
 	
-		for(Object item : resultCodes) {
-			CodeVO resultCd = (CodeVO) item;
-			category.put(resultCd.getCode(),resultCd.getDecode());
+		for(Object item : resultCodes) { 
+			CodeVO resultCd = (CodeVO) item;	// Object -> CodeVO 타입 캐스팅
+			category.put(resultCd.getCode(),resultCd.getDecode()); // 카테고리 코드, 카테고리명 map에 넣기
 		}	
 		
 		return category;
@@ -92,18 +92,22 @@ public class BoardController {
 	
 	// 이미지 리사이징 
 		public static BufferedImage makeThumbnail(BufferedImage src , int w, int h,String fileName) throws IOException {
-	    	BufferedImage thumbImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);  
-			Graphics2D graphics = thumbImage.createGraphics();  
+	    	BufferedImage thumbImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);  // BufferedImage 객체 생성
+			Graphics2D graphics = thumbImage.createGraphics();  // 2d 이미지 생성
+			
+			// 이미지 렌더링 속성 설정(이미지 보간: 알려진 값 사이 중간 값 추정. 화소당 선형보간 세번 수행, 새롭게 생성된 화소는 가장 가까운 화소 4개에 가중치를 곱한 값을 합해서 얻음.)
 	        graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);  
-	        graphics.drawImage(src, 0,0, w, h, null);  
+	        graphics.drawImage(src, 0,0, w, h, null);  // 설정한 가로, 세로 크기로 이미지 그리기
 	    	
-	        ResampleOp resampleOp = new ResampleOp (w, h);
-	        resampleOp.setUnsharpenMask(AdvancedResizeOp.UnsharpenMask.VerySharp);
+	        ResampleOp resampleOp = new ResampleOp (w, h); // imageScaling 라이브러리 객체 (조정할 이미지 크기로 생성)
+	        resampleOp.setUnsharpenMask(AdvancedResizeOp.UnsharpenMask.VerySharp); // 크기 조정 시 이미지 품질 선명하게 
 
-	        BufferedImage rescaled = resampleOp.filter(thumbImage, null);
+	        // 단일 입력 및 출력, 두 이미지의 색상 모델이 일치하지 않으면 대상 색상 모델로 색상 변환이 수행 (대상 이미지 null -> 적절한 colorModel 생성)
+	        // filter(소스이미지 , 대상 이미지)
+	        BufferedImage rescaled = resampleOp.filter(thumbImage, null); 
 
 	        
-	       return rescaled;
+	       return rescaled; // 리사이징 된 이미지 반환
 	    	
 	    }
 		
@@ -130,25 +134,7 @@ public class BoardController {
 			}
 		}
 		
-		// 파일 순번 조회
-//		public Map<Long,Long> filesNo(Long boardNo)throws Exception{
-//			UploadFileVO uploadFile = new UploadFileVO();
-//				uploadFile.setBoardNo(boardNo);
-//				List<?>result = uploadFileService.selectFileNo(uploadFile);
-//				
-//			
-//				Map<Long,Long> fileNoList = new HashMap<>();
-//			
-//				for(Object item : result) {
-//					log.info("selectFileNo = {}",item);
-//					UploadFileVO resultFile = (UploadFileVO) item;
-//					fileNoList.put(resultFile.getFileSq(),resultFile.getFileNo());
-//				}	
-//				
-//				return fileNoList;
-//			}
-	
-		
+
 		
 	// 글 목록
 	@RequestMapping(value = "/boardList.do")
@@ -156,41 +142,41 @@ public class BoardController {
 		log.info("----- 게시글 목록 화면 -----");
 		
 		/** EgovPropertyService */
-		searchVO.setPageUnit(propertiesService.getInt("pageUnit"));
-		searchVO.setPageSize(propertiesService.getInt("pageSize"));
+		searchVO.setPageUnit(propertiesService.getInt("pageUnit")); // 게시물 건 수 가져옴
+		searchVO.setPageSize(propertiesService.getInt("pageSize")); // 페이지 건 수 가져옴
 		
 
 		/** 페이징 세팅 */
-		PaginationInfo paginationInfo = new PaginationInfo();
-		paginationInfo.setCurrentPageNo(searchVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(searchVO.getPageUnit());
-		paginationInfo.setPageSize(searchVO.getPageSize());
+		PaginationInfo paginationInfo = new PaginationInfo(); // 페이징 객체 생성
+		paginationInfo.setCurrentPageNo(searchVO.getPageIndex()); //현재 페이지 번호
+		paginationInfo.setRecordCountPerPage(searchVO.getPageUnit()); //한 페이지 당 게시되는 게시물 건 수
+		paginationInfo.setPageSize(searchVO.getPageSize()); //페이지 리스트에 게시되는 페이지 건 수
 
-		searchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
-		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+		/** 검색조건 세팅 */
+		searchVO.setFirstIndex(paginationInfo.getFirstRecordIndex()); // 검색조건 : 첫번째 행 번호
+		searchVO.setLastIndex(paginationInfo.getLastRecordIndex()); // 검색조건 : 마지막 행 번호
+		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage()); // 검색조건 : 검색한 게시물 건 수
 
-
+		/** 검색조건 포함 글 목록 조회 */
 		List<?> boardList = boardService.selectBoardList(searchVO);
-		model.addAttribute("resultList", boardList);
+		model.addAttribute("resultList", boardList); // 모델 속성 "resultList"에 글 목록 객체 추가
 		
-
-		int totCnt = boardService.selectBoardListTotCnt(searchVO);
-		paginationInfo.setTotalRecordCount(totCnt);
+		/** 조회한 글 총 개수 */
+		int totCnt = boardService.selectBoardListTotCnt(searchVO); 
+		paginationInfo.setTotalRecordCount(totCnt); // 전체 게시물 건 수 
 		
-		model.addAttribute("paginationInfo", paginationInfo);
+		model.addAttribute("paginationInfo", paginationInfo); // 모델 속성 "paginationInfo"에 페이징 객체 추가
 		
-		return "board/board_list";
+		return "board/board_list"; // 글 목록 화면 반환
 	}
 
 	// 등록 화면
 	@GetMapping(value = "/addBoardView.do")
-	public String addBoardView(
-			BoardVO boardVO,
+	public String addBoardView( BoardVO boardVO,
 			@ModelAttribute("searchVO") BoardDefaultVO searchVO, 
 			Model model) throws Exception {
 		log.info("----- 게시글 등록 화면 -----");
-		model.addAttribute("boardVO", boardVO);
+		model.addAttribute("boardVO", boardVO); // 모델 속성"boardVO"에 게시글 객체 추가
 		return "board/board_register";
 	}
 
@@ -203,17 +189,18 @@ public class BoardController {
 			HttpServletRequest request)
 			throws Exception {
 
+		// BindingResult에는 모델의 바인딩 작업 중 발생한 타입 변환 오류정보, 검증 작업에서 발생한 검증 오류 정보가 모두 저장 됨.
 
 		if (bindingResult.hasErrors()) {
-			log.info("bindingResult = " + bindingResult);
-			model.addAttribute("boardVO", boardVO);
-			return "board/board_register";
+			log.info("bindingResult = " + bindingResult); // 발생한 에러 정보를 로그로 남긴다.
+			model.addAttribute("boardVO", boardVO); // 모델 속성에 게시글 객체 저장
+			return "board/board_register"; // 글 등록 화면 반환
 		}
 		
 
 		// 게시글 저장
-		 Long boardNo = boardService.insertBoard(boardVO);
-		 model.addAttribute("boardNo",boardNo);
+		 Long boardNo = boardService.insertBoard(boardVO); // 저장한 게시글의 글 번호
+		 model.addAttribute("boardNo",boardNo); // 모델 속성 "boardNo"에 글 번호 저장
 
 
 		// path 가져오기
@@ -223,31 +210,32 @@ public class BoardController {
 		String loot2 = context.getRealPath("/images/board/upload/thm");	// 썸네일 저장경로
 		String loot3 = context.getRealPath("/images/board/upload/files");	// 압축파일 저장경로
 		
-		// 경로 존재하는지 체크
+		// 파일 객체 생성(원본파일, 썸네일이미지파일, 압축파일)
 		File fileCheck = new File(loot);
 		File fileCheck2 = new File(loot2);
 		File fileCheck3 = new File(loot3);
 		
-		// 경로 존재 안하면 해당 폴더 생성
+		// 경로 존재하는지 체크 : 경로 존재 안하면 해당 폴더 생성
 		if(!fileCheck.exists()) fileCheck.mkdirs();
 		if(!fileCheck2.exists()) fileCheck2.mkdirs();
 		if(!fileCheck3.exists()) fileCheck3.mkdirs();
 		
+		 // 저장된 파일이름 정보를 담는 배열 리스트 객체 생성 (key: 파일이름유형명 , value: 파일 이름)
 		List<Map<String, String>> fileList = new ArrayList<>();
-		List<File>files = new ArrayList<>();
+		List<File>files = new ArrayList<>(); // 파일들을 담을 배열 리스트 객체 생성
 		
-		UploadFileVO uploadFileVO = new UploadFileVO();
-		String originFile = null;
-		String ext = null;
-		String changeFile = null;
-		String thumFileNm = null;
-		String fileSize = null;
-		String fileType = null;
-		String zipName = null;
-		String zipFilePath = null;
-		Long fileNo = 0L;
+		UploadFileVO uploadFileVO = new UploadFileVO(); // 파일정보를 담을 첨부파일 객체
+		String originFile = null; // 업로드 파일명
+		String ext = null; // 업로드 파일명제외 한 확장자명 
+		String changeFile = null; // 서버 저장용 파일명
+		String thumFileNm = null; // 썸네일 이미지 파일명
+		String fileSize = null; // 파일 크기
+		String fileType = null; // 파일 유형
+		String zipName = null; //압축파일명
+		String zipFilePath = null; //저장할 압축파일 경로
+		Long fileNo = 0L; // 파일 번호
 
-		Map<String, String> map = new HashMap<>();
+		Map<String, String> map = new HashMap<>(); //파일명 정보를 담을 map 객체 (key: 파일유형명, value: 파일명)
 		
 		if (uploadFile != null && !uploadFile.get(0).isEmpty()) {
 
@@ -256,7 +244,7 @@ public class BoardController {
 					originFile = uploadFile.get(i).getOriginalFilename();	// 업로드 파일명 
 					ext = originFile.substring(originFile.lastIndexOf("."));
 					changeFile = UUID.randomUUID().toString() + ext;		// 서버 저장용 파일명
-					thumFileNm = "thum_" + changeFile;		// 저용량 파일명
+					thumFileNm = "thum_" + changeFile;		// 썸네일 이미지 파일명
 					fileNo = Long.valueOf(i);	//파일 순번 
 					
 					map.put("originFile", originFile);
@@ -287,7 +275,7 @@ public class BoardController {
 					// 썸네일 파일 객체 생성
 					File thumFile = new File(loot2 + "\\" + fileList.get(i).get("thumFileNm"));
 
-					if(fileType.contains("image")) {
+					if(fileType.contains("image")) { //파일 유형이 이미지인 경우
 						
 							BufferedImage src = ImageIO.read(fileObject);
 							
@@ -344,7 +332,7 @@ public class BoardController {
 			
 		}
 
-		status.setComplete();
+		status.setComplete(); // 세션 데이터 일괄 삭제
 		return "redirect:{boardNo}/detailBoard.do";
 	}
 	
@@ -359,7 +347,7 @@ public class BoardController {
 	@GetMapping("{selectedId}/detailBoard.do")
 	public String detailBoardView(@PathVariable("selectedId") Long boardSq, 
 			@ModelAttribute("searchBoard") BoardVO searchBoard,
-			@ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model, HttpServletResponse response)  throws Exception {
+			@ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model)  throws Exception {
 		log.info("----- 상세조회 화면 -----");
 		BoardVO boardVO = new BoardVO();
 		boardVO.setBoardSq(boardSq);
@@ -370,20 +358,19 @@ public class BoardController {
 		
 		if(vo == null){
 			log.info("존재하지 않는 게시글입니다!");
-			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-	        response.setHeader("Pragma", "no-cache");
+			
 			return "board/board_exist";
 		}
 		
 		
-		UploadFileVO uploadFileVO = new UploadFileVO();
-		uploadFileVO.setBoardNo(boardSq);
+		UploadFileVO uploadFileVO = new UploadFileVO(); // 조회 정보를 담을 파일 객체생성
+		uploadFileVO.setBoardNo(boardSq); // 조회정보: 현재 게시글 번호를 객체에 세팅
 		
 		
-		List<?> fileList = uploadFileService.selectFileList(uploadFileVO);
-		model.addAttribute("fileList",fileList);
+		List<?> fileList = uploadFileService.selectFileList(uploadFileVO); // 파일 목록 조회
+		model.addAttribute("fileList",fileList); // 모델 속성에 파일목록 객체 저장
 		
-		model.addAttribute("fileSize",fileList.size());
+		model.addAttribute("fileSize",fileList.size()); // 모델 속성에 파일목록의 크기 저장
 		
 		String updateDt = vo.getUpdateDt(); // 조회한 글 작성일자
 		
@@ -393,9 +380,10 @@ public class BoardController {
 		String result = parts[0];  // 최근 글 작성 날짜에서 시간 제거
 		LocalDate resultDt = LocalDate.parse(result);	// 문자열 -> 날짜 타입
 		
-		long daysDifference = ChronoUnit.DAYS.between(resultDt, now);	// 날짜 일수 차이 계산
+		// 열거형 클래스 ChronoUnit : 날짜 기간 단위의 표준 집합 (날짜-시간 조작을 위한 단위 기반 액세스 제공)
+		long daysDifference = ChronoUnit.DAYS.between(resultDt, now);	// 날짜 일수 차이 계산(게시글 최종 수정일시, 현재 일시)
 		
-		Boolean dateResult = true;
+		Boolean dateResult = true; // 글 작성 이후 30일 경과 여부 (true: 경과하지 않음, false: 경과)  
 		
 		if(daysDifference > 30) {
 			dateResult = false;
@@ -414,17 +402,15 @@ public class BoardController {
 	// 수정화면
 	@RequestMapping("/updateBoardView.do")
 	public String updateBoardView(@RequestParam("selectedId") Long boardSq, 
-			@ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model, HttpServletResponse response) throws Exception {
-		BoardVO boardVO = new BoardVO();
-		boardVO.setBoardSq(boardSq);
-		BoardVO selectedVO = selectBoard(boardVO, searchVO);
-		model.addAttribute("boardVO",selectedVO);
+			@ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model) throws Exception {
+		BoardVO boardVO = new BoardVO(); // 수정할 게시글을 조회할 정보를 담고 있는 객체
+		boardVO.setBoardSq(boardSq); // 글 조회 정보 세팅: 조회할 글 번호
+		BoardVO selectedVO = selectBoard(boardVO, searchVO); // 조회 결과 글 객체
+		model.addAttribute("boardVO",selectedVO); // 모델 속성에 조회 결과 글 객체를 저장
 		
-		if(selectedVO == null) {
+		if(selectedVO == null) { // 수정할 게시글이 존재하지 않는 경우
 			log.info("삭제된 게시글 입니다!");
-			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-	        response.setHeader("Pragma", "no-cache");
-			return "board/board_exist";
+			return "board/board_exist"; // 삭제된 게시글 알람 화면 반환
 		}
 		
 		log.info("----- 게시글 수정 화면 -----");
@@ -468,12 +454,12 @@ public class BoardController {
 		String loot2 = context.getRealPath("/images/board/upload/thm");	// 썸네일 저장경로
 		String loot3 = context.getRealPath("/images/board/upload/modify");	// 수정된 파일 압축파일 저장경로
 		
-		// 경로 존재하는지 체크
+		// 파일 객체 생성(원본파일, 이미지썸네일파일, 수정된 압축파일)
 		File fileCheck = new File(loot);
 		File fileCheck2 = new File(loot2);
 		File fileCheck3 = new File(loot3);
 		
-		// 경로 존재 안하면 해당 폴더 생성
+		// 경로 존재하는지 체크: 경로 존재 안하면 해당 폴더 생성
 		if(!fileCheck.exists()) fileCheck.mkdirs();
 		if(!fileCheck2.exists()) fileCheck2.mkdirs();
 		if(!fileCheck3.exists()) fileCheck3.mkdirs();
@@ -481,18 +467,19 @@ public class BoardController {
 		List<Map<String, String>> fileList = new ArrayList<>();
 		List<File>files = new ArrayList<>();
 		
-		UploadFileVO uploadFileVO = new UploadFileVO();
-		uploadFileVO.setBoardNo(boardNo);
+		UploadFileVO uploadFileVO = new UploadFileVO(); // 파일정보를 담을 첨부파일 객체
+
+		uploadFileVO.setBoardNo(boardNo); // 첨부파일을 변경할 게시글 번호 세팅
 		
-		String originFile = null;
-		String ext = null;
-		String changeFile = null;
-		String thumFileNm = null;
-		String fileSize = null;
-		String fileType = null;
-		String zipName = null;
-		String zipFilePath = null;
-		Long fileNo = 0L;
+		String originFile = null; // 업로드 파일명
+		String ext = null; // 업로드 파일명제외 한 확장자명 
+		String changeFile = null; // 서버 저장용 파일명
+		String thumFileNm = null; // 썸네일 이미지 파일명
+		String fileSize = null; // 파일 크기
+		String fileType = null; // 파일 유형
+		String zipName = null; //압축파일명
+		String zipFilePath = null; //저장할 압축파일 경로
+		Long fileNo = 0L; // 파일 번호
 		
 	if(uploadFile != null && !uploadFile.get(0).isEmpty()) {
 		
@@ -563,21 +550,6 @@ public class BoardController {
 			uploadFileService.insertFile(uploadFileVO); //첨부파일 정보 DB저장
 			}
 
-//			기존 첨부파일 존재하면 파일 순번 수정
-//			List<?> resultFileList = uploadFileService.selectFileList(uploadFileVO);
-//			if(resultFileList.size() > 0) {
-//				for(Object item : resultFileList) {
-//					UploadFileVO result = (UploadFileVO)item;
-//					Long resultFileSq = result.getFileSq();
-//					Long resultBoardNo = result.getBoardNo();
-//					
-//					Map<Long,Long> filesNo = filesNo(resultBoardNo);
-//					Long resultFileNo = filesNo.get(resultFileSq);
-//					result.setFileNo(resultFileNo);
-//					
-//					uploadFileService.updateFileNo(result);
-//				}
-//			}
 			
 			zipName = boardNo+ "_files_md";		// 압축파일명
 		    zipFilePath = loot3 + "\\" + zipName + ".zip";	// 압축파일 저장경로 + 파일명
@@ -603,7 +575,7 @@ public class BoardController {
 	}
 		
 
-		status.setComplete();
+		status.setComplete(); // 세션 데이터 일괄 삭제
 		return "redirect:{boardNo}/detailBoard.do";
 	}
 
@@ -611,18 +583,18 @@ public class BoardController {
 	// 게시글 삭제 처리
 	@PostMapping("/deleteBoard.do")
 	public String deleteBoard(BoardVO boardVO, @ModelAttribute("searchVO") BoardDefaultVO searchVO, SessionStatus status) throws Exception {
-		UploadFileVO uploadFile = new UploadFileVO();
-		Long boardNo = boardVO.getBoardSq();
-		uploadFile.setBoardNo(boardNo);
+		UploadFileVO uploadFile = new UploadFileVO(); // 삭제할 첨부파일 정보를 담고 있는 객체
+		Long boardNo = boardVO.getBoardSq(); // 삭제할 게시글 번호
+		uploadFile.setBoardNo(boardNo); // 첨부파일 객체에 글 번호 세팅
 		
 		// 게시글 삭제
-		boardService.deleteBoard(boardVO);
+		boardService.deleteBoard(boardVO); // use_yn = 'N'
 		
 		// 첨부파일 전체 삭제 
-		uploadFileService.deleteAllFile(uploadFile);
+		uploadFileService.deleteAllFile(uploadFile); // use_yn = 'N'
 		
 		log.info("----- 게시글  삭제 완료 -----");
-		status.setComplete();
+		status.setComplete(); // 세션 데이터 일괄 삭제
 		return "redirect:/boardList.do";
 	}
 

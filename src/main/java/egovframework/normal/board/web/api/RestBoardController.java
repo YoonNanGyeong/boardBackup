@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,10 +28,10 @@ import egovframework.normal.board.service.UploadFileVO;
 public class RestBoardController {
 	
 	@Resource(name = "boardService")
-	private BoardService boardService;
+	private BoardService boardService; // 게시글 서비스 
 	
 	@Resource(name = "uploadFileService")
-	private UploadFileService uploadFileService;
+	private UploadFileService uploadFileService;  // 첨부파일 서비스 
 	
 	// 파일 단건 삭제 처리
 		@GetMapping("{fileSq}/deleteFile.do")
@@ -102,6 +101,7 @@ public class RestBoardController {
 			return res ;
 		} 
 		
+		// 삭제된 게시글 조회용
 		@GetMapping("{boardSq}/selectBoard.do")
 		@ResponseBody
 		public RestResponse<Object> selectBoard(@PathVariable("boardSq")Long boardSq, Model model)throws Exception{
