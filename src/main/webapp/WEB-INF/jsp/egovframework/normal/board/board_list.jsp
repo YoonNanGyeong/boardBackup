@@ -68,8 +68,7 @@
             <div id="titleIndex">
                 <!-- 글자 강조 박스 -->
             </div>
-            <h3>
-            	
+            <h3>	
 				<c:set var = "key" value = "${searchVO.boardCd}"/>
          		<c:out value = "${category[key]}" default = "목록"/>
            	</h3>

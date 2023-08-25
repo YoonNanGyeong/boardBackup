@@ -73,9 +73,10 @@
                                         </div>
                                         <!-- list title -->
                                         <div class="title">
-                                            <h4 style="color: #0070D2;">
-                                                <c:set var="key" value="${boardVO.boardCd}" />
-                                                <c:out value="${category[key]}" default = "상세조회" />
+                                            <h4 id="category" style="color: #0070D2;">
+                                                <%-- <c:set var="key" value="${boardVO.boardCd}" />
+                                                <c:out value="${category[key]}" default = "상세조회" /> --%>
+                                                <c:out value="${boardVO.boardCd}" />
                                             </h4>
 
                                             <h3>
