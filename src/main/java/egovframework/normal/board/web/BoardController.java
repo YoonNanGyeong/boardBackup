@@ -17,7 +17,6 @@ import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import egovframework.normal.board.service.CodeVO;
 import egovframework.normal.board.service.UploadFileService;
 import egovframework.normal.board.service.BoardService;
 import egovframework.normal.board.service.BoardDefaultVO;
@@ -74,17 +73,20 @@ public class BoardController {
 	// 게시판 코드 디코드 
 	@ModelAttribute("category")
 	public Map<String,String> classifier()throws Exception{
-	CodeVO codeVO = new CodeVO();
-		codeVO.setCodePid("B01"); //조회 정보가 담긴 코드 객체(부모코드)
-		List<?>resultCodes = codeService.selectCodeList(codeVO); //부모코드가 B01 인 코드 목록 조회
+//		CodeVO codeVO = new CodeVO();
+//		codeVO.setCodePid("B01"); //조회 정보가 담긴 코드 객체(부모코드)
+//		List<?>resultCodes = codeService.selectCodeList(codeVO); //부모코드가 B01 인 코드 목록 조회
 	
 		 // 코드 목록을 저장할 객체(key : 카테고리 코드 , value : 카테고리명)
 		Map<String,String> category = new HashMap<>();
-	
-		for(Object item : resultCodes) { 
-			CodeVO resultCd = (CodeVO) item;	// Object -> CodeVO 타입 캐스팅
-			category.put(resultCd.getCode(),resultCd.getDecode()); // 카테고리 코드, 카테고리명 map에 넣기
-		}	
+		category.put("B0101","공지사항"); // 카테고리 코드, 카테고리명 map에 넣기
+		category.put("B0102","자유게시판"); 
+		category.put("B0103","코딩게시판"); 
+		
+//		for(Object item : resultCodes) { 
+//			CodeVO resultCd = (CodeVO) item;	// Object -> CodeVO 타입 캐스팅
+//			category.put(resultCd.getCode(),resultCd.getDecode()); // 카테고리 코드, 카테고리명 map에 넣기
+//		}	
 		
 		return category;
 		

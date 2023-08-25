@@ -71,7 +71,7 @@
             <h3>
             	
 				<c:set var = "key" value = "${searchVO.boardCd}"/>
-         		<c:out value = "${category[key]}" default = "공지사항"/>
+         		<c:out value = "${category[key]}" default = "목록"/>
            	</h3>
           </div>
            <!-- /title -->

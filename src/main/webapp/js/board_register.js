@@ -1,10 +1,11 @@
 import { ajax } from "/js/ajax.js";
 
 // form
-let frm = document.addForm;
+let frm = document.addForm; // 글 작성 폼 
 
 // 등록 버튼
 const $addBtn = document.getElementById("writeBtn");
+// 목록 버튼
 const $listBtn = document.getElementById("listBtn");
 
 // 입력 필드 
@@ -33,8 +34,8 @@ const fn_validationOfUser = e => {
 	// 입력 필드 값
 	let $userValue = e.target.value;
 
-	if ($userValue.trim() == '') {
-		$errUser.classList.remove('hidden');
+	if ($userValue.trim() == '') { // 입력값 공백 제거(trim()) 후 필수 입력값 검증
+		$errUser.classList.remove('hidden'); // 에러 문구 안보이는 class 제거 
 		$errUser.textContent = '*닉네임을 입력해주세요';
 		$user.focus();
 		$userValue = ' ';

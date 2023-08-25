@@ -21,22 +21,22 @@ for(const ele of $prevNextBtn){
 			prevNextCondition : $condition.value	//조회 조건
 		};
 		ajax
-			.post(url, payLoad)
-			.then(res => res.json())
-			.then(res => {
-				if(res.header.rtcd =='00'){
-					console.log(res.rtmsg);
+			.post(url, payLoad) // post method로 전송
+			.then(res => res.json()) // 응답 데이터 json 타입
+			.then(res => {	
+				if(res.header.rtcd =='00'){// 결과 코드가 성공 일 경우 
+					console.log(res.rtmsg); // 코드, 메세지
 
-				  if(res.data != null){
+				  if(res.data != null){ // 응답 데이터가 있는 경우 
 					  location.href = "/"+ res.data +"/detailBoard.do";
-				  }else if(res.data == null){
+				  }else if(res.data == null){ // 응답 데이터가 없는 경우 
 					$condition.value = null;
 				  }   
-				}else if(res.header.rtcd =='99'){
-					console.log(res.rtmsg);
-					if($condition.value == 'next'){
+				}else if(res.header.rtcd =='99'){ // 실패 
+					console.log(res.rtmsg); // 코드, 메세지
+					if($condition.value == 'next'){ // 조회 조건이 next면 안내 창 팝업
 						alert("다음글이 없습니다. :(");
-					}else{
+					}else{ // 조회 조건이 prev면 안내 창 팝업
 						alert("이전글이 없습니다. :(");
 					}
 				}
@@ -52,7 +52,7 @@ const $downZip = document.querySelector('.fa-solid.fa-download');
 
 // 아이콘 클릭 시 압축 파일 다운로드
 $downZip.addEventListener('click', e => {
-	const url = `/zipFileDownload.do?boardSq=${$boardSq.value}`;
+	const url = `/zipFileDownload.do?boardSq=${$boardSq.value}`; // 다운로드 url
 	if(!confirm('첨부된 파일들이 압축파일로 저장됩니다.\n다운로드 하시겠습니까?')){
 		return;
 	}else{
