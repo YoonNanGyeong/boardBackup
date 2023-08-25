@@ -4,10 +4,6 @@ const $prevNextBtn = document.querySelectorAll('.prevNext-btn');	//이전 다음
 const $condition = document.getElementById('prevNextCondition');	//이전 다음 버튼 value 값이 들어갈 input 태그
 const $boardCd = document.getElementById('boardCd');	//게시물 코드
 const $boardSq = document.getElementById('boardSq');	//게시물 번호
-const $category = document.getElementById('category').textContent;	 //카테고리
-console.log($category);
-
-let cateObj = new Object;
 
 for(const ele of $prevNextBtn){
 	ele.addEventListener('click', e => {
