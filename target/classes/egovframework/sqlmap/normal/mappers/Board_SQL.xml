@@ -25,10 +25,10 @@
 					  , user_nm
 					  )
 				VALUES ( test_board_seq.nextval
-					  , #boardCd#
-					  , #title#  
-					  , #content#
-					  , #userNm#
+					  , #{boardCd}
+					  , #{title}
+					  , #{content}
+					  , #{userNm}
 						 )
 		]]>
 		<!-- 게시글 저장 시 생성되는 게시글 번호 -->
@@ -37,5 +37,17 @@
 		</selectKey>
 	</insert>
 	
+	<!-- 게시글 수정 -->
+	<update id="updateBoard">
+		<![CDATA[
+			UPDATE test_board_tb
+			SET title=#{title}
+				, content=#{content}
+				, update_dt=systimestamp
+				, user_nm = #{userNm}
+				, board_cd = #{boardCd}
+			WHERE board_sq=#{boardSq}
+		]]>
+	</update>
 	
 </mapper>
