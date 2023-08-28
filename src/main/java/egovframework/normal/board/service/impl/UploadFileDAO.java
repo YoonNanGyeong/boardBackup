@@ -7,10 +7,7 @@ import org.springframework.stereotype.Repository;
 import egovframework.normal.board.service.UploadFileVO;
 import egovframework.rte.psl.dataaccess.EgovAbstractDAO;
 
-/**
- * @author nangyeong
- *
- */
+
 @Repository("uploadFileDAO")
 public class UploadFileDAO extends EgovAbstractDAO{
 	
