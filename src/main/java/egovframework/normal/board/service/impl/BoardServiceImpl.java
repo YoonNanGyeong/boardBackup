@@ -35,12 +35,12 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	private static final Logger log = LoggerFactory.getLogger(BoardServiceImpl.class);
 
 	// ibatis
-	@Resource(name = "boardDAO")
-	private BoardDAO boardDAO;
+//	@Resource(name = "boardDAO")
+//	private BoardDAO boardDAO;
 	
 	// mybatis
-//	@Resource(name = "boardMapper")
-//	private BoardMapper boardDAO;
+	@Resource(name = "boardMapper")
+	private BoardMapper boardDAO;
 
 
 	/**
