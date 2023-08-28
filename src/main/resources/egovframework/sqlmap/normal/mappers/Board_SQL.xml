@@ -78,8 +78,11 @@
 			FROM test_board_tb
 			WHERE 1=1 and use_yn = 'Y'
 			<!-- 선택된 글 카테고리가 없으면 기본 카테고리 코드 'B0101' -->
-			<if test = "boardCd != null">
+			<if test = "boardCd == null">
 			   AND board_cd = 'B0101'
+			</if>
+			<if test = "boardCd != null">
+			   AND board_cd = #{boardCd}
 			</if>
 			
 			<!-- 선택된 검색 조건에 따라 쿼리문 바뀜 -->
@@ -108,8 +111,11 @@
 		WHERE 1=1 and use_yn = 'Y'
 		
 		<!-- 선택된 글 카테고리가 없으면 기본 카테고리 코드 'B0101' -->
-			<if test = "boardCd != null">
+			<if test = "boardCd == null">
 			   AND board_cd = 'B0101'
+			</if>
+			<if test = "boardCd != null">
+			   AND board_cd = #{boardCd}
 			</if>
 			
 			<!-- 선택된 검색 조건에 따라 쿼리문 바뀜 -->
