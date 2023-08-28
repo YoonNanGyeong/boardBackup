@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="egovframework.normal.board.service.impl.BoardMapper">
-<!-- 클래스 프로퍼티와 테이블 컬럼 매칭  -->
+	<!-- 클래스 프로퍼티와 테이블 컬럼 매칭  -->
 	<resultMap id="board" type="egovframework.normal.board.service.BoardVO" >
 		<result property="boardSq" column="board_sq"/>
 		<result property="boardCd" column="board_cd"/>
@@ -14,7 +14,28 @@
 		<result property="updateDt" column="update_dt"/>
 	</resultMap>
 	
-	<insert id="insertBoard" >
-	
+	<!-- 게시글 저장 -->
+	<insert id="insertBoard" parameterType = "egovframework.normal.board.service.BoardVO">
+		<![CDATA[
+				INSERT INTO test_board_tb 
+					( board_sq
+					  , board_cd
+					  , title
+					  , content
+					  , user_nm
+					  )
+				VALUES ( test_board_seq.nextval
+					  , #boardCd#
+					  , #title#  
+					  , #content#
+					  , #userNm#
+						 )
+		]]>
+		<!-- 게시글 저장 시 생성되는 게시글 번호 -->
+		<selectKey keyProperty="boardSq"  resultType="Long">
+			SELECT test_board_seq.currval AS board_sq FROM dual
+		</selectKey>
 	</insert>
+	
+	
 </mapper>
