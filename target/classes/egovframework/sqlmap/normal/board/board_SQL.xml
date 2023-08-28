@@ -186,8 +186,6 @@
 		   		t2.row_no = #prevNo#
 		   </isEqual>
  	  	</dynamic>
- 	 		
- 	  
 
 	</select>  
 	

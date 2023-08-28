@@ -16,21 +16,19 @@
 	
 	<!-- 게시글 저장 -->
 	<insert id="insertBoard" parameterType = "boardVO">
-		<![CDATA[
-				INSERT INTO test_board_tb 
-					( board_sq
-					  , board_cd
-					  , title
-					  , content
-					  , user_nm
-					  )
-				VALUES ( test_board_seq.nextval
-					  , #{boardCd}
-					  , #{title}
-					  , #{content}
-					  , #{userNm}
-						 )
-		]]>
+		INSERT INTO test_board_tb 
+			( board_sq
+			  , board_cd
+			  , title
+			  , content
+			  , user_nm
+			  )
+		VALUES ( test_board_seq.nextval
+			  , #{boardCd}
+			  , #{title}
+			  , #{content}
+			  , #{userNm}
+				 )
 		<!-- 게시글 저장 시 생성되는 게시글 번호 -->
 		<selectKey keyProperty="boardSq"  resultType="Long">
 			SELECT test_board_seq.currval AS board_sq FROM dual
@@ -39,46 +37,38 @@
 	
 	<!-- 게시글 수정 -->
 	<update id="updateBoard">
-		<![CDATA[
-			UPDATE test_board_tb
-			SET title=#{title}
-				, content=#{content}
-				, update_dt=systimestamp
-				, user_nm = #{userNm}
-				, board_cd = #{boardCd}
-			WHERE board_sq=#{boardSq}
-		]]>
+		UPDATE test_board_tb
+		SET title=#{title}
+			, content=#{content}
+			, update_dt=systimestamp
+			, user_nm = #{userNm}
+			, board_cd = #{boardCd}
+		WHERE board_sq=#{boardSq}
 	</update>
 	
 	<!-- 게시글 조회수 증가 -->
 	<update id="increaseViewCnt">
-		<![CDATA[
-			UPDATE test_board_tb
-			SET view_cnt = view_cnt + 1
-			WHERE board_sq=#{boardSq}
-		]]>
+		UPDATE test_board_tb
+		SET view_cnt = view_cnt + 1
+		WHERE board_sq=#{boardSq}
 	</update>
 	
 	<!-- 게시글 삭제 처리 -->
 	<delete id="deleteBoard">
-		<![CDATA[
-			UPDATE test_board_tb
-			SET use_yn = 'N'
-			WHERE board_sq=#{boardSq}
-		]]>
+		UPDATE test_board_tb
+		SET use_yn = 'N'
+		WHERE board_sq=#{boardSq}
 	</delete>
 	
 	<!-- 게시글 조회 -->
     <select id="selectBoard" resultMap="board" >
-       	<![CDATA[
-            SELECT
-            	board_sq, board_cd, title, content, view_cnt, user_nm, use_yn,
-            	TO_CHAR(update_dt,'YYYY.MM.DD HH24:MI')update_dt, create_dt
-            FROM test_board_tb 
-            WHERE board_sq=#{boardSq}
-            	AND use_yn = 'Y'
-        ]]>
-    </select>
+          SELECT
+          	board_sq, board_cd, title, content, view_cnt, user_nm, use_yn,
+          	TO_CHAR(update_dt,'YYYY.MM.DD HH24:MI')update_dt, create_dt
+          FROM test_board_tb 
+          WHERE board_sq=#{boardSq}
+          	AND use_yn = 'Y'
+       </select>
     
     <!-- 게시글 목록 조회 -->
 	<select id="selectBoardList"  parameterType="searchVO" resultType="egovMap">
@@ -138,7 +128,6 @@
 	
 	<!-- 게시글 이전, 다음 행 번호 조회 -->
 	<select id="boardPrevNext" parameterType="boardVO" resultType="egovMap">
-		<![CDATA[
  		SELECT DISTINCT t2.next_no, t2.prev_no 
  		  FROM (SELECT rownum AS row_no, lag(rownum)over(ORDER BY rownum) AS prev_no, lead(rownum)over(ORDER BY rownum) AS next_no, board_sq 
 				FROM (SELECT board_sq, board_cd, title, content, view_cnt, user_nm,  
@@ -148,12 +137,10 @@
  				   		ORDER BY board_sq)t1 
  				    				ORDER BY rownum)t2 
 		 WHERE board_sq = #{boardSq}
- 	]]> 
 	</select>
 	
 	<!-- 이전, 다음 행 번호로 게시글 조회  -->
 	<select id="selectPrevNext" parameterType="boardVO" resultType="egovMap">
-		<![CDATA[
 	 		SELECT t2.board_sq, t2.board_cd, t2.title, t2.content, t2.view_cnt, t2.user_nm,  
 	 		  		   t2.use_yn, t2.update_dt , t2.create_dt 	 
 	 		FROM (SELECT rownum  AS row_no, lag(rownum)over(ORDER BY rownum) AS prev_no, lead(rownum)over(ORDER BY rownum) AS next_no, t1.* 
@@ -163,7 +150,7 @@
 	 					   WHERE use_yn = 'Y' AND board_cd = #{boardCd}
 	 					   ORDER BY board_sq)t1 
 	 					ORDER BY rownum)t2 
-	 	  ]]> 
+	 	
 	  	  <where>
 	  	  	 <if test='prevNextCondition == "next" '>
 	  	  	 	t2.row_no = #{nextNo}
