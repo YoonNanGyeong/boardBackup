@@ -15,7 +15,7 @@
 	</resultMap>
 	
 	<!-- 게시글 저장 -->
-	<insert id="insertBoard" parameterType = "egovframework.normal.board.service.BoardVO">
+	<insert id="insertBoard" parameterType = "boardVO">
 		<![CDATA[
 				INSERT INTO test_board_tb 
 					( board_sq
@@ -50,4 +50,127 @@
 		]]>
 	</update>
 	
+	<!-- 게시글 조회수 증가 -->
+	<update id="increaseViewCnt">
+		<![CDATA[
+			UPDATE test_board_tb
+			SET view_cnt = view_cnt + 1
+			WHERE board_sq=#{boardSq}
+		]]>
+	</update>
+	
+	<!-- 게시글 삭제 처리 -->
+	<delete id="deleteBoard">
+		<![CDATA[
+			UPDATE test_board_tb
+			SET use_yn = 'N'
+			WHERE board_sq=#{boardSq}
+		]]>
+	</delete>
+	
+	<!-- 게시글 조회 -->
+    <select id="selectBoard" resultMap="board" >
+       	<![CDATA[
+            SELECT
+            	board_sq, board_cd, title, content, view_cnt, user_nm, use_yn,
+            	TO_CHAR(update_dt,'YYYY.MM.DD HH24:MI')update_dt, create_dt
+            FROM test_board_tb 
+            WHERE board_sq=#{boardSq}
+            	AND use_yn = 'Y'
+        ]]>
+    </select>
+    
+    <!-- 게시글 목록 조회 -->
+	<select id="selectBoardList"  parameterType="searchVO" resultType="egovMap">
+
+			SELECT
+				board_sq, board_cd, title, view_cnt, user_nm, TO_CHAR(update_dt,'YYYY.MM.DD')update_dt
+			FROM test_board_tb
+			WHERE 1=1 and use_yn = 'Y'
+			<!-- 선택된 글 카테고리가 없으면 기본 카테고리 코드 'B0101' -->
+			<if test = "boardCd != null">
+			   AND board_cd = 'B0101'
+			</if>
+			
+			<!-- 선택된 검색 조건에 따라 쿼리문 바뀜 -->
+			<if test = "searchCondition != null">			
+				<if test = 'searchCondition == "0" '>
+					AND title LIKE '%' || #{searchKeyword} || '%'
+				</if>
+				<if test = 'searchCondition == "1" '>
+					AND content LIKE '%' || #{searchKeyword} || '%'
+				</if>
+				<if test = 'searchCondition == "2" '>
+					AND 	user_nm LIKE '%' || #{searchKeyword} || '%'
+				</if>
+			</if>
+			
+			<!-- 페이징  -->
+			ORDER BY board_sq DESC
+			OFFSET #{firstIndex} ROWS 
+			FETCH NEXT #{recordCountPerPage} ROWS ONLY	
+	</select>
+	
+	<!-- 게시글 총 개수 조회 -->
+	<select id="selectBoardListTotCnt" parameterType="searchVO" resultType="int">
+		SELECT COUNT(*) totcnt
+		FROM test_board_tb
+		WHERE 1=1 and use_yn = 'Y'
+		
+		<!-- 선택된 글 카테고리가 없으면 기본 카테고리 코드 'B0101' -->
+			<if test = "boardCd != null">
+			   AND board_cd = 'B0101'
+			</if>
+			
+			<!-- 선택된 검색 조건에 따라 쿼리문 바뀜 -->
+			<if test = "searchCondition != null">			
+				<if test = 'searchCondition == "0" '>
+					AND title LIKE '%' || #{searchKeyword} || '%'
+				</if>
+				<if test = 'searchCondition == "1" '>
+					AND content LIKE '%' || #{searchKeyword} || '%'
+				</if>
+				<if test = 'searchCondition == "2" '>
+					AND 	user_nm LIKE '%' || #{searchKeyword} || '%'
+				</if>
+			</if>
+	</select>
+	
+	<!-- 게시글 이전, 다음 행 번호 조회 -->
+	<select id="boardPrevNext" parameterType="boardVO" resultType="egovMap">
+		<![CDATA[
+ 		SELECT DISTINCT t2.next_no, t2.prev_no 
+ 		  FROM (SELECT rownum AS row_no, lag(rownum)over(ORDER BY rownum) AS prev_no, lead(rownum)over(ORDER BY rownum) AS next_no, board_sq 
+				FROM (SELECT board_sq, board_cd, title, content, view_cnt, user_nm,  
+ 						 use_yn, to_char(update_dt, 'yyyy.mm.dd hh24:mi')as update_dt , create_dt  
+ 					FROM TEST_BOARD_TB  
+ 				   WHERE use_yn = 'Y' AND board_cd = #{boardCd}
+ 				   		ORDER BY board_sq)t1 
+ 				    				ORDER BY rownum)t2 
+		 WHERE board_sq = #{boardSq}
+ 	]]> 
+	</select>
+	
+	<!-- 이전, 다음 행 번호로 게시글 조회  -->
+	<select id="selectPrevNext" parameterType="boardVO" resultType="egovMap">
+		<![CDATA[
+	 		SELECT t2.board_sq, t2.board_cd, t2.title, t2.content, t2.view_cnt, t2.user_nm,  
+	 		  		   t2.use_yn, t2.update_dt , t2.create_dt 	 
+	 		FROM (SELECT rownum  AS row_no, lag(rownum)over(ORDER BY rownum) AS prev_no, lead(rownum)over(ORDER BY rownum) AS next_no, t1.* 
+	 					FROM (SELECT board_sq, board_cd, title, content, view_cnt, user_nm,  
+	 							 use_yn, to_char(update_dt, 'yyyy.mm.dd hh24:mi')as update_dt , create_dt  
+	 						FROM TEST_BOARD_TB  
+	 					   WHERE use_yn = 'Y' AND board_cd = #{boardCd}
+	 					   ORDER BY board_sq)t1 
+	 					ORDER BY rownum)t2 
+	 	  ]]> 
+	  	  <where>
+	  	  	 <if test='prevNextCondition == "next" '>
+	  	  	 	t2.row_no = #{nextNo}
+	  	  	 </if>
+	  	  	 <if test='prevNextCondition == "prev" '>
+	  	  	 	t2.row_no = #{prevNo}
+	  	  	 </if>
+	  	  </where>
+	</select>
 </mapper>
