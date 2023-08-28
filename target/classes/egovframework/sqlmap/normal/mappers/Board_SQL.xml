@@ -13,4 +13,8 @@
 		<result property="createDt" column="create_dt"/>
 		<result property="updateDt" column="update_dt"/>
 	</resultMap>
+	
+	<insert id="insertBoard" >
+	
+	</insert>
 </mapper>
