@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="egovframework.normal.board.service.impl.UploadFileMapper">
+<!-- 클래스 프로퍼티와 테이블 컬럼 매칭  -->
+<resultMap id="uploadfile" type="egovframework.normal.board.service.UploadFileVO">
+	<result property="fileSq" column="file_sq"/>
+	<result property="boardNo" column="board_no"/>
+	<result property="storeNm" column="store_nm"/>
+	<result property="uploadNm" column="upload_nm"/>
+	<result property="fileSize" column="file_size"/>
+	<result property="fileType" column="file_type"/>
+	<result property="useYn" column="use_yn"/>
+	<result property="fileNo" column="file_no"/>
+</resultMap>
+
+
+</mapper>
