@@ -53,7 +53,7 @@ public interface BoardService {
 	 * @param BoardVO - 조회한 글 VO
 	 * @return 이전, 다음글 행번호 
 	 */
-	List<?> boardPrevNext(BoardVO vo) throws Exception;
+	BoardVO boardPrevNext(BoardVO vo) throws Exception;
 	
 	/**
 	 * 이전, 다음글 번호로 글 조회
