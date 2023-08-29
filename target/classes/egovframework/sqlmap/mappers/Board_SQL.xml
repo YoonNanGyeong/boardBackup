@@ -47,7 +47,7 @@
 	</update>
 	
 	<!-- 게시글 조회수 증가 -->
-	<update id="increaseViewCnt">
+	<update id="increaseViewCnt" parameterType="boardVO">
 		UPDATE test_board_tb
 		SET view_cnt = view_cnt + 1
 		WHERE board_sq=#{boardSq}
@@ -61,23 +61,25 @@
 	</delete>
 	
 	<!-- 게시글 조회 -->
-    <select id="selectBoard" resultMap="board" >
+    <select id="selectBoard" parameterType="boardVO" resultType="boardVO">
           SELECT
           	board_sq, board_cd, title, content, view_cnt, user_nm, use_yn,
           	TO_CHAR(update_dt,'YYYY.MM.DD HH24:MI')update_dt, create_dt
           FROM test_board_tb 
           WHERE use_yn = 'Y'
-           <choose>
-           		<when test='prevNextCondition == "next" '>
-           		AND  board_sq=#{nextNo}
-           		</when>
-           		<when test='prevNextCondition == "prev" '>
-           		AND  board_sq=#{prevNo}
-           		</when>
-           		<otherwise>           		
-	         	 AND  board_sq=#{boardSq}
-           		</otherwise>
-           </choose>     
+          <choose>
+          	<when test='prevNextCondition == "next" '>
+          		AND  board_sq=#{nextNo}
+          	</when>
+          	<when test='prevNextCondition == "prev" '>
+          		AND  board_sq=#{prevNo}
+          	</when>
+          	<otherwise>
+	         	AND  board_sq=#{boardSq}
+          	</otherwise>
+          </choose>
+           		
+           		
        </select>
     
     <!-- 게시글 목록 조회 -->
@@ -142,17 +144,8 @@
 			</if>
 	</select>
 	
-	<!-- 게시글 이전, 다음 행 번호 조회 -->
-	<select id="boardPrevNext" parameterType="boardVO" >
- 		<!-- SELECT DISTINCT t2.next_no, t2.prev_no 
- 		  FROM (SELECT rownum AS row_no, lag(rownum)over(ORDER BY rownum) AS prev_no, lead(rownum)over(ORDER BY rownum) AS next_no, board_sq 
-				FROM (SELECT board_sq, board_cd, title, content, view_cnt, user_nm,  
- 						 use_yn, to_char(update_dt, 'yyyy.mm.dd hh24:mi')as update_dt , create_dt  
- 					FROM TEST_BOARD_TB  
- 				   WHERE use_yn = 'Y' AND board_cd = #{boardCd}
- 				   		ORDER BY board_sq)t1 
- 				    				ORDER BY rownum)t2 
-		 WHERE board_sq = #{boardSq} -->
+	<!-- 게시글 이전, 다음글 번호 조회 -->
+	<select id="boardPrevNext" parameterType="boardVO" resultType="boardVO">
 		 SELECT t1.prev_no, t1.next_no
 		 FROM(SELECT board_sq, lag(board_sq)over(ORDER BY board_sq) AS prev_no, lead(board_sq)over(ORDER BY board_sq) AS next_no
 				FROM TEST_BOARD_TB  
@@ -160,25 +153,4 @@
 		 WHERE t1.board_sq = #{boardSq}
 	</select>
 	
-	<!-- 이전, 다음 행 번호로 게시글 조회  -->
-	<select id="selectPrevNext" parameterType="boardVO" resultType="egovMap">
-	 		SELECT t2.board_sq, t2.board_cd, t2.title, t2.content, t2.view_cnt, t2.user_nm,  
-	 		  		   t2.use_yn, t2.update_dt , t2.create_dt 	 
-	 		FROM (SELECT rownum  AS row_no, lag(rownum)over(ORDER BY rownum) AS prev_no, lead(rownum)over(ORDER BY rownum) AS next_no, t1.* 
-	 					FROM (SELECT board_sq, board_cd, title, content, view_cnt, user_nm,  
-	 							 use_yn, to_char(update_dt, 'yyyy.mm.dd hh24:mi')as update_dt , create_dt  
-	 						FROM TEST_BOARD_TB  
-	 					   WHERE use_yn = 'Y' AND board_cd = #{boardCd}
-	 					   ORDER BY board_sq)t1 
-	 					ORDER BY rownum)t2 
-	 	
-	  	  <where>
-	  	  	 <if test='prevNextCondition == "next" '>
-	  	  	 	t2.row_no = #{nextNo}
-	  	  	 </if>
-	  	  	 <if test='prevNextCondition == "prev" '>
-	  	  	 	t2.row_no = #{prevNo}
-	  	  	 </if>
-	  	  </where>
-	</select>
 </mapper>

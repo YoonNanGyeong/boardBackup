@@ -31,15 +31,10 @@ public interface BoardMapper {
 	
 	
 	/**
-	 * 조회한 글의 이전, 다음글 행번호
+	 * 조회한 글의 이전, 다음글번호
 	 */
 	public BoardVO boardPrevNext(BoardVO vo);
 	
-	/**
-	 * 이전, 다음글 번호로 글 조회
-	 */
-	public List<?> selectPrevNext(BoardVO vo);
-
 	/**
 	 * 글 목록을 조회한다.
 	 */

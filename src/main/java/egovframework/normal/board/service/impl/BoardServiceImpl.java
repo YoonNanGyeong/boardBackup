@@ -82,7 +82,8 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 		BoardVO resultVO = boardDAO.selectBoard(vo);
 
 		if (resultVO != null) {			
-			boardDAO.increaseViewCnt(resultVO);
+//			boardDAO.increaseViewCnt(resultVO);
+			updateViewCnt(resultVO);
 		}	
 		return resultVO;
 	}
@@ -122,7 +123,7 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	/**
 	 * 조회한 글의 이전, 다음글 번호
 	 * @param BoardVO - 조회한 글 VO
-	 * @return 이전, 다음글 행번호
+	 * @return 이전, 다음글번호
 	 */
 	@Override
 	public BoardVO boardPrevNext(BoardVO vo) throws Exception {
@@ -130,16 +131,7 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	}
 
 	
-	
-	/**
-	 * 이전, 다음글 번호로 글 조회
-	 * @param BoardVO - 조회할 글정보를 담고있는 VO
-	 * @return 이전, 다음글
-	 */
-	@Override
-	public List<?> selectPrevNext(BoardVO vo) throws Exception {
-		return boardDAO.selectPrevNext(vo);
-	}
+
 
 
 
