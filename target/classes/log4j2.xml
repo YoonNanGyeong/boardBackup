@@ -2,7 +2,8 @@
 <Configuration>
     <Appenders>
         <Console name="console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d %5p [%c] %m%n" />
+        	<!-- 로그 패턴 설정 : %d 날짜포멧 %5p 로그 레벨 출력 기본문자열 길이 [%c]로깅이 발생한 카테고리 %m 로그 메세지출력 %n 개행문자 출력  -->
+            <PatternLayout pattern="%d %5p [%c] %m%n" /> 
         </Console>
     </Appenders>
     <Loggers>
@@ -19,6 +20,8 @@
         <Logger name="org.springframework" level="INFO" additivity="false">
             <AppenderRef ref="console" />
         </Logger>
+        
+        <!-- 현재 시스템에서 발생하는 모든 로그에 대한 설정 -->
         <Root level="INFO">
             <AppenderRef ref="console" />
         </Root>

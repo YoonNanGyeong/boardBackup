@@ -30,8 +30,8 @@ import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -63,7 +63,7 @@ public class BoardController {
 	protected EgovPropertyService propertiesService;
 
 	/** logger 객체 */
-	private static final Logger log = LoggerFactory.getLogger(BoardController.class);
+	private static final Logger log = LogManager.getLogger(BoardController.class);
 
 	
 	// 게시판 코드 디코드 
@@ -311,6 +311,7 @@ public class BoardController {
 				
 			}catch(IllegalStateException | IOException e){
 				log.info("다중 파일 업로드 실패...");
+				log.error("에러 발생: ",e);
 				// 업로드 실패 시 파일 삭제
 				for(int i = 0; i < uploadFile.size(); i++) {
 					new File(loot + "\\" + fileList.get(i).get("changeFile")).delete();	
@@ -553,6 +554,7 @@ public class BoardController {
 		 
 		}catch(IllegalStateException | IOException e){
 			log.info("다중 파일 업로드 실패...");
+			log.error("에러 발생: ",e);
 			// 업로드 실패 시 파일 삭제
 			for(int i = 0; i < uploadFile.size(); i++) {
 				new File(loot + "\\" + fileList.get(i).get("changeFile")).delete();	

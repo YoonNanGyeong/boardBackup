@@ -49,9 +49,9 @@ public interface BoardService {
 	BoardVO selectBoard(BoardVO vo) throws Exception;
 	
 	/**
-	 * 조회한 글의 이전, 다음글 행번호
+	 *  조회한 글의 이전, 다음글 번호
 	 * @param BoardVO - 조회한 글 VO
-	 * @return 이전, 다음글 행번호 목록
+	 * @return 이전, 다음글 행번호 
 	 */
 	List<?> boardPrevNext(BoardVO vo) throws Exception;
 	
