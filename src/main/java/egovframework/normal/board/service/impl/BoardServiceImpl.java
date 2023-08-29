@@ -42,11 +42,11 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	/**
 	 * 글을 등록한다.
 	 * @param vo - 등록할 정보가 담긴 BoardVO
-	 * @return 등록 결과
-	 * @exception Exception
+	 * @return 등록한 게시글 번호
 	 */
 	@Override
 	public Long insertBoard(BoardVO vo) throws Exception {
+		
 		log.debug(vo.toString());
 
 		Long id = boardDAO.insertBoard(vo);
@@ -57,8 +57,6 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	/**
 	 * 글을 수정한다.
 	 * @param vo - 수정할 정보가 담긴 BoardVO
-	 * @return void형
-	 * @exception Exception
 	 */
 	@Override
 	public void updateBoard(BoardVO vo) throws Exception {
@@ -68,8 +66,6 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	/**
 	 * 글을 삭제한다.
 	 * @param vo - 삭제할 정보가 담긴 BoardVO
-	 * @return void형
-	 * @exception Exception
 	 */
 	@Override
 	public void deleteBoard(BoardVO vo) throws Exception {
@@ -80,7 +76,6 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	 * 글을 조회한다.
 	 * @param vo - 조회할 정보가 담긴 BoardVO
 	 * @return 조회한 글
-	 * @exception Exception
 	 */
 	@Override
 	public BoardVO selectBoard(BoardVO vo) throws Exception {
@@ -96,7 +91,6 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	 * 글 목록을 조회한다.
 	 * @param searchVO - 조회할 정보가 담긴 VO
 	 * @return 글 목록
-	 * @exception Exception
 	 */
 	@Override
 	public List<?> selectBoardList(BoardDefaultVO searchVO) throws Exception {
@@ -107,7 +101,6 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	 * 글 총 갯수를 조회한다.
 	 * @param searchVO - 조회할 정보가 담긴 VO
 	 * @return 글 총 갯수
-	 * @exception
 	 */
 	@Override
 	public int selectBoardListTotCnt(BoardDefaultVO searchVO) {
@@ -117,6 +110,7 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 
 	/**
 	 * 조회수 증가
+	 * @param BoardVO - 조회수를 증가 시킬  VO
 	 */
 	@Override
 	public void updateViewCnt(BoardVO vo) throws Exception {
@@ -126,7 +120,9 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	
 	
 	/**
-	 * 조회한 글 이전 다음글 번호
+	 * 조회한 글의 이전, 다음글 번호
+	 * @param BoardVO - 조회한 글 VO
+	 * @return 이전, 다음글 행번호
 	 */
 	@Override
 	public List<?> boardPrevNext(BoardVO vo) throws Exception {
@@ -137,6 +133,8 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	
 	/**
 	 * 이전, 다음글 번호로 글 조회
+	 * @param BoardVO - 조회할 글정보를 담고있는 VO
+	 * @return 이전, 다음글
 	 */
 	@Override
 	public List<?> selectPrevNext(BoardVO vo) throws Exception {

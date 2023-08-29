@@ -18,13 +18,14 @@ public class UploadFileServiceImpl extends EgovAbstractServiceImpl implements Up
 	/** logger 객체 */
 	private static final Logger log = LoggerFactory.getLogger(UploadFileServiceImpl.class);
 	
-	
 	// mybatis
 	@Resource(name = "uploadFileMapper")
 	private UploadFileMapper uploadFileDAO;
 	
 	/**
 	   * 업로드 파일 등록 
+	   * @param vo - 등록할 정보가 담긴 UploadFileVO
+	   * @return 등록한 파일 번호
 	   */
 	@Override
 	public Long insertFile(UploadFileVO vo) throws Exception {
@@ -35,7 +36,9 @@ public class UploadFileServiceImpl extends EgovAbstractServiceImpl implements Up
 	}
 
 	/**
-	   * 업로드파일조회
+	   * 파일목록조회
+	   * @param vo - 조회할 정보가 담긴 UploadFileVO
+	   * @return 조회한 파일 목록
 	   */
 	@Override
 	public List<?> selectFileList(UploadFileVO vo) throws Exception {
@@ -43,7 +46,9 @@ public class UploadFileServiceImpl extends EgovAbstractServiceImpl implements Up
 	}
 
 	/**
-	   * 첨부파일조회
+	   * 첨부파일 단건조회
+	   * @param vo - 조회할 정보가 담긴 UploadFileVO
+	   * @return 조회한 파일
 	   */
 	@Override
 	public UploadFileVO selectFile(UploadFileVO vo) {
@@ -52,7 +57,8 @@ public class UploadFileServiceImpl extends EgovAbstractServiceImpl implements Up
 
 	/**
 	   * 첨부파일 단건 삭제 
-	   * 
+	   * @param vo - 삭제할 정보가 담긴 UploadFileVO
+	   * @return 삭제 건수
 	   */
 	@Override
 	public int deleteFile(UploadFileVO vo) throws Exception {
@@ -62,7 +68,8 @@ public class UploadFileServiceImpl extends EgovAbstractServiceImpl implements Up
 	
 	/**
 	   * 첨부파일 전체 삭제 
-	   * 
+	   * @param vo - 삭제할 정보가 담긴 UploadFileVO
+	   * @return 삭제 건수
 	   */
 	@Override
 	public int deleteAllFile(UploadFileVO vo) throws Exception {
@@ -71,6 +78,8 @@ public class UploadFileServiceImpl extends EgovAbstractServiceImpl implements Up
 
 	/**
 	    * 첨부파일 순번 조회
+	    * @param vo - 조회할 정보가 담긴 UploadFileVO
+	    * @return 파일 순번, 번호 목록
 	   */
 	@Override
 	public List<?> selectFileNo(UploadFileVO vo) throws Exception {
@@ -79,16 +88,12 @@ public class UploadFileServiceImpl extends EgovAbstractServiceImpl implements Up
 
 	/**
 	   *  첨부파일 순번 수정
+	   *  @param vo - 수정할 정보가 담긴 UploadFileVO
 	   */
 	@Override
 	public void updateFileNo(UploadFileVO vo) throws Exception {
 		uploadFileDAO.updateFileNo(vo);
 	}
-
-	
-
-		
-
 
 
 }
