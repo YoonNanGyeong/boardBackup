@@ -17,9 +17,13 @@ import org.springframework.stereotype.Service;
 public class UploadFileServiceImpl extends EgovAbstractServiceImpl implements UploadFileService {
 	/** logger 객체 */
 	private static final Logger log = LoggerFactory.getLogger(UploadFileServiceImpl.class);
+	// ibatis
+//	@Resource(name = "uploadFileDAO")
+//	private UploadFileDAO uploadFileDAO;
 	
-	@Resource(name = "uploadFileDAO")
-	private UploadFileDAO uploadFileDAO;
+	// mybatis
+	@Resource(name = "uploadFileMapper")
+	private UploadFileMapper uploadFileDAO;
 	
 	/**
 	   * 업로드 파일 등록 
