@@ -2,8 +2,6 @@ package egovframework.normal.board.web.api;
 
 import javax.annotation.Resource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,9 +29,6 @@ public class RestBoardController {
 	
 	@Resource(name = "uploadFileService")
 	private UploadFileService uploadFileService;  // 첨부파일 서비스 
-	
-	/** logger 객체 */
-	private static final Logger log = LoggerFactory.getLogger(RestBoardController.class);
 	
 	// 파일 단건 삭제 처리
 		@GetMapping("{fileSq}/deleteFile.do")
@@ -65,31 +60,7 @@ public class RestBoardController {
 		public RestResponse<Object> detailPrevNext(
 						@RequestBody BoardVO boardVO,
 						@ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model
-						)  throws Exception {
-			
-		    // 이전, 다음행 번호 key, value값으로 가져오기
-//			List<Map<String, Object>> nextPrev = (List<Map<String, Object>>) boardService.boardPrevNext(boardVO);
-//			Map<String, Object> resultMap = nextPrev.get(0);  //해당 글 이전, 다음 행번호
-			
-			// object 타입 -> long 타입  // 이전, 다음글 value 값 null 이면 0L 아니면 value 값 
-//			Long longPrevNo = 
-//					(resultMap.get("prevNo") != null) ? Long.valueOf(resultMap.get("prevNo").toString()) : 0L;
-//			Long longNextNo = 
-//					(resultMap.get("nextNo") != null) ? Long.valueOf(resultMap.get("nextNo").toString()) : 0L;
-
-
-//			boardVO.setPrevNo(longPrevNo);	// 응답 body에 담을 boardVO객체에 이전글 번호 세팅
-//			boardVO.setNextNo(longNextNo); // 응답 body에 담을 boardVO객체에 다음글 번호 세팅
-
-			// 행번호로 글 조회
-//			List<Map<String, Object>> nextPrevVO = (List<Map<String, Object>>) boardService.selectPrevNext(boardVO);
-//			Map<String, Object> resultVO = null; // 조회한 글 객체
-//			if(nextPrevVO.size() > 0) { // 이전글 다음글이 존재하면				
-//				resultVO = nextPrevVO.get(0); // 조회한 글 객체에 조회 결과를 대입
-//			}else {
-//				resultVO = null;
-//			}
-				
+						)  throws Exception {	
 			BoardVO prevNextVO = boardService.boardPrevNext(boardVO); // 이전, 다음글 번호 조회
 			prevNextVO.setPrevNextCondition(boardVO.getPrevNextCondition()); // 검색조건 유지(이전, 다음버튼 여부)
 			
@@ -98,8 +69,7 @@ public class RestBoardController {
 			RestResponse<Object> res = null;
 			
 			if(resultVO != null) {				
-//				Long boardSq = Long.valueOf(String.valueOf(resultVO.get("boardSq"))); // 조회한 글의 글 번호
-				Long boardSq = resultVO.getBoardSq();
+				Long boardSq = resultVO.getBoardSq(); // 조회한 글의 글 번호
 				res = RestResponse.createRestResponse("00", "성공", boardSq); // 성공 했을 경우 코드, 메세지, 글번호 데이터 
 			}else {
 				res = RestResponse.createRestResponse("99", "실패", null); // 실패 했을 경우 코드, 메세지 

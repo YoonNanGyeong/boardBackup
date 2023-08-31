@@ -81,6 +81,7 @@ public class BoardController {
 	}
 	
 	// 이미지 리사이징 
+	// 이미지 파일은 메모리 차지를 많이 하기 때문에 필요할 때 메모리 자원을 확보하지 못 하는 경우가 자주 발생 하므로 이용 가능한 메모리를 사용하여 미리 이미지 처리하는 BufferedImage 사용
 		public static BufferedImage makeThumbnail(BufferedImage src , int w, int h,String fileName) throws IOException {
 	    	BufferedImage thumbImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);  // BufferedImage 객체 생성
 			Graphics2D graphics = thumbImage.createGraphics();  // 2d 이미지 생성
